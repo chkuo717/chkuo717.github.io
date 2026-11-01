@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Halbach cylinder that re-sets to the load · Chin-Hsing Kuo</title>
+  <meta name="description" content="Animation of the reconfigurable Halbach cylinder (Biggs, Kuo and Ren, ASME Journal of Mechanical Design 2026): eight gear-mounted magnets around a rotor magnet balance a rotating payload, and a lever re-sets them for a different load.">
+  <script src="../assets/anim/draw.js?v=10a55783" defer></script>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css?v=b1f70a23">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/magnetic-mechanisms.html">Magnetic mechanisms</a> · Animation</p>
+    <h1>A Halbach cylinder that <span class="hl">re-sets to the load</span></h1>
+    <p class="lede">Eight magnets in a ring make a uniform field; a magnet at the centre, fixed to an arm, is pushed round by that field just as hard as gravity pulls the arm down. Turn one lever and the ring's field weakens evenly, so the same device balances a lighter load.</p>
+
+    <div class="anim-layout">
+      <figure class="fig" id="halbachfig">
+        <svg id="halbach" viewBox="0 0 340 352" role="img" aria-label="Eight round magnets, each inside a dashed gear circle, form a ring around a central housing. A square rotor magnet in the housing is fixed to an arm carrying a payload; the arm turns a full circle. A lever on the top-left gear sets the angle of all gears. A graph below shows gravity torque, magnetic torque and their sum against the arm angle.">
+          <g stroke="var(--fg)" stroke-width="1.2" fill="var(--fg)">
+            <line x1="322" y1="16" x2="322" y2="44"/><polygon points="318,42 326,42 322,50"/>
+            <text class="v" x="328" y="42" font-size="12" stroke="none">g</text>
+          </g>
+          <g id="hOuter"></g>
+          <g id="hLever"></g>
+          <circle cx="170" cy="128" r="30" fill="var(--card)" stroke="var(--fg)" stroke-width="1.6"/>
+          <g id="hRotor"></g>
+          <g transform="translate(40,262)">
+            <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
+            <line x1="0" y1="35" x2="260" y2="35" stroke="var(--line)"/>
+            <path id="hTG" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="hTM" fill="none" stroke="var(--spring)" stroke-width="1.4"/>
+            <path id="hTN" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="hCursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <text x="4" y="-5" font-size="10" fill="var(--fg-2)">Torque on the arm over one turn (near zero = balanced)</text>
+            <g font-size="10"><text x="264" y="38" fill="var(--red)" font-weight="700">net</text><text x="264" y="12" fill="var(--fg-2)">gravity</text><text x="264" y="66" fill="var(--spring)">magnet</text></g>
+          </g>
+        </svg>
+        <div class="ctl"><label for="hbLoad">Payload <em>M</em></label><input type="range" id="hbLoad" min="0.2" max="1" step="0.05" value="0.6"><output id="hbLoadOut">0.60</output><span class="muted small">of the full capacity</span></div>
+        <div class="ctl radios">
+          <label><input type="radio" name="hbmode" value="set" checked> Lever set for the load</label>
+          <label><input type="radio" name="hbmode" value="full"> Lever at full field</label>
+          <label><input type="radio" name="hbmode" value="off"> Field off</label>
+          <span class="muted small">ϕ = <output id="hbPhiOut">53°</output></span>
+        </div>
+        <div class="ctl"><span class="muted small" id="hbMsg"></span></div>
+        <figcaption>Move the payload slider and watch the gears: neighbouring magnets turn opposite ways by the same angle ϕ, the field in the bore weakens by cos ϕ, and the red net torque flattens again. Set the lever to full field with a light load and the magnets overpower the weight.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The eight outer magnets are a <em>Halbach cylinder</em>: each is magnetised at twice its angle round the ring, an arrangement that adds the fields of all eight into one uniform field across the bore and almost nothing outside. The rotor magnet at the centre sits in that field with its north pole pointing along the arm. A magnet in a uniform field feels a torque proportional to the sine of the angle between them, which is exactly how the torque of a weight on an arm varies with the arm's angle. Match the two amplitudes and the arm is balanced at every angle, with nothing touching.</p>
+        <p>Each outer magnet is embedded in a spur gear, and the eight gears mesh in a ring, so neighbouring gears turn opposite ways. Turning the lever on one gear therefore turns the magnets alternately by +ϕ and −ϕ. That particular motion keeps the field's direction and uniformity and scales its strength by cos ϕ: from full at ϕ = 0 to nothing at ϕ = 90°. The lever is the payload adjustment.</p>
+
+        <h2>The idea</h2>
+        <p>A balancer tuned to one load is of limited use. Spring balancers are re-tuned by moving spring ends or changing stiffness, which needs extra mechanism and usually some work against the spring. Here the whole adjustment is one lever that turns a one-degree-of-freedom gear train. The paper's design condition is simply ϕ = cos<sup>−1</sup>(<em>MgL</em>/<em>nB</em><sub>max</sub>): any payload up to the capacity <em>nB</em><sub>max</sub>/<em>gL</em> has a lever angle that balances it. A pleasant consequence, found in the tests, is that re-setting costs almost no work when the arm is held horizontal: the torque on the lever changes sign through that position, so turning it from on to off and back is nearly energy-free there.</p>
+
+        <h2>In the paper</h2>
+        <p>Finite-element simulation of the eight-magnet cylinder with a cubic rotor magnet gave a peak torque of 1.67 N m at full field, falling smoothly to almost nothing at ϕ = 90°; the built prototype measured 1.72 N m, with the measured curve a close sinusoid. Torques on the lever were measured too, and the work of a full re-set computed for each arm angle: up to 1.36 J to be supplied with the arm up, 1.64 J released with the arm down, and close to zero with the arm horizontal. The prototype and the torque map are pictured on the <a href="../research/magnetic-mechanisms.html">Magnetic mechanisms</a> page.</p>
+        <p class="muted small">The animation uses the paper's model: torque <em>nB</em><sub>max</sub> cos ϕ sin θ against <em>MgL</em> sin θ, with a small added ripple to stand for the discreteness of a real ring. Dimensions are illustrative; the lever and gear train are drawn schematically.</p>
+      </div>
+    </div>
+
+    <p class="cite"><strong>The paper.</strong> Biggs, E., Kuo, C.-H. and Ren, T., "<a href="https://doi.org/10.1115/1.4069596">A reconfigurable Halbach cylinder for gravity compensation of variable rotational payloads</a>," <em>ASME Journal of Mechanical Design</em>, 2026. doi:<a href="https://doi.org/10.1115/1.4069596">10.1115/1.4069596</a></p>
+    <script src="../assets/anim/magnetic.js?v=6e01598a" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author or taken from the author's own published papers, credited where shown.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js?v=21380ff0" defer></script>
+</body>
+</html>

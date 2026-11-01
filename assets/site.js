@@ -108,7 +108,8 @@
   for (var i = 0; i < N; i++) curve.push(solve(2 * Math.PI * i / (N - 1)));
   var lo = Infinity, hi = -Infinity;
   curve.forEach(function (c) { lo = Math.min(lo, c.Ug, c.Us); hi = Math.max(hi, c.Ug + c.Us); });
-  var pad = (hi - lo) * 0.08; lo -= pad; hi += pad;
+  hi = lo + (hi - lo) * 2.0;   // room for payloads up to m = 2
+  var pad = (hi - lo) * 0.05; lo -= pad; hi += pad;
   function Y(u) { return H - (u - lo) / (hi - lo) * H; }
   function path(fn) { return curve.map(function (c, i) { return (i ? 'L' : 'M') + f(W * i / (N - 1)) + ',' + f(Y(fn(c))); }).join(''); }
   el.cUg.setAttribute('d', path(function (c) { return c.Ug; }));
@@ -116,29 +117,144 @@
   var pathBal = path(function (c) { return c.Ug + c.Us; }), pathUnbal = path(function (c) { return c.Ug; });
   el.cUt.setAttribute('d', pathBal);
 
-  var toggle = document.getElementById('toggleSprings'), speed = document.getElementById('speed');
-  var on = true;
-  function setSprings(v) {
-    on = v;
-    el.springs.style.display = v ? '' : 'none';
-    el.cUs.style.display = v ? '' : 'none';
-    el.cUt.setAttribute('d', v ? pathBal : pathUnbal);
-    el.lblT.textContent = v ? 'total' : 'total = gravity';
+  // controls: payload m, spring mode
+  var massIn = document.getElementById('payload'), massOut = document.getElementById('massOut');
+  var kAOut = document.getElementById('kAOut'), kBOut = document.getElementById('kBOut');
+  var mode = 'tuned';                      // tuned | fixed | off
+  var m0 = 1, kA0 = kA, kB0 = kB;          // springs as designed for m = 1
+  function applyMode() {
+    m = massIn ? parseFloat(massIn.value) : 1;
+    if (mode === 'tuned') { kA = m * g * rA / (hA * lA); kB = m * g * rB / (hB * lB); }
+    else { kA = kA0; kB = kB0; }
+    el.springs.style.display = mode === 'off' ? 'none' : '';
+    el.cUs.style.display = mode === 'off' ? 'none' : '';
+    if (massOut) massOut.value = m.toFixed(2);
+    if (kAOut) kAOut.value = (mode === 'off' ? 0 : kA).toFixed(3);
+    if (kBOut) kBOut.value = (mode === 'off' ? 0 : kB).toFixed(3);
+    el.lblT.textContent = mode === 'off' ? 'total = gravity' : 'total';
+    rechart();
   }
-  if (toggle) toggle.addEventListener('change', function () { setSprings(toggle.checked); });
+  function rechart() {
+    curve = [];
+    for (var i = 0; i < N; i++) curve.push(solve(2 * Math.PI * i / (N - 1)));
+    // fixed scale so that changes in m are visible: based on the designed case
+    el.cUg.setAttribute('d', path(function (c) { return c.Ug; }));
+    el.cUs.setAttribute('d', path(function (c) { return c.Us; }));
+    el.cUt.setAttribute('d', path(function (c) { return mode === 'off' ? c.Ug : c.Ug + c.Us; }));
+  }
+  if (massIn) massIn.addEventListener('input', applyMode);
+  Array.prototype.forEach.call(document.querySelectorAll('input[name=smode]'), function (r) {
+    r.addEventListener('change', function () { if (r.checked) { mode = r.value; applyMode(); } });
+  });
+  applyMode();
 
-  var theta = 0.9, last = null;
+  var theta = 0.9, last = null, omega = 0.7;  // slow, constant: speed has no bearing on balance
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function tick(t) {
-    var s = solve(theta);
-    draw(s);
+    draw(solve(theta));
     var frac = ((theta % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI) / (2 * Math.PI);
     el.cursor.setAttribute('x1', f(W * frac)); el.cursor.setAttribute('x2', f(W * frac));
-    if (t !== undefined) {
-      if (last !== null) theta += (speed ? parseFloat(speed.value) : 0.9) * (t - last) / 1000;
-      last = t;
-    }
+    if (t !== undefined) { if (last !== null) theta += omega * (t - last) / 1000; last = t; }
   }
   tick();
+  if (!reduce) requestAnimationFrame(function loop(t) { tick(t); requestAnimationFrame(loop); });
+})();
+
+
+// Home: gravity compensation of a pendulum by a reconfigurable Halbach cylinder.
+// After Biggs, Kuo and Ren, ASME J. Mech. Des. 148 (2026) 033305.
+// Model: arm of length L with payload M, fixed to a centre magnet of dipole moment mu, inside a
+// near-uniform field B (direction fixed, pointing "up" in the figure). With the dipole along the arm,
+//   U_g = M g L cos(theta),   U_m = -mu B cos(theta)   (theta from the upward vertical)
+//   torque_g = -M g L sin(theta),  torque_m = +mu B sin(theta)  ->  net = 0 for all theta when mu B = M g L.
+// Turning all outer magnets by delta changes the field; here B = Bmax cos(delta), an illustration of the lever.
+(function () {
+  var svg = document.getElementById('mag');
+  if (!svg) return;
+  var C = { x: 170, y: 130 }, L = 95, R = 92, n = 10, g = 1, mu = 1, Bmax = 2.0 * 95;  // full field carries M = 2
+  var M = 1, Bmode = 'tuned', B0 = M * g * L / mu;  // field as set for M = 1
+  var $ = function (id) { return svg.querySelector('#' + id); };
+  var outer = $('outer'), rotor = $('rotor'), field = $('field'), tG = $('tG'), tM = $('tM'), tN = $('tN'), cursor = $('cursor2');
+  var massIn = document.getElementById('mass2'), massOut = document.getElementById('mass2Out'), BOut = document.getElementById('BOut'), dOut = document.getElementById('dOut');
+  function f(v) { return v.toFixed(1); }
+
+  function Bnow() {
+    if (Bmode === 'off') return 0;
+    return Bmode === 'tuned' ? M * g * L / mu : B0;
+  }
+  function deltaFor(B) { return Math.acos(Math.min(1, B / Bmax)); }
+
+  function drawOuter(delta) {
+    // Halbach (k = 2, "dipole") ring: magnetisation angle 2*phi + 90deg for a magnet at azimuth phi,
+    // which gives a uniform field inside; each magnet then turned by delta about its own axis.
+    var out = '';
+    if (Bmode === 'off') { outer.innerHTML = ''; return; }
+    for (var i = 0; i < n; i++) {
+      var phi = 2 * Math.PI * i / n - Math.PI / 2;
+      var cx = C.x + R * Math.cos(phi), cy = C.y + R * Math.sin(phi);
+      var mag = 2 * phi + Math.PI / 2 + delta;     // svg y is down: angles measured clockwise on screen
+      var ax = Math.cos(mag), ay = Math.sin(mag);
+      out += '<g transform="translate(' + f(cx) + ',' + f(cy) + ')">' +
+             '<rect x="-11" y="-11" width="22" height="22" rx="2" fill="var(--bg-2)" stroke="var(--fg)" stroke-width="1.3"/>' +
+             '<line x1="' + f(-7 * ax) + '" y1="' + f(-7 * ay) + '" x2="' + f(7 * ax) + '" y2="' + f(7 * ay) + '" stroke="var(--fg)" stroke-width="1.6" marker-end="url(#arr)"/></g>';
+    }
+    outer.innerHTML = out;
+  }
+  function drawField(B) {
+    var out = '';
+    if (B <= 0) { field.innerHTML = ''; return; }
+    var k = Math.min(1, B / Bmax);
+    for (var x = -48; x <= 48; x += 24) {
+      out += '<line x1="' + (C.x + x) + '" y1="' + (C.y + 62) + '" x2="' + (C.x + x) + '" y2="' + (C.y - 62) + '" marker-end="url(#arr)" opacity="' + (0.25 + 0.75 * k).toFixed(2) + '"/>';
+    }
+    field.innerHTML = out;
+  }
+  function drawArm(theta) {
+    var ex = C.x + L * Math.sin(theta), ey = C.y - L * Math.cos(theta);
+    var r = 7 + 5 * Math.sqrt(M);
+    rotor.innerHTML =
+      '<line x1="' + C.x + '" y1="' + C.y + '" x2="' + f(ex) + '" y2="' + f(ey) + '" stroke="var(--fg)" stroke-width="3.5" stroke-linecap="round"/>' +
+      // centre magnet: dipole along the arm, N at the arm side
+      '<g transform="rotate(' + f(theta * 180 / Math.PI) + ' ' + C.x + ' ' + C.y + ')">' +
+      '<rect x="' + (C.x - 9) + '" y="' + (C.y - 20) + '" width="18" height="40" rx="3" fill="var(--card)" stroke="var(--fg)" stroke-width="1.5"/>' +
+      '<rect x="' + (C.x - 9) + '" y="' + (C.y - 20) + '" width="18" height="20" rx="3" fill="var(--red)" opacity=".85"/>' +
+      '<text x="' + C.x + '" y="' + (C.y - 7) + '" font-size="9" text-anchor="middle" fill="#fff" font-weight="700">N</text>' +
+      '<text x="' + C.x + '" y="' + (C.y + 14) + '" font-size="9" text-anchor="middle" fill="var(--fg)" font-weight="700">S</text></g>' +
+      '<circle cx="' + f(ex) + '" cy="' + f(ey) + '" r="' + f(r) + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.6"/>' +
+      '<circle cx="' + f(ex) + '" cy="' + f(ey) + '" r="' + f(r) + '" fill="url(#masshatch)" stroke="none" color="var(--fg)"/>' +
+      '<text x="' + f(ex + r + 4) + '" y="' + f(ey + 4) + '" font-size="11" font-style="italic" fill="var(--fg)">M</text>';
+  }
+  // torque chart: theta from -180 to 180, fixed scale for M up to 2
+  var W = 260, H = 70, N = 181, scale = 2.2 * g * L;
+  function Y(t) { return H / 2 - t / scale * (H / 2); }
+  function path(fn) { var d = ''; for (var i = 0; i < N; i++) { var th = -Math.PI + 2 * Math.PI * i / (N - 1); d += (i ? 'L' : 'M') + f(W * i / (N - 1)) + ',' + f(Y(fn(th))); } return d; }
+  function rechart(B) {
+    tG.setAttribute('d', path(function (th) { return -M * g * L * Math.sin(th); }));
+    tM.setAttribute('d', path(function (th) { return mu * B * Math.sin(th); }));
+    tN.setAttribute('d', path(function (th) { return (mu * B - M * g * L) * Math.sin(th); }));
+    tM.style.display = B > 0 ? '' : 'none';
+  }
+  function apply() {
+    M = massIn ? parseFloat(massIn.value) : 1;
+    var B = Bnow(), d = Bmode === 'off' ? 0 : deltaFor(B);
+    if (massOut) massOut.value = M.toFixed(2);
+    if (BOut) BOut.value = Bmode === 'off' ? '0 %' : Math.round(100 * B / Bmax) + ' %';
+    if (dOut) dOut.value = Bmode === 'off' ? '–' : Math.round(d * 180 / Math.PI) + '°';
+    drawOuter(d); drawField(B); rechart(B);
+  }
+  if (massIn) massIn.addEventListener('input', apply);
+  Array.prototype.forEach.call(document.querySelectorAll('input[name=bmode]'), function (r) {
+    r.addEventListener('change', function () { if (r.checked) { Bmode = r.value; apply(); } });
+  });
+  apply();
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var t0 = null, theta = 0;
+  function tick(t) {
+    if (t !== undefined) { if (t0 === null) t0 = t; theta = 0.75 * Math.PI * Math.sin((t - t0) / 1000 * 0.45); }
+    drawArm(theta);
+    var frac = (theta + Math.PI) / (2 * Math.PI);
+    cursor.setAttribute('x1', f(W * frac)); cursor.setAttribute('x2', f(W * frac));
+  }
+  theta = 0.6; tick();
   if (!reduce) requestAnimationFrame(function loop(t) { tick(t); requestAnimationFrame(loop); });
 })();

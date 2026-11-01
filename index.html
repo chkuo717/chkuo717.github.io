@@ -92,12 +92,57 @@
             </g>
           </g>
         </svg>
-        <div class="ctl">
-          <label><input type="checkbox" id="toggleSprings" checked> Springs on</label>
-          <label for="speed">Speed</label><input id="speed" type="range" min="0" max="2.5" step="0.1" value="0.9">
+        <div class="ctl ctl-col">
+          <label for="payload">Payload <em>m</em> = <output id="massOut">1.0</output></label>
+          <input id="payload" type="range" min="0.5" max="2" step="0.05" value="1">
+          <div class="radios" role="radiogroup" aria-label="Springs">
+            <label><input type="radio" name="smode" value="tuned" checked> springs retuned to <em>m</em></label>
+            <label><input type="radio" name="smode" value="fixed"> springs designed for <em>m</em> = 1</label>
+            <label><input type="radio" name="smode" value="off"> no springs</label>
+          </div>
+          <div class="readout muted small">k<sub>A</sub> = <output id="kAOut"></output>, k<sub>B</sub> = <output id="kBOut"></output> (from <em>k h l = m g r</em>)</div>
         </div>
-        <figcaption>A general four-bar linkage with a mass on its coupler, completely gravity balanced by two zero-free-length springs anchored to the ground, with no extra links. The total potential energy (red) stays flat, so the linkage rests in any posture. From Kuo, <em>Mechanism and Machine Theory</em> 214 (2025) 106140, <a href="https://doi.org/10.1016/j.mechmachtheory.2025.106140">open access</a>. Untick the springs to see the weight take over.</figcaption>
+        <figcaption>A general four-bar linkage with a mass on its coupler, completely gravity balanced by two zero-free-length springs anchored to the ground, with no extra links. The total potential energy (red) stays flat, so the linkage rests in any posture. Balance depends on posture only, never on speed. Change the payload: the two spring constants follow <em>k h l = m g r</em>, and the total stays flat; keep the original springs and the balance is lost. From Kuo, <em>Mechanism and Machine Theory</em> 214 (2025) 106140, <a href="https://doi.org/10.1016/j.mechmachtheory.2025.106140">open access</a>.</figcaption>
       </figure>
+    </section>
+
+    <section class="hero hero-2">
+      <figure class="fig" id="magfig">
+        <svg id="mag" viewBox="0 0 340 352" role="img" aria-label="A pendulum arm with a payload, mounted on a magnet at the centre of a ring of outer magnets. The outer magnets produce a uniform field that applies a restoring torque on the centre magnet equal and opposite to the gravity torque at every angle. A graph below shows gravity torque, magnetic torque and their sum against arm angle; the sum is zero.">
+          <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+          <g id="outer"></g>
+          <circle cx="170" cy="130" r="26" fill="var(--card)" stroke="var(--fg)" stroke-width="2"/>
+          <g id="rotor"></g>
+          <g id="field" stroke="var(--accent)" stroke-width="1.2" opacity=".55"></g>
+          <g id="chart2" transform="translate(40,262)">
+            <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
+            <line x1="0" y1="35" x2="260" y2="35" stroke="var(--line)"/>
+            <path id="tG" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="tM" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
+            <path id="tN" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="cursor2" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Torque on the arm vs arm angle</text>
+            <g font-size="9"><text x="264" y="38" fill="var(--red)" font-weight="700">net</text><text x="264" y="12" fill="var(--fg-2)">gravity</text><text x="264" y="66" fill="var(--accent)">magnet</text></g>
+          </g>
+        </svg>
+        <div class="ctl ctl-col">
+          <label for="mass2">Payload <em>M</em> = <output id="mass2Out">1.0</output></label>
+          <input id="mass2" type="range" min="0.5" max="2" step="0.05" value="1">
+          <div class="radios" role="radiogroup" aria-label="Field">
+            <label><input type="radio" name="bmode" value="tuned" checked> field retuned to <em>M</em> (lever)</label>
+            <label><input type="radio" name="bmode" value="fixed"> field set for <em>M</em> = 1</label>
+            <label><input type="radio" name="bmode" value="off"> outer magnets removed</label>
+          </div>
+          <div class="readout muted small">field <em>B</em> = <output id="BOut"></output> of maximum; outer magnets turned by <output id="dOut"></output></div>
+        </div>
+        <figcaption>Gravity compensation with no springs at all. A pendulum arm is fixed to a magnet at the centre of a ring of outer magnets arranged as a Halbach cylinder, which produces a near-uniform field inside. The torque of that field on the centre magnet is <em>mB</em> sin <em>θ</em>, the same shape as the gravity torque <em>MgL</em> sin <em>θ</em>, so one setting of <em>B</em> cancels the weight at every angle. Turning the outer magnets together changes <em>B</em>, which is how the device is re-set for a new payload. After Biggs, Kuo and Ren, <em>ASME Journal of Mechanical Design</em> 148 (2026) 033305.</figcaption>
+      </figure>
+      <div>
+        <p class="eyebrow">Magnetic balancing</p>
+        <h2 class="h2-tight">The same idea, <span class="hl">without contact</span></h2>
+        <p>A spring stores energy by stretching; a pair of magnets stores it in the field between them, with nothing touching and nothing to wear. At Wollongong my group works on using permanent magnets this way: arrays that compensate a weight over a long linear stroke, two magnets that levitate a load passively over a long vertical range, and reconfigurable Halbach cylinders like the one animated here, whose compensating torque can be re-set to the payload with a lever.</p>
+        <p><a href="research/magnetic-mechanisms.html">Magnetic mechanisms →</a></p>
+      </div>
     </section>
 
     <section>

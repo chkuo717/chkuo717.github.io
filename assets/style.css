@@ -13,6 +13,19 @@
   --link: #0033FF;
   --card: #FFFFFF;
   --shadow: 0 1px 2px rgba(0,22,65,.06), 0 8px 24px -16px rgba(0,22,65,.25);
+  /* figure colours, after the author's paper figures */
+  --spring: #0033FF;
+  --cw: #0033FF;
+  --mass: #ED0A00;
+  --cable: #00A651;
+  --ground: #A6A6A6;
+  --pin: #7F7F7F;
+  --link-fill: #DDE4F6;
+  --mag-stator: #BFE3F2;
+  --mag-rotor: #FBCFE8;
+  --mag-arrow: #0033FF;
+  --mag-arrow-2: #ED0A00;
+  --fig-serif: "Times New Roman", Times, "Nimbus Roman", "Liberation Serif", serif;
   --serif: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --sans: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -33,11 +46,24 @@
     --link: #FFFFFF;
     --card: #0A2252;
     --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.6);
+    --spring: #6B93FF;
+    --cw: #3D6BFF;
+    --mass: #ED0A00;
+    --cable: #2ECC71;
+    --ground: #6B7691;
+    --pin: #9AA3B5;
+    --link-fill: #1B3570;
+    --mag-stator: #2B5A7A;
+    --mag-rotor: #7A2B5E;
+    --mag-arrow: #8FB3FF;
+    --mag-arrow-2: #FF6B5E;
   }
 }
 :root[data-theme="dark"] {
   --bg: #001641; --bg-2: #0A2252; --fg: #FFFFFF; --fg-2: #C9D1E6; --line: #26407A;
   --accent: #FFFFFF; --accent-2: #0033FF; --accent-soft: #0A2252; --link: #FFFFFF; --card: #0A2252;
+  --spring: #6B93FF; --cw: #3D6BFF; --mass: #ED0A00; --cable: #2ECC71; --ground: #6B7691; --pin: #9AA3B5; --link-fill: #1B3570;
+  --mag-stator: #2B5A7A; --mag-rotor: #7A2B5E; --mag-arrow: #8FB3FF; --mag-arrow-2: #FF6B5E;
 }
 
 * { box-sizing: border-box; }
@@ -194,3 +220,8 @@ dl.facts dd { max-width: var(--measure); }
 .cite strong { color: var(--fg); }
 .anim-card .tag { color: var(--red); }
 .key { display: inline-block; padding: 0 .35em; border: 1px solid var(--line); border-radius: 3px; font-size: .85em; background: var(--bg-2); }
+
+/* Figure text: the serif face of the paper figures; .v = a variable (italic), .n = an upright note */
+.fig svg text, .pfig svg text { font-family: var(--fig-serif); }
+.fig svg text.v, .pfig svg text.v, .fig svg g.v text, .pfig svg g.v text { font-style: italic; }
+.fig svg text.n, .pfig svg text.n { font-style: normal; }

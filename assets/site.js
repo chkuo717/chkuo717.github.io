@@ -60,32 +60,15 @@
 
   var $ = function (id) { return svg.querySelector('#' + id); };
   var el = { crank: $('crank'), rocker: $('rocker'), coupler: $('coupler'), jO: $('jO'), jQ: $('jQ'), jM: $('jM'), jN: $('jN'),
-             mass: $('mass'), massLbl: $('massLbl'), sprA: $('sprA'), sprB: $('sprB'), armA: $('armA'), armB: $('armB'),
+             mass: $('mass'), sprA: $('sprA'), sprB: $('sprB'), armA: $('armA'), armB: $('armB'), ground: $('ground'),
              anchors: $('anchors'), cUg: $('cUg'), cUs: $('cUs'), cUt: $('cUt'), cursor: $('cursor'), springs: $('springs'), lblT: $('lblT') };
 
-  // static parts: pivots, ground anchors
+  // static parts: pivots, ground symbols, spring anchors (drawn in the style of the paper figures, see draw.js)
   var o = S({ x: 0, y: 0 }), q = S(Q), ha = S(HA), hb = S(HB);
   el.jO.setAttribute('cx', o.x); el.jO.setAttribute('cy', o.y);
   el.jQ.setAttribute('cx', q.x); el.jQ.setAttribute('cy', q.y);
-  el.anchors.innerHTML = anchor(ha) + anchor(hb);
-  function anchor(p) {
-    return '<polygon points="' + f(p.x) + ',' + f(p.y) + ' ' + f(p.x - 7) + ',' + f(p.y + 11) + ' ' + f(p.x + 7) + ',' + f(p.y + 11) + '"/>' +
-           '<circle cx="' + f(p.x) + '" cy="' + f(p.y) + '" r="2.4" fill="var(--fg)"/>';
-  }
-  function zigzag(a, b, n, w) {
-    var dx = b.x - a.x, dy = b.y - a.y, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, px = -uy, py = ux;
-    var pts = [a.x + ',' + a.y], lead = Math.min(8, L * 0.12);
-    pts.push(f(a.x + ux * lead) + ',' + f(a.y + uy * lead));
-    var span = L - 2 * lead;
-    for (var i = 1; i < n; i++) {
-      var t = lead + span * i / n, s = (i % 2 ? 1 : -1) * w;
-      pts.push(f(a.x + ux * t + px * s) + ',' + f(a.y + uy * t + py * s));
-    }
-    pts.push(f(b.x - ux * lead) + ',' + f(b.y - uy * lead));
-    pts.push(f(b.x) + ',' + f(b.y));
-    return pts.join(' ');
-  }
-  function line(a, b) { return '<line x1="' + f(a.x) + '" y1="' + f(a.y) + '" x2="' + f(b.x) + '" y2="' + f(b.y) + '"/>'; }
+  if (el.ground) el.ground.innerHTML = KD.ground(o, { w: 18 }) + KD.ground(q, { w: 18 });
+  el.anchors.innerHTML = KD.ground(ha, { w: 12, plain: true }) + KD.pin(ha) + KD.ground(hb, { w: 12, plain: true }) + KD.pin(hb);
 
   function draw(s) {
     var M = S(s.M), N = S(s.N), P = S(s.P), LA = S(s.LA), LB = S(s.LB);
@@ -95,12 +78,11 @@
     el.jM.setAttribute('cx', f(M.x)); el.jM.setAttribute('cy', f(M.y));
     el.jN.setAttribute('cx', f(N.x)); el.jN.setAttribute('cy', f(N.y));
     el.mass.setAttribute('transform', 'translate(' + f(P.x) + ',' + f(P.y) + ')');
-    el.massLbl.setAttribute('x', f(P.x + 11)); el.massLbl.setAttribute('y', f(P.y - 6));
-    // spring attachment arms are rigid parts of the crank and rocker
-    el.armA.innerHTML = line(o, LA) + '<circle cx="' + f(LA.x) + '" cy="' + f(LA.y) + '" r="2.6" fill="var(--fg)" stroke="none"/>';
-    el.armB.innerHTML = line(q, LB) + '<circle cx="' + f(LB.x) + '" cy="' + f(LB.y) + '" r="2.6" fill="var(--fg)" stroke="none"/>';
-    el.sprA.setAttribute('points', zigzag(ha, LA, 9, 3.2));
-    el.sprB.setAttribute('points', zigzag(hb, LB, 9, 3.2));
+    // spring attachment arms are rigid parts of the crank and rocker; their ends are the spring pins
+    el.armA.innerHTML = KD.link(o, LA, 2) + KD.pin(LA);
+    el.armB.innerHTML = KD.link(q, LB, 2) + KD.pin(LB);
+    el.sprA.setAttribute('points', KD.zigzag(ha, LA, 9, 3.5));
+    el.sprB.setAttribute('points', KD.zigzag(hb, LB, 9, 3.5));
   }
 
   // energy curves over a full crank turn, drawn once; scaled to the chart box
@@ -197,16 +179,14 @@
   function drawOuter(delta) {
     // Halbach (k = 2, "dipole") ring: magnetisation angle 2*phi + 90deg for a magnet at azimuth phi,
     // which gives a uniform field inside; each magnet then turned by delta about its own axis.
+    // Drawn as the paper figures draw stator magnets: light-blue squares with a blue magnetisation arrow.
     var out = '';
     if (Bmode === 'off') { outer.innerHTML = ''; return; }
     for (var i = 0; i < n; i++) {
       var phi = 2 * Math.PI * i / n - Math.PI / 2;
-      var cx = C.x + R * Math.cos(phi), cy = C.y + R * Math.sin(phi);
+      var c = { x: C.x + R * Math.cos(phi), y: C.y + R * Math.sin(phi) };
       var mag = 2 * phi + Math.PI / 2 + delta;     // svg y is down: angles measured clockwise on screen
-      var ax = Math.cos(mag), ay = Math.sin(mag);
-      out += '<g transform="translate(' + f(cx) + ',' + f(cy) + ')">' +
-             '<rect x="-11" y="-11" width="22" height="22" rx="2" fill="var(--bg-2)" stroke="var(--fg)" stroke-width="1.3"/>' +
-             '<line x1="' + f(-7 * ax) + '" y1="' + f(-7 * ay) + '" x2="' + f(7 * ax) + '" y2="' + f(7 * ay) + '" stroke="var(--fg)" stroke-width="1.6" marker-end="url(#arr)"/></g>';
+      out += KD.magnet(c, 22, 22, (mag + Math.PI / 2) * 180 / Math.PI, 'var(--mag-stator)', 'var(--mag-arrow)');
     }
     outer.innerHTML = out;
   }
@@ -215,24 +195,21 @@
     if (B <= 0) { field.innerHTML = ''; return; }
     var k = Math.min(1, B / Bmax);
     for (var x = -48; x <= 48; x += 24) {
-      out += '<line x1="' + (C.x + x) + '" y1="' + (C.y + 62) + '" x2="' + (C.x + x) + '" y2="' + (C.y - 62) + '" marker-end="url(#arr)" opacity="' + (0.25 + 0.75 * k).toFixed(2) + '"/>';
+      out += '<g opacity="' + (0.25 + 0.75 * k).toFixed(2) + '">' + KD.arrow({ x: C.x + x, y: C.y + 62 }, { x: C.x + x, y: C.y - 62 }, 'var(--mag-arrow)', 1.1, 6) + '</g>';
     }
     field.innerHTML = out;
   }
   function drawArm(theta) {
-    var ex = C.x + L * Math.sin(theta), ey = C.y - L * Math.cos(theta);
-    var r = 7 + 5 * Math.sqrt(M);
+    var end = { x: C.x + L * Math.sin(theta), y: C.y - L * Math.cos(theta) };
+    var r = 7 + 5 * Math.sqrt(M), deg = theta * 180 / Math.PI;
     rotor.innerHTML =
-      '<line x1="' + C.x + '" y1="' + C.y + '" x2="' + f(ex) + '" y2="' + f(ey) + '" stroke="var(--fg)" stroke-width="3.5" stroke-linecap="round"/>' +
-      // centre magnet: dipole along the arm, N at the arm side
-      '<g transform="rotate(' + f(theta * 180 / Math.PI) + ' ' + C.x + ' ' + C.y + ')">' +
-      '<rect x="' + (C.x - 9) + '" y="' + (C.y - 20) + '" width="18" height="40" rx="3" fill="var(--card)" stroke="var(--fg)" stroke-width="1.5"/>' +
-      '<rect x="' + (C.x - 9) + '" y="' + (C.y - 20) + '" width="18" height="20" rx="3" fill="var(--red)" opacity=".85"/>' +
-      '<text x="' + C.x + '" y="' + (C.y - 7) + '" font-size="9" text-anchor="middle" fill="#fff" font-weight="700">N</text>' +
-      '<text x="' + C.x + '" y="' + (C.y + 14) + '" font-size="9" text-anchor="middle" fill="var(--fg)" font-weight="700">S</text></g>' +
-      '<circle cx="' + f(ex) + '" cy="' + f(ey) + '" r="' + f(r) + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.6"/>' +
-      '<circle cx="' + f(ex) + '" cy="' + f(ey) + '" r="' + f(r) + '" fill="url(#masshatch)" stroke="none" color="var(--fg)"/>' +
-      '<text x="' + f(ex + r + 4) + '" y="' + f(ey + 4) + '" font-size="11" font-style="italic" fill="var(--fg)">M</text>';
+      // the arm as a bar with the payload's centre of mass at its end
+      KD.body(C, end, 5) +
+      // rotor magnet: dipole along the arm, drawn pink with a red arrow as in the paper figures
+      '<g transform="rotate(' + f(deg) + ' ' + C.x + ' ' + C.y + ')">' +
+      '<rect x="' + (C.x - 9) + '" y="' + (C.y - 20) + '" width="18" height="40" rx="2" fill="var(--mag-rotor)" stroke="var(--fg)" stroke-width="1.4"/>' +
+      KD.arrow({ x: C.x, y: C.y + 13 }, { x: C.x, y: C.y - 13 }, 'var(--mag-arrow-2)', 1.8, 7) + '</g>' +
+      KD.com(end, r - 3.5) + KD.label({ x: end.x + r + 5, y: end.y + 4 }, 'M');
   }
   // torque chart: theta from -180 to 180, fixed scale for M up to 2
   var W = 260, H = 70, N = 181, scale = 1.25 * g * L;

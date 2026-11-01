@@ -1,30 +1,12 @@
 // Animations for the gravity-balancing paper pages (papers/*.html).
 // Each block looks for its own root SVG and does nothing on pages that lack it.
 // The four-bar animation of Kuo (2025) lives in site.js and is shared with the home page.
+// Drawing goes through the shared helpers in draw.js (window.KD), which follow the author's figure style.
 
 (function () {
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function f(v) { return (+v).toFixed(1); }
-  function zigzag(a, b, n, w) {
-    var dx = b.x - a.x, dy = b.y - a.y, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, px = -uy, py = ux;
-    var pts = [f(a.x) + ',' + f(a.y)], lead = Math.min(6, L * 0.12);
-    pts.push(f(a.x + ux * lead) + ',' + f(a.y + uy * lead));
-    var span = L - 2 * lead;
-    for (var i = 1; i < n; i++) {
-      var t = lead + span * i / n, s = (i % 2 ? 1 : -1) * w;
-      pts.push(f(a.x + ux * t + px * s) + ',' + f(a.y + uy * t + py * s));
-    }
-    pts.push(f(b.x - ux * lead) + ',' + f(b.y - uy * lead));
-    pts.push(f(b.x) + ',' + f(b.y));
-    return pts.join(' ');
-  }
-  function line(a, b) { return '<line x1="' + f(a.x) + '" y1="' + f(a.y) + '" x2="' + f(b.x) + '" y2="' + f(b.y) + '"/>'; }
-  function dot(p, r, fill) { return '<circle cx="' + f(p.x) + '" cy="' + f(p.y) + '" r="' + r + '" fill="' + (fill || 'var(--card)') + '" stroke="var(--fg)" stroke-width="1.6"/>'; }
-  function massDisc(p, r) {
-    return '<circle cx="' + f(p.x) + '" cy="' + f(p.y) + '" r="' + r + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.6"/>' +
-           '<circle cx="' + f(p.x) + '" cy="' + f(p.y) + '" r="' + r + '" fill="url(#masshatch)" stroke="none" color="var(--fg)"/>';
-  }
+  var f = KD.f;
   // A chart box W x H whose x axis runs over [x0, x1]; fn(x) -> value; y range [lo, hi]
   function chartPath(W, H, x0, x1, lo, hi, fn, N) {
     N = N || 181;
@@ -38,6 +20,14 @@
   function loop(tick) {
     tick();
     if (!reduce) requestAnimationFrame(function step(t) { tick(t); requestAnimationFrame(step); });
+  }
+  function teeth(c, rad, th, n, h) {
+    var out = '';
+    for (var i = 0; i < n; i++) {
+      var a = th + 2 * Math.PI * i / n;
+      out += '<line x1="' + f(c.x + rad * Math.sin(a)) + '" y1="' + f(c.y - rad * Math.cos(a)) + '" x2="' + f(c.x + (rad + h) * Math.sin(a)) + '" y2="' + f(c.y - (rad + h) * Math.cos(a)) + '"/>';
+    }
+    return out;
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -74,7 +64,6 @@
       var Us = on ? 0.5 * k * s * s : 0;
       return { mass: mass, A: A, P: P, Q: Q, dir: dir, s: s, Ug: Ug, Us: Us };
     }
-
     function spokes(c, rad, th, n) {
       var out = '';
       for (var i = 0; i < n; i++) {
@@ -83,47 +72,28 @@
       }
       return out;
     }
-    function teeth(c, rad, th, n, inward) {
-      var out = '', h = inward ? -3 : 3;
-      for (var i = 0; i < n; i++) {
-        var a = th + 2 * Math.PI * i / n;
-        out += '<line x1="' + f(c.x + rad * Math.sin(a)) + '" y1="' + f(c.y - rad * Math.cos(a)) + '" x2="' + f(c.x + (rad + h) * Math.sin(a)) + '" y2="' + f(c.y - (rad + h) * Math.cos(a)) + '"/>';
-      }
-      return out;
-    }
-    function compSpring(from, to, free) {
-      // a compression spring seated at `from`, pointing to `to`; it is only as long as the gap, up to its free length
-      var dx = to.x - from.x, dy = to.y - from.y, d = Math.hypot(dx, dy), len = Math.min(d, free);
-      var end = { x: from.x + dx / d * len, y: from.y + dy / d * len };
-      var loaded = d < free - 0.5;
-      return '<polyline fill="none" stroke="' + (loaded ? 'var(--accent)' : 'var(--line)') + '" stroke-width="1.6" stroke-linejoin="round" points="' + zigzag(from, end, 11, 3) + '"/>' +
-             '<line x1="' + f(end.x - 4 * dy / d) + '" y1="' + f(end.y + 4 * dx / d) + '" x2="' + f(end.x + 4 * dy / d) + '" y2="' + f(end.y - 4 * dx / d) + '" stroke="var(--fg)" stroke-width="1.6"/>';
-    }
 
     function draw(th) {
       var s = state(th);
-      el.ring.innerHTML = '<circle cx="' + Or.x + '" cy="' + Or.y + '" r="' + R + '" fill="none" stroke="var(--fg)" stroke-width="2"/>' +
-        '<g stroke="var(--fg-2)" stroke-width="1">' + teeth(Or, R, th / 2, 36, true) + '</g>' +
-        '<circle cx="' + Or.x + '" cy="' + Or.y + '" r="4.5" fill="var(--card)" stroke="var(--fg)" stroke-width="1.6"/>';
-      el.inner.innerHTML = '<circle cx="' + O.x + '" cy="' + O.y + '" r="' + r + '" fill="var(--bg-2)" stroke="var(--fg)" stroke-width="2"/>' +
-        '<g stroke="var(--fg-2)" stroke-width="1">' + teeth(O, r, th, 18, false) + spokes(O, r, th, 3) + '</g>';
-      el.arm.innerHTML = '<line x1="' + O.x + '" y1="' + O.y + '" x2="' + f(s.mass.x) + '" y2="' + f(s.mass.y) + '" stroke="var(--fg)" stroke-width="3.5" stroke-linecap="round"/>' +
-        massDisc(s.mass, 9) + dot(O, 5) +
-        '<text x="' + f(s.mass.x + 12) + '" y="' + f(s.mass.y + 4) + '" font-size="11" font-style="italic" fill="var(--fg)">m</text>';
+      el.ring.innerHTML = KD.ground(Or, { w: 14 }) +
+        '<circle cx="' + Or.x + '" cy="' + Or.y + '" r="' + R + '" fill="none" stroke="var(--fg)" stroke-width="2"/>' +
+        '<g stroke="var(--fg)" stroke-width="1">' + teeth(Or, R, th / 2, 36, -3) + '</g>' + KD.joint(Or, 4);
+      el.inner.innerHTML = '<circle cx="' + O.x + '" cy="' + O.y + '" r="' + r + '" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="2"/>' +
+        '<g stroke="var(--fg)" stroke-width="1">' + teeth(O, r, th, 18, 3) + spokes(O, r, th, 3) + '</g>';
+      el.arm.innerHTML = KD.body(O, s.mass, 4) + KD.ground(O, { w: 12, plain: true }) + KD.mass(s.mass, 10, 'm') + KD.joint(O, 5);
       el.lineG.style.display = showLine ? '' : 'none';
-      el.lineG.innerHTML = '<line x1="' + f(s.P.x) + '" y1="' + f(s.P.y) + '" x2="' + f(s.Q.x) + '" y2="' + f(s.Q.y) + '" stroke="var(--red)" stroke-width="1" stroke-dasharray="3 3"/>' +
-        '<text x="' + f(s.P.x + 6 * -s.dir.x) + '" y="' + f(s.P.y + 6 * -s.dir.y + 4) + '" font-size="10" font-style="italic" fill="var(--fg-2)" text-anchor="middle">P</text>' +
-        '<text x="' + f(s.Q.x + 6 * s.dir.x) + '" y="' + f(s.Q.y + 6 * s.dir.y + 4) + '" font-size="10" font-style="italic" fill="var(--fg-2)" text-anchor="middle">Q</text>';
+      el.lineG.innerHTML = KD.dashed(s.P, s.Q) +
+        KD.label({ x: s.P.x + 7 * -s.dir.x, y: s.P.y + 7 * -s.dir.y + 4 }, 'P', { size: 11, anchor: 'middle' }) +
+        KD.label({ x: s.Q.x + 7 * s.dir.x, y: s.Q.y + 7 * s.dir.y + 4 }, 'Q', { size: 11, anchor: 'middle' });
       el.springs.style.display = on ? '' : 'none';
-      el.springs.innerHTML = compSpring(s.Q, s.A, R) + compSpring(s.P, s.A, R) +
-        '<circle cx="' + f(s.A.x) + '" cy="' + f(s.A.y) + '" r="4" fill="var(--red)"/>' +
-        '<text x="' + f(s.A.x + 7) + '" y="' + f(s.A.y - 6) + '" font-size="10" font-style="italic" fill="var(--fg)">A</text>';
-      if (!on) el.inner.innerHTML += '<circle cx="' + f(s.A.x) + '" cy="' + f(s.A.y) + '" r="4" fill="var(--red)"/>';
+      el.springs.innerHTML = KD.compSpring(s.Q, s.A, R, 8) + KD.compSpring(s.P, s.A, R, 8) +
+        KD.disc(s.A, 3.5, 'var(--mass)') + KD.label({ x: s.A.x + 7, y: s.A.y - 6 }, 'A', { size: 11 });
+      if (!on) el.inner.innerHTML += KD.disc(s.A, 3.5, 'var(--mass)');
     }
 
     // energy chart over the swing
     var W = 260, H = 70, lo, hi;
-    (function () { var a = state(0), b = state(AMP); lo = Math.min(a.Ug, b.Ug, a.Us, b.Us); hi = Math.max(a.Ug + a.Us, b.Ug + b.Us); var p = (hi - lo) * .08; lo -= p; hi += p; })();
+    (function () { var a = state(0), b = state(AMP); lo = Math.min(a.Ug, b.Ug, a.Us, b.Us); hi = Math.max(a.Ug + a.Us, b.Ug + b.Us, a.Ug, b.Us); var p = (hi - lo) * .08; lo -= p; hi += p; })();
     function rechart() {
       el.cUg.setAttribute('d', chartPath(W, H, -AMP, AMP, lo, hi, function (t) { return state(t).Ug; }));
       el.cUs.setAttribute('d', chartPath(W, H, -AMP, AMP, lo, hi, function (t) { return state(t).Us; }));
@@ -182,40 +152,30 @@
 
     function draw(th, s) {
       var st = state(th, s);
-      var ph = 12 + 10 * M, pw = 26 + 6 * M;                     // payload box grows with M
-      var plate = st.top.y - 6;
-      el.rail.innerHTML = '<line x1="' + (O.x - 7) + '" y1="' + (O.y - 85) + '" x2="' + (O.x - 7) + '" y2="' + (O.y - 25) + '" stroke="var(--fg-2)" stroke-width="1.2"/>' +
-        '<rect x="' + (O.x - 11) + '" y="' + (O.y - 85) + '" width="4" height="60" fill="url(#hatch)" stroke="none" color="var(--fg-2)" opacity=".7"/>';
+      var rp = 7 + 5 * Math.sqrt(M);                             // payload disc grows with M
+      var plate = st.top.y - 6, cx = st.top.x + c / 2;
+      el.rail.innerHTML = KD.wall({ x: O.x - 7, y: O.y - 85 }, { x: O.x - 7, y: O.y - 25 }, 1);
       el.body.innerHTML =
-        // ground
-        '<line x1="' + (O.x - 30) + '" y1="' + (O.y + 8) + '" x2="' + (O.x + 60) + '" y2="' + (O.y + 8) + '" stroke="var(--fg-2)" stroke-width="1.2"/>' +
-        '<rect x="' + (O.x - 30) + '" y="' + (O.y + 8) + '" width="90" height="7" fill="url(#hatch)" stroke="none" color="var(--fg-2)" opacity=".6"/>' +
+        KD.ground(O, { w: 13 }) + KD.ground(st.O2, { w: 13 }) +
         // parallelogram
-        '<g stroke="var(--fg)" stroke-width="3.2" stroke-linecap="round">' + line(O, st.top) + line(st.O2, st.top2) + '</g>' +
-        '<line x1="' + f(st.top.x) + '" y1="' + f(st.top.y) + '" x2="' + f(st.top2.x) + '" y2="' + f(st.top2.y) + '" stroke="var(--fg)" stroke-width="3.2" stroke-linecap="round"/>' +
+        KD.link(O, st.top) + KD.link(st.O2, st.top2) + KD.link(st.top, st.top2) +
         // platform with self-regulator and payload
-        '<rect x="' + f(st.top.x - 8) + '" y="' + f(plate - 16) + '" width="' + (c + 16) + '" height="16" rx="2" fill="var(--bg-2)" stroke="var(--fg)" stroke-width="1.4"/>' +
-        '<text x="' + f(st.top.x + c / 2) + '" y="' + f(plate - 5) + '" font-size="7.5" text-anchor="middle" fill="var(--fg-2)">regulator</text>' +
-        '<rect x="' + f(st.top.x + c / 2 - pw / 2) + '" y="' + f(plate - 16 - ph) + '" width="' + f(pw) + '" height="' + f(ph) + '" rx="2" fill="var(--card)" stroke="var(--fg)" stroke-width="1.6"/>' +
-        '<rect x="' + f(st.top.x + c / 2 - pw / 2) + '" y="' + f(plate - 16 - ph) + '" width="' + f(pw) + '" height="' + f(ph) + '" rx="2" fill="url(#masshatch)" stroke="none" color="var(--fg)"/>' +
-        '<text x="' + f(st.top.x + c / 2 + pw / 2 + 5) + '" y="' + f(plate - 16 - ph / 2 + 4) + '" font-size="11" font-style="italic" fill="var(--fg)">M</text>' +
+        '<rect x="' + f(st.top.x - 8) + '" y="' + f(plate - 16) + '" width="' + (c + 16) + '" height="16" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="1.4"/>' +
+        KD.note({ x: cx, y: plate - 5 }, 'regulator', { size: 7.5, anchor: 'middle' }) +
+        KD.mass({ x: cx, y: plate - 16 - rp }, rp, 'M') +
         // joints and sliders
-        dot(O, 5) + dot(st.O2, 5) + dot(st.top, 4) + dot(st.top2, 4) +
-        '<rect x="' + f(st.A.x - 11) + '" y="' + f(st.A.y - 5) + '" width="9" height="10" rx="1" fill="var(--card)" stroke="var(--fg)" stroke-width="1.4"/>' +
-        '<g transform="rotate(' + f(th * 180 / Math.PI) + ' ' + f(st.B.x) + ' ' + f(st.B.y) + ')"><rect x="' + f(st.B.x - 5) + '" y="' + f(st.B.y - 6) + '" width="10" height="12" rx="1" fill="var(--card)" stroke="var(--fg)" stroke-width="1.4"/></g>' +
-        '<text x="' + f(st.A.x - 22) + '" y="' + f(st.A.y + 4) + '" font-size="10" font-style="italic" fill="var(--fg)">A</text>' +
-        '<text x="' + f(st.B.x + 9) + '" y="' + f(st.B.y + 4) + '" font-size="10" font-style="italic" fill="var(--fg)">B</text>';
+        KD.joint(O, 5) + KD.joint(st.O2, 5) + KD.joint(st.top, 4) + KD.joint(st.top2, 4) +
+        KD.slider({ x: st.A.x - 7, y: st.A.y }, 9, 5, 0) + KD.slider(st.B, 10, 6, th * 180 / Math.PI) +
+        KD.label({ x: st.A.x - 23, y: st.A.y + 4 }, 'A', { size: 11 }) + KD.label({ x: st.B.x + 9, y: st.B.y + 4 }, 'B', { size: 11 });
       el.spring.style.display = mode === 'off' ? 'none' : '';
-      el.spring.setAttribute('points', zigzag(st.A, st.B, 10, 3));
+      el.spring.setAttribute('points', KD.zigzag(st.A, st.B, 10, 3.5));
       // cables: A up and over the pulleys, down the left, back under the pivot and up the arm; B along the arm
       var pa = { x: O.x - 7, y: O.y - 100 }, pb = { x: O.x - 60, y: O.y - 100 }, pc = { x: O.x - 60, y: O.y - 2 };
       var mid = { x: O.x + (L - 14) * st.u.x, y: O.y + (L - 14) * st.u.y };
       el.cables.style.display = mode === 'off' ? 'none' : '';
-      el.cables.innerHTML = '<g fill="none" stroke="var(--accent)" stroke-width="1.1" opacity=".9">' +
-        '<polyline points="' + f(st.A.x - 7) + ',' + f(st.A.y) + ' ' + f(pa.x) + ',' + f(pa.y) + ' ' + f(pb.x) + ',' + f(pb.y) + ' ' + f(pc.x) + ',' + f(pc.y) + ' ' + O.x + ',' + O.y + ' ' + f(mid.x) + ',' + f(mid.y) + '"/>' +
-        '<polyline stroke-dasharray="3 2" points="' + f(st.B.x) + ',' + f(st.B.y) + ' ' + f(mid.x) + ',' + f(mid.y) + '"/></g>' +
-        '<g fill="var(--card)" stroke="var(--fg-2)" stroke-width="1">' + dot(pa, 3) + dot(pb, 3) + dot(pc, 3) + '</g>' +
-        '<text x="' + f(pb.x - 4) + '" y="' + f((pb.y + pc.y) / 2) + '" font-size="8" fill="var(--accent)" text-anchor="end">cable A</text>';
+      el.cables.innerHTML = KD.cable([{ x: st.A.x - 7, y: st.A.y }, pa, pb, pc, O, mid]) + KD.cable([st.B, mid]) +
+        KD.joint(pa, 3) + KD.joint(pb, 3) + KD.joint(pc, 3) +
+        KD.note({ x: pb.x - 4, y: (pb.y + pc.y) / 2 }, 'cable A', { size: 8, anchor: 'end', fill: 'var(--cable)' });
     }
 
     var W = 260, H = 70, lo, hi;
@@ -229,7 +189,7 @@
       el.lblT.textContent = mode === 'off' ? 'total = gravity' : 'total';
     }
     var loadIn = document.getElementById('regLoad'), loadOut = document.getElementById('regLoadOut'), sOut = document.getElementById('regSOut'), msg = document.getElementById('regMsg');
-    var phase = 'swing', phaseT = 0, sFrom = 50, thHome = 0;
+    var phase = 'swing', phaseT = 0, sFrom = 50;
     function retarget() {
       M = loadIn ? parseFloat(loadIn.value) : 1;
       sTarget = mode === 'auto' ? sFor(M) : sFixed;
@@ -250,14 +210,13 @@
       rb.addEventListener('change', function () { if (rb.checked) { mode = rb.value; retarget(); rechart(sNow); } });
     });
     rechart(sNow); say();
-    var t0 = null, th = 0.4, last = null, swingT = 0;
+    var th = 0.4, last = null, swingT = 0;
     loop(function (t) {
       var dt = 0;
       if (t !== undefined) { if (last !== null) dt = Math.min(0.05, (t - last) / 1000); last = t; }
       if (phase === 'swing') {
         swingT += dt; th = AMP * Math.sin(swingT * 0.6);
       } else if (phase === 'home') {
-        // ease the arm back upright, then adjust
         th += (0 - th) * Math.min(1, 4 * dt);
         if (Math.abs(th) < 0.01) { th = 0; phase = 'adjust'; phaseT = 0; sFrom = sNow; say(); }
       } else if (phase === 'adjust') {
@@ -320,32 +279,25 @@
       var H = P(hH, 0), phi = -Math.PI / 2 + th / ng;
       var A = P(hH + r2a * Math.cos(phi), r2a * Math.sin(phi));
       var B = P(hH + xB(th), 0), S = P(hH + xStop, 0), end = P(sM, 0);
-      var gear2rot = th + th / ng;                 // absolute rotation of gear 2 (screen clockwise)
-      function teeth(cen, rad, rot, n) {
-        var out = '';
-        for (var i = 0; i < n; i++) { var a = rot + 2 * Math.PI * i / n; out += '<line x1="' + f(cen.x + rad * Math.sin(a)) + '" y1="' + f(cen.y - rad * Math.cos(a)) + '" x2="' + f(cen.x + (rad + 2.5) * Math.sin(a)) + '" y2="' + f(cen.y - (rad + 2.5) * Math.cos(a)) + '"/>'; }
-        return out;
-      }
+      var gear2rot = th + th / ng, deg = th * 180 / Math.PI;                 // absolute rotation of gear 2 (screen clockwise)
       el.g.innerHTML =
-        // link with a slot for the slider
-        '<line x1="' + O.x + '" y1="' + O.y + '" x2="' + f(end.x) + '" y2="' + f(end.y) + '" stroke="var(--fg)" stroke-width="3.5" stroke-linecap="round"/>' +
+        KD.ground(O, { w: 26 }) +
+        // the link, drawn as a bar; the slider and spring sit inside it
+        KD.body(O, end, 5.5) +
         // fixed gear 1 (hatched) and gear 2
-        '<circle cx="' + O.x + '" cy="' + O.y + '" r="' + r1 + '" fill="url(#hatch)" stroke="var(--fg)" stroke-width="1.6" color="var(--fg-2)"/>' +
-        '<g stroke="var(--fg-2)" stroke-width="1">' + teeth(O, r1, 0, 10) + '</g>' +
-        '<circle cx="' + f(H.x) + '" cy="' + f(H.y) + '" r="' + r2 + '" fill="var(--bg-2)" stroke="var(--fg)" stroke-width="1.6" opacity=".95"/>' +
-        '<g stroke="var(--fg-2)" stroke-width="1">' + teeth(H, r2, gear2rot, 20) + '</g>' +
-        dot(H, 3.5) +
+        '<circle cx="' + O.x + '" cy="' + O.y + '" r="' + r1 + '" fill="url(#hatch)" stroke="var(--fg)" stroke-width="1.6" color="var(--fg)"/>' +
+        '<g stroke="var(--fg)" stroke-width="1">' + teeth(O, r1, 0, 10, 2.5) + '</g>' +
+        '<circle cx="' + f(H.x) + '" cy="' + f(H.y) + '" r="' + r2 + '" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="1.6"/>' +
+        '<g stroke="var(--fg)" stroke-width="1">' + teeth(H, r2, gear2rot, 20, 2.5) + '</g>' +
+        KD.joint(H, 3.5) +
         // crank, connecting rod, slider, spring seat
-        '<line x1="' + f(H.x) + '" y1="' + f(H.y) + '" x2="' + f(A.x) + '" y2="' + f(A.y) + '" stroke="var(--fg)" stroke-width="2"/>' +
-        '<line x1="' + f(A.x) + '" y1="' + f(A.y) + '" x2="' + f(B.x) + '" y2="' + f(B.y) + '" stroke="var(--fg)" stroke-width="2.2" stroke-linecap="round"/>' +
-        '<g transform="rotate(' + f(th * 180 / Math.PI) + ' ' + f(B.x) + ' ' + f(B.y) + ')"><rect x="' + f(B.x - 5) + '" y="' + f(B.y - 6) + '" width="10" height="12" rx="1" fill="var(--card)" stroke="var(--fg)" stroke-width="1.4"/></g>' +
-        '<g transform="rotate(' + f(th * 180 / Math.PI) + ' ' + f(S.x) + ' ' + f(S.y) + ')"><rect x="' + f(S.x - 1.5) + '" y="' + f(S.y - 7) + '" width="3" height="14" fill="var(--fg)"/></g>' +
-        dot(A, 3, 'var(--red)') + dot(O, 4.5) +
-        massDisc(end, 9) +
-        '<text x="' + f(A.x + 6) + '" y="' + f(A.y - 5) + '" font-size="10" font-style="italic" fill="var(--fg)">A</text>' +
-        '<text x="' + f(end.x + 12) + '" y="' + f(end.y + 4) + '" font-size="11" font-style="italic" fill="var(--fg)">m</text>';
+        KD.link(H, A, 2) + KD.link(A, B, 2.2) +
+        KD.slider(B, 9, 5, deg) +
+        '<g transform="rotate(' + f(deg) + ' ' + f(S.x) + ' ' + f(S.y) + ')"><rect x="' + f(S.x - 1.5) + '" y="' + f(S.y - 5.5) + '" width="3" height="11" fill="var(--fg)"/></g>' +
+        KD.disc(A, 3, 'var(--mass)') + KD.joint(O, 4.5) +
+        KD.com(end, 7) + KD.label({ x: A.x + 6, y: A.y - 5 }, 'A', { size: 11 }) + KD.label({ x: end.x + 15 * v.x - 4, y: end.y + 15 * v.y + 4 }, 'm');
       el.spring.style.display = on ? '' : 'none';
-      el.spring.setAttribute('points', zigzag(B, S, 9, 3.5));
+      el.spring.setAttribute('points', KD.zigzag(B, S, 9, 3.5, 3));
     }
 
     var W = 260, H = 70, scale = 1.3 * m * g * sM;
@@ -358,7 +310,6 @@
       el.tS.setAttribute('d', path(function (th) { return torque(Us, th); }));
       el.tS.style.display = on ? '' : 'none';
       el.tN.setAttribute('d', path(function (th) { return torque(Ug, th) + torque(Us, th); }));
-      // peak leftover torque as a share of the unbalanced peak
       if (msg) msg.textContent = on ? 'Leftover torque: ' + Math.round(100 * peakNet() / (m * g * sM)) + ' % of the unbalanced peak.' : 'Not balanced: the motor carries the whole weight.';
       if (kOut) kOut.value = on ? (100 * k / k0).toFixed(0) + ' %' : '–';
     }

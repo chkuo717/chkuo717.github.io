@@ -54,11 +54,11 @@ def build_nav(active, root):
 def paper_item(p, rep):
     e = html.escape
     title = e(p["title"])
+    href = f'https://doi.org/{p["doi"]}' if p.get("doi") else p.get("url")
     link = ""
-    if p.get("doi"):
-        link = f' <a href="https://doi.org/{e(p["doi"])}">doi</a>'
-    elif p.get("url"):
-        link = f' <a href="{e(p["url"])}">open</a>'
+    if href:
+        title = f'<a href="{e(href)}">{title}</a>'
+        link = f' <a href="{e(href)}">{"doi" if p.get("doi") else "link"}</a>'
     tag = ""
     if p.get("anim"):
         tag = f' <a class="anim" href="{e(p["anim"])}">animation</a>'
@@ -66,7 +66,7 @@ def paper_item(p, rep):
         tag = ' <span class="soon">animation coming</span>'
     kind = TYPE_LABEL.get(p.get("type"), "")
     kind_html = f'<span class="kind">{kind}</span> ' if kind else ""
-    note = f'<br><span class="note">{e(p["note"])}</span>' if p.get("note") else ""
+    note = f'<br><span class="note">{p["note"]}</span>' if p.get("note") else ""  # note may carry a link
     return (f'<li>{kind_html}<strong>{title}.</strong>{tag}<br>'
             f'<span class="venue">{e(p["authors"])}, <em>{e(p["venue"])}</em>, {p["year"]}.{link}</span>{note}</li>')
 

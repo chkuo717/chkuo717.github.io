@@ -1,56 +1,439 @@
 {
-  "_comment": "One entry per publication. theme: gravity | magnetic | parallel | reconfigurable | medical | theory | collab. rep: true marks a representative paper shown first on its theme page. anim: path to an animation page once one exists.",
-  "papers": [
-    {"key":"MMT2025b","theme":"gravity","rep":true,"title":"Complete gravity balancing of the general four-bar linkage using linear springs","authors":"Kuo, C.-H.","venue":"Mechanism and Machine Theory","year":2025,"doi":"10.1016/j.mechmachtheory.2025.106140","note":"Sole author. The home-page animation is drawn from this paper."},
-    {"key":"MMT2023","theme":"gravity","rep":true,"title":"Perfect static balancing using Cardan-gear spring mechanisms","authors":"Kuo, C.-H. and Wu, Y.-X.","venue":"Mechanism and Machine Theory","year":2023,"doi":"10.1016/j.mechmachtheory.2023.105229"},
-    {"key":"MMT2020","theme":"gravity","rep":true,"title":"Gravity compensation design of Delta parallel robots using gear-spring modules","authors":"Nguyen, V. L., Lin, C.-Y. and Kuo, C.-H.","venue":"Mechanism and Machine Theory","year":2020,"doi":"10.1016/j.mechmachtheory.2020.104046"},
-    {"key":"JMR2017a","theme":"gravity","rep":true,"title":"A single-degree-of-freedom self-regulated gravity balancer for adjustable payload","authors":"Chu, Y.-L. and Kuo, C.-H.","venue":"ASME Journal of Mechanisms and Robotics","year":2017,"doi":"10.1115/1.4035561"},
-    {"key":"MMT2024","theme":"gravity","title":"Performance analysis of gravity-balanced serial robotic manipulators under dynamic loads","authors":"Nguyen, V. L., Kuo, C.-H. and Lin, P. T.","venue":"Mechanism and Machine Theory","year":2024,"doi":"10.1016/j.mechmachtheory.2023.105519"},
-    {"key":"JMR2022","theme":"gravity","title":"Reliability-based analysis and optimization of the gravity balancing performance of spring-articulated serial robots with uncertainties","authors":"Nguyen, V. L., Kuo, C.-H. and Lin, P. T.","venue":"ASME Journal of Mechanisms and Robotics","year":2022,"doi":"10.1115/1.4053048"},
-    {"key":"JMR2021b","theme":"gravity","title":"Statically balancing a reconfigurable mechanism by using one passive energy element only: a case study","authors":"Kuo, C.-H., Nguyen, V. L., Robertson, D., Chou, L.-T. and Herder, J. L.","venue":"ASME Journal of Mechanisms and Robotics","year":2021,"doi":"10.1115/1.4050682"},
-    {"key":"JMR2020","theme":"gravity","title":"Gravity compensation design of planar articulated robotic arms using the gear-spring modules","authors":"Nguyen, V. L., Lin, C.-Y. and Kuo, C.-H.","venue":"ASME Journal of Mechanisms and Robotics","year":2020,"doi":"10.1115/1.4045650"},
-    {"key":"MMT2019","theme":"gravity","title":"An analytical stiffness method for spring-articulated planar serial or quasi-serial manipulators under gravity and an arbitrary load","authors":"Nguyen, V. L. and Kuo, C.-H.","venue":"Mechanism and Machine Theory","year":2019,"doi":"10.1016/j.mechmachtheory.2019.03.015"},
-    {"key":"JMES2015","theme":"gravity","title":"Design and implementation of a new statically balancing mechanism for slider-type desktop monitor stands","authors":"Hsiu, W.-H., Syu, F.-C. and Kuo, C.-H.","venue":"Proc. IMechE Part C: Journal of Mechanical Engineering Science","year":2015,"doi":"10.1177/0954406214545821","note":"Technology transferred to Syncmold Enterprise Co. (US Patent 2015/0053830 A1, Display Lifting Device)."},
-    {"key":"BC02","theme":"gravity","type":"chapter","title":"A modularization approach for gravity compensation of planar articulated robotic manipulators","authors":"Nguyen, V. L. and Kuo, C.-H.","venue":"In: Arakelian, V. (ed.), Gravity Compensation in Robotics, Springer","year":2022},
-    {"key":"BC01","theme":"gravity","type":"chapter","title":"Gravity balancing of mechanisms","authors":"Kuo, C.-H.","venue":"In: JSME Handbook of Mechanisms in Motion, Corona Publishing, Tokyo (invited, in press)","year":2027},
-
-    {"key":"JMD2026","theme":"magnetic","rep":true,"title":"A reconfigurable Halbach cylinder for gravity compensation of variable rotational payloads","authors":"Biggs, E., Kuo, C.-H. and Ren, T.","venue":"ASME Journal of Mechanical Design","year":2026,"doi":"10.1115/1.4069596"},
-    {"key":"TMech2026","theme":"magnetic","rep":true,"title":"Passive levitation in long vertical range using two permanent magnets","authors":"Zeng, X., Li, S., Kuo, C.-H. and Sariyildiz, E.","venue":"IEEE/ASME Transactions on Mechatronics","year":2026,"doi":"10.1109/TMECH.2025.3629126"},
-    {"key":"MMT2025a","theme":"magnetic","rep":true,"title":"Design optimization and validation of a permanent-magnet array for gravity compensation in long-stroke linear motion","authors":"Zeng, X., Kuo, C.-H. and Sariyildiz, E.","venue":"Mechanism and Machine Theory","year":2025,"doi":"10.1016/j.mechmachtheory.2025.105990"},
-    {"key":"TMAG2024","theme":"magnetic","rep":true,"title":"A computational approach for the analysis and synthesis of the interactive force between two general permanent magnets by using Monte Carlo integration","authors":"Zeng, X., Kuo, C.-H. and Sariyildiz, E.","venue":"IEEE Transactions on Magnetics","year":2024,"doi":"10.1109/TMAG.2024.3466273"},
-    {"key":"ALTR2026","theme":"magnetic","title":"A triple-magnet passive gravity compensator: sensitivity-based design and experimental validation","authors":"Li, S., Zeng, X. and Kuo, C.-H.","venue":"ASME Letters in Translational Robotics","year":2026,"doi":"10.1115/1.4072727"},
-
-    {"key":"JMR2021a","theme":"parallel","rep":true,"title":"Structure synthesis of a class of parallel manipulators with fully decoupled projective motion","authors":"Kuo, C.-H. and Dai, J. S.","venue":"ASME Journal of Mechanisms and Robotics","year":2021,"doi":"10.1115/1.4050151"},
-    {"key":"ROB2014","theme":"parallel","rep":true,"title":"A non-overconstrained variant of the Agile Eye with a special decoupled kinematics","authors":"Kuo, C.-H., Dai, J. S. and Legnani, G.","venue":"Robotica","year":2014,"doi":"10.1017/S0263574713001100"},
-    {"key":"MMT2013","theme":"parallel","rep":true,"title":"Task-oriented structure synthesis of a class of parallel manipulators using motion constraint generator","authors":"Kuo, C.-H. and Dai, J. S.","venue":"Mechanism and Machine Theory","year":2013,"doi":"10.1016/j.mechmachtheory.2013.08.010"},
-    {"key":"BC03","theme":"parallel","type":"chapter","title":"A partially-decoupled 4-DOF general 3SPS/PS parallel manipulator","authors":"Kuo, C.-H. and Dai, J. S.","venue":"In: Legnani, G. and Fassi, I. (eds), Robotics: State of the Art and Future Trends, Nova Science","year":2012},
-
-    {"key":"MMT2017","theme":"reconfigurable","rep":true,"title":"Configuration analysis of a class of reconfigurable cube mechanisms: mobility and configuration isomorphism","authors":"Kuo, C.-H. and Su, J.-W.","venue":"Mechanism and Machine Theory","year":2017,"doi":"10.1016/j.mechmachtheory.2015.08.006"},
-    {"key":"JMR2014","theme":"reconfigurable","rep":true,"title":"Structure decomposition and homomorphism identification of planar variable topology mechanisms","authors":"Kuo, C.-H. and Chang, L.-Y.","venue":"ASME Journal of Mechanisms and Robotics","year":2014,"doi":"10.1115/1.4026336"},
-    {"key":"JMD2007","theme":"reconfigurable","rep":true,"title":"On the mobility and configuration singularity of mechanisms with variable topologies","authors":"Kuo, C.-H. and Yan, H.-S.","venue":"ASME Journal of Mechanical Design","year":2007,"doi":"10.1115/1.2717230"},
-    {"key":"MS2017","theme":"reconfigurable","title":"An algebraic formulation for the configuration transformation of a class of reconfigurable cube mechanisms","authors":"Kuo, C.-H., Su, J.-W. and Wu, L.-C.","venue":"Mechanical Sciences","year":2017,"doi":"10.5194/ms-8-101-2017"},
-    {"key":"JSI2012","theme":"reconfigurable","title":"Reconfiguration principles and strategies for reconfigurable mechanisms","authors":"Kuo, C.-H., Dai, J. S. and Yan, H.-S.","venue":"Journal of Science and Innovation","year":2012,"doi":"10.6654/JSI.201201_2(1).0004"},
-    {"key":"TCSME2006","theme":"reconfigurable","title":"Representations and identifications of structural and motion state characteristics of mechanisms with variable topologies","authors":"Yan, H.-S. and Kuo, C.-H.","venue":"Transactions of the Canadian Society for Mechanical Engineering","year":2006,"doi":"10.1139/tcsme-2006-0003"},
-    {"key":"JMD2006","theme":"reconfigurable","title":"Topological representations and characteristics of variable kinematic joints","authors":"Yan, H.-S. and Kuo, C.-H.","venue":"ASME Journal of Mechanical Design","year":2006,"doi":"10.1115/1.2166854"},
-    {"key":"BK02","theme":"reconfigurable","type":"book","title":"Structural Characteristics of Mechanisms with Variable Topologies: Taking into Account the Configuration Singularity","authors":"Kuo, C.-H.","venue":"VDM Verlag Dr. Müller, Saarbrücken","year":2008},
-
-    {"key":"JMR2017b","theme":"medical","rep":true,"title":"A novel reconfigurable gravity balancer for lower-limb rehabilitation with switchable hip/knee-only exercise","authors":"Tseng, T.-Y., Lin, Y.-J., Hsu, W.-C., Lin, L.-F. and Kuo, C.-H.","venue":"ASME Journal of Mechanisms and Robotics","year":2017,"doi":"10.1115/1.4036218","note":"US Patent 9,592,415 B2, Auxiliary Device for Muscle Strength Training."},
-    {"key":"JMR2016","theme":"medical","rep":true,"title":"Design of a novel statically balanced mechanism for laparoscope holders with decoupled positioning and orientating manipulation","authors":"Kuo, C.-H. and Lai, S.-J.","venue":"ASME Journal of Mechanisms and Robotics","year":2016,"doi":"10.1115/1.4029789","note":"US Patent 9,232,981 B2, Surgical Holder."},
-    {"key":"JMED2012","theme":"medical","rep":true,"title":"Kinematics of a fully-decoupled remote center-of-motion parallel manipulator for minimally invasive surgery","authors":"Kuo, C.-H. and Dai, J. S.","venue":"ASME Journal of Medical Devices","year":2012,"doi":"10.1115/1.4006541"},
-    {"key":"BIR2025","theme":"medical","title":"Kirigami analogies for parallelogram-based remote-center-of-motion mechanisms","authors":"Yeow, B. S., Wang, A., Kuo, C.-H. and Ren, H.","venue":"Biomimetic Intelligence and Robotics","year":2025,"doi":"10.1016/j.birob.2025.100251"},
-    {"key":"JMED2017","theme":"medical","title":"Innovative design of an automatic acupoint catgut-embedding instrument","authors":"Kuo, C.-H. and Wang, C.-W.","venue":"ASME Journal of Medical Devices","year":2017,"doi":"10.1115/1.4035689"},
-    {"key":"JMES2017","theme":"medical","title":"Kinematic design and optimization of a novel dual-orthogonal remote center-of-motion mechanism for craniotomy","authors":"Li, G.-K., Essomba, T., Wu, C.-T., Lee, S.-T. and Kuo, C.-H.","venue":"Proc. IMechE Part C: Journal of Mechanical Engineering Science","year":2017,"doi":"10.1177/0954406216636169"},
-    {"key":"IJMRCAS2012","theme":"medical","title":"Kinematic design considerations for minimally invasive surgical robots: an overview","authors":"Kuo, C.-H., Dai, J. S. and Dasgupta, P.","venue":"International Journal of Medical Robotics and Computer Assisted Surgery","year":2012,"doi":"10.1002/rcs.453"},
-    {"key":"BJUI2011","theme":"medical","title":"Flexible robotics","authors":"Vyas, L., Aquino, D., Kuo, C.-H., Dai, J. S. and Dasgupta, P.","venue":"BJU International","year":2011,"doi":"10.1111/j.1464-410X.2010.09886.x"},
-    {"key":"PA01","theme":"medical","type":"patent","title":"Medical clamping instrument","authors":"Kuo, C.-H., Liu, T.-H. and Wang, R.-J.","venue":"US Patent 10,456,153 B2; technology transferred to HIWIN Technologies Corp.","year":2019},
-
-    {"key":"BK04","theme":"theory","rep":true,"type":"book","title":"Linkage Synthesis and Force Analysis by Using Relative Poles","authors":"Kuo, C.-H.","venue":"Interactive e-book, GeoGebra","year":2024,"url":"https://www.geogebra.org/m/zyjgc9w5"},
-    {"key":"JMD2008","theme":"theory","rep":true,"title":"Computational identification of link adjacency and joint incidence in kinematic chains and mechanisms","authors":"Kuo, C.-H. and Shih, J.-C.","venue":"ASME Journal of Mechanical Design","year":2008,"doi":"10.1115/1.2936931"},
-    {"key":"BK01","theme":"theory","type":"book","title":"Antique Mechanism Models in Taiwan (bilingual, Chinese and English)","authors":"Yan, H.-S., Huang, H.-H. and Kuo, C.-H.","venue":"National Cheng Kung University Museum, Tainan","year":2008},
-
-    {"key":"ES2025","theme":"collab","title":"Origami-inspired deployable spatial structures with terrain adaptability","authors":"Wang, Y., Wang, X., Qu, H., Hu, B., Kuo, C.-H. and Guo, S.","venue":"Engineering Structures","year":2025,"doi":"10.1016/j.engstruct.2025.121412"},
-    {"key":"IJMS2025","theme":"collab","title":"Curved loop strip soft gripper","authors":"Liu, W., Qu, H., Wang, H., Wang, X., Kuang, Y., Hu, B., Li, X., Liu, D., Kuo, C.-H. and Guo, S.","venue":"International Journal of Mechanical Sciences","year":2025,"doi":"10.1016/j.ijmecsci.2025.110746"},
-    {"key":"TMech2023","theme":"collab","title":"Design and control of a novel variable stiffness series elastic actuator","authors":"Sariyildiz, E., Mutlu, R., Roberts, J., Kuo, C.-H. and Ugurlu, B.","venue":"IEEE/ASME Transactions on Mechatronics","year":2023,"doi":"10.1109/TMECH.2022.3232471"},
-    {"key":"MMT2022","theme":"collab","title":"Compliance error compensation of a robot end-effector with joint stiffness uncertainties for milling: an analytical model","authors":"Nguyen, V. L., Kuo, C.-H. and Lin, P. T.","venue":"Mechanism and Machine Theory","year":2022,"doi":"10.1016/j.mechmachtheory.2021.104717"}
-  ]
+ "_comment": "One entry per publication. theme: gravity | magnetic | parallel | reconfigurable | medical | theory | collab. rep: true marks a representative paper shown first on its theme page. anim: path to an animation page once one exists.",
+ "papers": [
+  {
+   "key": "MMT2025b",
+   "theme": "gravity",
+   "rep": true,
+   "title": "Complete gravity balancing of the general four-bar linkage using linear springs",
+   "authors": "Kuo, C.-H.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2025,
+   "doi": "10.1016/j.mechmachtheory.2025.106140",
+   "note": "Sole author. The home-page animation is drawn from this paper."
+  },
+  {
+   "key": "MMT2023",
+   "theme": "gravity",
+   "rep": true,
+   "title": "Perfect static balancing using Cardan-gear spring mechanisms",
+   "authors": "Kuo, C.-H. and Wu, Y.-X.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2023,
+   "doi": "10.1016/j.mechmachtheory.2023.105229"
+  },
+  {
+   "key": "MMT2020",
+   "theme": "gravity",
+   "rep": true,
+   "title": "Gravity compensation design of Delta parallel robots using gear-spring modules",
+   "authors": "Nguyen, V. L., Lin, C.-Y. and Kuo, C.-H.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2020,
+   "doi": "10.1016/j.mechmachtheory.2020.104046"
+  },
+  {
+   "key": "JMR2017a",
+   "theme": "gravity",
+   "rep": true,
+   "title": "A single-degree-of-freedom self-regulated gravity balancer for adjustable payload",
+   "authors": "Chu, Y.-L. and Kuo, C.-H.",
+   "venue": "ASME Journal of Mechanisms and Robotics",
+   "year": 2017,
+   "doi": "10.1115/1.4035561"
+  },
+  {
+   "key": "MMT2024",
+   "theme": "gravity",
+   "title": "Performance analysis of gravity-balanced serial robotic manipulators under dynamic loads",
+   "authors": "Nguyen, V. L., Kuo, C.-H. and Lin, P. T.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2024,
+   "doi": "10.1016/j.mechmachtheory.2023.105519"
+  },
+  {
+   "key": "JMR2022",
+   "theme": "gravity",
+   "title": "Reliability-based analysis and optimization of the gravity balancing performance of spring-articulated serial robots with uncertainties",
+   "authors": "Nguyen, V. L., Kuo, C.-H. and Lin, P. T.",
+   "venue": "ASME Journal of Mechanisms and Robotics",
+   "year": 2022,
+   "doi": "10.1115/1.4053048"
+  },
+  {
+   "key": "JMR2021b",
+   "theme": "gravity",
+   "title": "Statically balancing a reconfigurable mechanism by using one passive energy element only: a case study",
+   "authors": "Kuo, C.-H., Nguyen, V. L., Robertson, D., Chou, L.-T. and Herder, J. L.",
+   "venue": "ASME Journal of Mechanisms and Robotics",
+   "year": 2021,
+   "doi": "10.1115/1.4050682"
+  },
+  {
+   "key": "JMR2020",
+   "theme": "gravity",
+   "title": "Gravity compensation design of planar articulated robotic arms using the gear-spring modules",
+   "authors": "Nguyen, V. L., Lin, C.-Y. and Kuo, C.-H.",
+   "venue": "ASME Journal of Mechanisms and Robotics",
+   "year": 2020,
+   "doi": "10.1115/1.4045650"
+  },
+  {
+   "key": "MMT2019",
+   "theme": "gravity",
+   "title": "An analytical stiffness method for spring-articulated planar serial or quasi-serial manipulators under gravity and an arbitrary load",
+   "authors": "Nguyen, V. L. and Kuo, C.-H.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2019,
+   "doi": "10.1016/j.mechmachtheory.2019.03.015"
+  },
+  {
+   "key": "JMES2015",
+   "theme": "gravity",
+   "title": "Design and implementation of a new statically balancing mechanism for slider-type desktop monitor stands",
+   "authors": "Hsiu, W.-H., Syu, F.-C. and Kuo, C.-H.",
+   "venue": "Proc. IMechE Part C: Journal of Mechanical Engineering Science",
+   "year": 2015,
+   "doi": "10.1177/0954406214546365",
+   "note": "Technology transferred to Syncmold Enterprise Co.; <a href=\"https://patents.google.com/patent/US20150053830A1/en\">US Patent 2015/0053830 A1, Display Lifting Device</a>."
+  },
+  {
+   "key": "BC02",
+   "theme": "gravity",
+   "type": "chapter",
+   "title": "A modularization approach for gravity compensation of planar articulated robotic manipulators",
+   "authors": "Nguyen, V. L. and Kuo, C.-H.",
+   "venue": "In: Arakelian, V. (ed.), Gravity Compensation in Robotics, Springer",
+   "year": 2022,
+   "doi": "10.1007/978-3-030-95750-6_1"
+  },
+  {
+   "key": "BC01",
+   "theme": "gravity",
+   "type": "chapter",
+   "title": "Gravity balancing of mechanisms",
+   "authors": "Kuo, C.-H.",
+   "venue": "In: JSME Handbook of Mechanisms in Motion, Corona Publishing, Tokyo (invited, in press)",
+   "year": 2027
+  },
+  {
+   "key": "JMD2026",
+   "theme": "magnetic",
+   "rep": true,
+   "title": "A reconfigurable Halbach cylinder for gravity compensation of variable rotational payloads",
+   "authors": "Biggs, E., Kuo, C.-H. and Ren, T.",
+   "venue": "ASME Journal of Mechanical Design",
+   "year": 2026,
+   "doi": "10.1115/1.4069596"
+  },
+  {
+   "key": "TMech2026",
+   "theme": "magnetic",
+   "rep": true,
+   "title": "Passive levitation in long vertical range using two permanent magnets",
+   "authors": "Zeng, X., Li, S., Kuo, C.-H. and Sariyildiz, E.",
+   "venue": "IEEE/ASME Transactions on Mechatronics",
+   "year": 2026,
+   "doi": "10.1109/TMECH.2025.3629126"
+  },
+  {
+   "key": "MMT2025a",
+   "theme": "magnetic",
+   "rep": true,
+   "title": "Design optimization and validation of a permanent-magnet array for gravity compensation in long-stroke linear motion",
+   "authors": "Zeng, X., Kuo, C.-H. and Sariyildiz, E.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2025,
+   "doi": "10.1016/j.mechmachtheory.2025.105990"
+  },
+  {
+   "key": "TMAG2024",
+   "theme": "magnetic",
+   "rep": true,
+   "title": "A computational approach for the analysis and synthesis of the interactive force between two general permanent magnets by using Monte Carlo integration",
+   "authors": "Zeng, X., Kuo, C.-H. and Sariyildiz, E.",
+   "venue": "IEEE Transactions on Magnetics",
+   "year": 2024,
+   "doi": "10.1109/TMAG.2024.3466273"
+  },
+  {
+   "key": "ALTR2026",
+   "theme": "magnetic",
+   "title": "A triple-magnet passive gravity compensator: sensitivity-based design and experimental validation",
+   "authors": "Li, S., Zeng, X. and Kuo, C.-H.",
+   "venue": "ASME Letters in Translational Robotics",
+   "year": 2026,
+   "doi": "10.1115/1.4072727"
+  },
+  {
+   "key": "JMR2021a",
+   "theme": "parallel",
+   "rep": true,
+   "title": "Structure synthesis of a class of parallel manipulators with fully decoupled projective motion",
+   "authors": "Kuo, C.-H. and Dai, J. S.",
+   "venue": "ASME Journal of Mechanisms and Robotics",
+   "year": 2021,
+   "doi": "10.1115/1.4050151"
+  },
+  {
+   "key": "ROB2014",
+   "theme": "parallel",
+   "rep": true,
+   "title": "A non-overconstrained variant of the Agile Eye with a special decoupled kinematics",
+   "authors": "Kuo, C.-H., Dai, J. S. and Legnani, G.",
+   "venue": "Robotica",
+   "year": 2014,
+   "doi": "10.1017/S0263574713001100"
+  },
+  {
+   "key": "MMT2013",
+   "theme": "parallel",
+   "rep": true,
+   "title": "Task-oriented structure synthesis of a class of parallel manipulators using motion constraint generator",
+   "authors": "Kuo, C.-H. and Dai, J. S.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2013,
+   "doi": "10.1016/j.mechmachtheory.2013.08.010"
+  },
+  {
+   "key": "BC03",
+   "theme": "parallel",
+   "type": "chapter",
+   "title": "A partially-decoupled 4-DOF general 3SPS/PS parallel manipulator",
+   "authors": "Kuo, C.-H. and Dai, J. S.",
+   "venue": "In: Legnani, G. and Fassi, I. (eds), Robotics: State of the Art and Future Trends, Nova Science",
+   "year": 2012,
+   "url": "https://books.google.com/books?vid=ISBN9781621004035"
+  },
+  {
+   "key": "MMT2017",
+   "theme": "reconfigurable",
+   "rep": true,
+   "title": "Configuration analysis of a class of reconfigurable cube mechanisms: mobility and configuration isomorphism",
+   "authors": "Kuo, C.-H. and Su, J.-W.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2017,
+   "doi": "10.1016/j.mechmachtheory.2015.08.006"
+  },
+  {
+   "key": "JMR2014",
+   "theme": "reconfigurable",
+   "rep": true,
+   "title": "Structure decomposition and homomorphism identification of planar variable topology mechanisms",
+   "authors": "Kuo, C.-H. and Chang, L.-Y.",
+   "venue": "ASME Journal of Mechanisms and Robotics",
+   "year": 2014,
+   "doi": "10.1115/1.4026336"
+  },
+  {
+   "key": "JMD2007",
+   "theme": "reconfigurable",
+   "rep": true,
+   "title": "On the mobility and configuration singularity of mechanisms with variable topologies",
+   "authors": "Kuo, C.-H. and Yan, H.-S.",
+   "venue": "ASME Journal of Mechanical Design",
+   "year": 2007,
+   "doi": "10.1115/1.2717230"
+  },
+  {
+   "key": "MS2017",
+   "theme": "reconfigurable",
+   "title": "An algebraic formulation for the configuration transformation of a class of reconfigurable cube mechanisms",
+   "authors": "Kuo, C.-H., Su, J.-W. and Wu, L.-C.",
+   "venue": "Mechanical Sciences",
+   "year": 2017,
+   "doi": "10.5194/ms-8-101-2017"
+  },
+  {
+   "key": "JSI2012",
+   "theme": "reconfigurable",
+   "title": "Reconfiguration principles and strategies for reconfigurable mechanisms",
+   "authors": "Kuo, C.-H., Dai, J. S. and Yan, H.-S.",
+   "venue": "Journal of Science and Innovation",
+   "year": 2012,
+   "doi": "10.6654/JSI.201201_2(1).0004"
+  },
+  {
+   "key": "TCSME2006",
+   "theme": "reconfigurable",
+   "title": "Representations and identifications of structural and motion state characteristics of mechanisms with variable topologies",
+   "authors": "Yan, H.-S. and Kuo, C.-H.",
+   "venue": "Transactions of the Canadian Society for Mechanical Engineering",
+   "year": 2006,
+   "doi": "10.1139/tcsme-2006-0003"
+  },
+  {
+   "key": "JMD2006",
+   "theme": "reconfigurable",
+   "title": "Topological representations and characteristics of variable kinematic joints",
+   "authors": "Yan, H.-S. and Kuo, C.-H.",
+   "venue": "ASME Journal of Mechanical Design",
+   "year": 2006,
+   "doi": "10.1115/1.2166854"
+  },
+  {
+   "key": "BK02",
+   "theme": "reconfigurable",
+   "type": "book",
+   "title": "Structural Characteristics of Mechanisms with Variable Topologies: Taking into Account the Configuration Singularity",
+   "authors": "Kuo, C.-H.",
+   "venue": "VDM Verlag Dr. Müller, Saarbrücken",
+   "year": 2008,
+   "url": "https://books.google.com/books?vid=ISBN9783836488907"
+  },
+  {
+   "key": "JMR2017b",
+   "theme": "medical",
+   "rep": true,
+   "title": "A novel reconfigurable gravity balancer for lower-limb rehabilitation with switchable hip/knee-only exercise",
+   "authors": "Tseng, T.-Y., Lin, Y.-J., Hsu, W.-C., Lin, L.-F. and Kuo, C.-H.",
+   "venue": "ASME Journal of Mechanisms and Robotics",
+   "year": 2017,
+   "doi": "10.1115/1.4036218",
+   "note": "<a href=\"https://patents.google.com/patent/US9592415B2/en\">US Patent 9,592,415 B2, Auxiliary Device for Muscle Strength Training</a>."
+  },
+  {
+   "key": "JMR2016",
+   "theme": "medical",
+   "rep": true,
+   "title": "Design of a novel statically balanced mechanism for laparoscope holders with decoupled positioning and orientating manipulation",
+   "authors": "Kuo, C.-H. and Lai, S.-J.",
+   "venue": "ASME Journal of Mechanisms and Robotics",
+   "year": 2016,
+   "doi": "10.1115/1.4029789",
+   "note": "<a href=\"https://patents.google.com/patent/US9232981B2/en\">US Patent 9,232,981 B2, Surgical Holder</a>."
+  },
+  {
+   "key": "JMED2012",
+   "theme": "medical",
+   "rep": true,
+   "title": "Kinematics of a fully-decoupled remote center-of-motion parallel manipulator for minimally invasive surgery",
+   "authors": "Kuo, C.-H. and Dai, J. S.",
+   "venue": "ASME Journal of Medical Devices",
+   "year": 2012,
+   "doi": "10.1115/1.4006541"
+  },
+  {
+   "key": "BIR2025",
+   "theme": "medical",
+   "title": "Kirigami analogies for parallelogram-based remote-center-of-motion mechanisms",
+   "authors": "Yeow, B. S., Wang, A., Kuo, C.-H. and Ren, H.",
+   "venue": "Biomimetic Intelligence and Robotics",
+   "year": 2025,
+   "doi": "10.1016/j.birob.2025.100251"
+  },
+  {
+   "key": "JMED2017",
+   "theme": "medical",
+   "title": "Innovative design of an automatic acupoint catgut-embedding instrument",
+   "authors": "Kuo, C.-H. and Wang, C.-W.",
+   "venue": "ASME Journal of Medical Devices",
+   "year": 2017,
+   "doi": "10.1115/1.4035689"
+  },
+  {
+   "key": "JMES2017",
+   "theme": "medical",
+   "title": "Kinematic design and optimization of a novel dual-orthogonal remote center-of-motion mechanism for craniotomy",
+   "authors": "Li, G.-K., Essomba, T., Wu, C.-T., Lee, S.-T. and Kuo, C.-H.",
+   "venue": "Proc. IMechE Part C: Journal of Mechanical Engineering Science",
+   "year": 2017,
+   "doi": "10.1177/0954406216636918"
+  },
+  {
+   "key": "IJMRCAS2012",
+   "theme": "medical",
+   "title": "Kinematic design considerations for minimally invasive surgical robots: an overview",
+   "authors": "Kuo, C.-H., Dai, J. S. and Dasgupta, P.",
+   "venue": "International Journal of Medical Robotics and Computer Assisted Surgery",
+   "year": 2012,
+   "doi": "10.1002/rcs.453"
+  },
+  {
+   "key": "BJUI2011",
+   "theme": "medical",
+   "title": "Flexible robotics",
+   "authors": "Vyas, L., Aquino, D., Kuo, C.-H., Dai, J. S. and Dasgupta, P.",
+   "venue": "BJU International",
+   "year": 2011,
+   "doi": "10.1111/j.1464-410X.2010.09886.x"
+  },
+  {
+   "key": "PA01",
+   "theme": "medical",
+   "type": "patent",
+   "title": "Medical clamping instrument",
+   "authors": "Kuo, C.-H., Liu, T.-H. and Wang, R.-J.",
+   "venue": "US Patent 10,456,153 B2; technology transferred to HIWIN Technologies Corp.",
+   "year": 2019,
+   "url": "https://patents.google.com/patent/US10456153B2/en"
+  },
+  {
+   "key": "BK04",
+   "theme": "theory",
+   "rep": true,
+   "type": "book",
+   "title": "Linkage Synthesis and Force Analysis by Using Relative Poles",
+   "authors": "Kuo, C.-H.",
+   "venue": "Interactive e-book, GeoGebra",
+   "year": 2024,
+   "url": "https://www.geogebra.org/m/zyjgc9w5"
+  },
+  {
+   "key": "JMD2008",
+   "theme": "theory",
+   "rep": true,
+   "title": "Computational identification of link adjacency and joint incidence in kinematic chains and mechanisms",
+   "authors": "Kuo, C.-H. and Shih, J.-C.",
+   "venue": "ASME Journal of Mechanical Design",
+   "year": 2008,
+   "doi": "10.1115/1.2936931"
+  },
+  {
+   "key": "BK01",
+   "theme": "theory",
+   "type": "book",
+   "title": "Antique Mechanism Models in Taiwan (bilingual, Chinese and English)",
+   "authors": "Yan, H.-S., Huang, H.-H. and Kuo, C.-H.",
+   "venue": "National Cheng Kung University Museum, Tainan",
+   "year": 2008,
+   "url": "https://books.google.com/books?vid=ISBN9789860139488"
+  },
+  {
+   "key": "ES2025",
+   "theme": "collab",
+   "title": "Origami-inspired deployable spatial structures with terrain adaptability",
+   "authors": "Wang, Y., Wang, X., Qu, H., Hu, B., Kuo, C.-H. and Guo, S.",
+   "venue": "Engineering Structures",
+   "year": 2025,
+   "doi": "10.1016/j.engstruct.2025.121412"
+  },
+  {
+   "key": "IJMS2025",
+   "theme": "collab",
+   "title": "Curved loop strip soft gripper",
+   "authors": "Liu, W., Qu, H., Wang, H., Wang, X., Kuang, Y., Hu, B., Li, X., Liu, D., Kuo, C.-H. and Guo, S.",
+   "venue": "International Journal of Mechanical Sciences",
+   "year": 2025,
+   "doi": "10.1016/j.ijmecsci.2025.110746"
+  },
+  {
+   "key": "TMech2023",
+   "theme": "collab",
+   "title": "Design and control of a novel variable stiffness series elastic actuator",
+   "authors": "Sariyildiz, E., Mutlu, R., Roberts, J., Kuo, C.-H. and Ugurlu, B.",
+   "venue": "IEEE/ASME Transactions on Mechatronics",
+   "year": 2023,
+   "doi": "10.1109/TMECH.2022.3232471"
+  },
+  {
+   "key": "MMT2022",
+   "theme": "collab",
+   "title": "Compliance error compensation of a robot end-effector with joint stiffness uncertainties for milling: an analytical model",
+   "authors": "Nguyen, V. L., Kuo, C.-H. and Lin, P. T.",
+   "venue": "Mechanism and Machine Theory",
+   "year": 2022,
+   "doi": "10.1016/j.mechmachtheory.2021.104717"
+  }
+ ]
 }

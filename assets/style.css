@@ -155,3 +155,16 @@ h1 .hl { background: none; box-shadow: inset 0 -.38em 0 0 var(--red); }
 dl.facts dd { max-width: var(--measure); }
 .hero .fig .ctl label { display: inline-flex; align-items: center; gap: .3rem; }
 .hero .fig .ctl input[type=checkbox] { accent-color: var(--accent); }
+
+/* Paper figures on theme pages */
+.figrow { display: grid; gap: 1rem; margin: 1.5rem 0 2rem; }
+@media (min-width: 40rem) { .figrow { grid-template-columns: repeat(2, 1fr); } .figrow.one { grid-template-columns: 1fr; max-width: 48rem; } }
+.pfig { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: .75rem; box-shadow: var(--shadow); }
+.pfig img { display: block; width: 100%; height: auto; border-radius: 2px; background: #fff; }
+.pfig figcaption { font-size: .85rem; color: var(--fg-2); margin-top: .6rem; line-height: 1.45; }
+.pfig figcaption .src { display: block; margin-top: .25rem; font-size: .78rem; }
+.about-grid { display: grid; gap: 2rem; align-items: start; }
+@media (min-width: 48rem) { .about-grid { grid-template-columns: 1fr 240px; } }
+.portrait { width: 100%; max-width: 240px; border-radius: var(--radius); display: block; box-shadow: var(--shadow); }
+.credit { font-size: .8rem; color: var(--fg-2); border-top: 1px solid var(--line); padding-top: .8rem; margin-top: 2.5rem; max-width: var(--measure); }
+.pfig-svg svg { width: 100%; height: auto; display: block; }

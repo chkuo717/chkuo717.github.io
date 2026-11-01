@@ -46,6 +46,24 @@ def parse(text):
     return meta, body
 
 
+import hashlib, re as _re
+
+def asset_version(rel_asset):
+    """Short content hash of a file under assets/, so browsers fetch a changed file at once."""
+    path = os.path.join(ROOT, "assets", rel_asset)
+    try:
+        with open(path, "rb") as fh:
+            return hashlib.sha1(fh.read()).hexdigest()[:8]
+    except OSError:
+        return "0"
+
+def stamp_assets(html):
+    """Append ?v=<hash> to every local .css/.js reference (src= or href=) that points into assets/."""
+    def sub(m):
+        prefix, rel_asset, ext = m.group(1), m.group(2), m.group(3)
+        return f'{prefix}{rel_asset}{ext}?v={asset_version(rel_asset + ext)}"'
+    return _re.sub(r'((?:src|href)="(?:\.\./)*assets/)([^"?]+?)(\.css|\.js)"', sub, html)
+
 def build_nav(active, root):
     items = []
     for href, key, label in NAV:
@@ -134,6 +152,7 @@ def main():
                         .replace("{{nav}}", build_nav(meta.get("nav", ""), root))
                         .replace("{{body_class}}", meta.get("nav", ""))
                         .replace("{{content}}", expand_tokens(body, root).strip()))
+            page = stamp_assets(page)
             out_path = os.path.join(ROOT, rel)
             os.makedirs(os.path.dirname(out_path), exist_ok=True)
             with open(out_path, "w", encoding="utf-8") as f:

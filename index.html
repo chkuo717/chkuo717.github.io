@@ -95,8 +95,12 @@
 
     <section class="hero hero-2">
       <figure class="fig" id="magfig">
-        <svg id="mag" viewBox="0 0 340 352" role="img" aria-label="A pendulum arm with a payload, mounted on a magnet at the centre of a ring of outer magnets. The outer magnets apply a torque on the centre magnet that nearly cancels the gravity torque at every angle. A graph below shows gravity torque, magnetic torque and their sum against arm angle; the sum stays close to zero but not exactly on it.">
-                    <g id="outer"></g>
+        <svg id="mag" viewBox="0 0 340 352" role="img" aria-label="A pendulum arm with a payload, mounted on a magnet at the centre of a ring of eight outer magnets arranged as a Halbach cylinder; the top magnet is magnetised straight up, the side magnets straight down. The outer magnets apply a torque on the centre magnet that nearly cancels the gravity torque at every angle. A graph below shows gravity torque, magnetic torque and their sum against arm angle; the sum stays close to zero but not exactly on it.">
+                    <g stroke="var(--fg)" stroke-width="1.2" fill="var(--fg)">
+            <line x1="306" y1="30" x2="306" y2="58"/><polygon points="302,56 310,56 306,64"/>
+            <text class="v" x="312" y="56" font-size="12" stroke="none">g</text>
+          </g>
+          <g id="outer"></g>
           <circle cx="170" cy="130" r="26" fill="var(--card)" stroke="var(--fg)" stroke-width="2"/>
           <g id="rotor"></g>
           <g id="field" opacity=".6"></g>
@@ -112,7 +116,7 @@
           </g>
         </svg>
         <div class="ctl"><label><input type="checkbox" id="magnetsOn" checked> Outer magnets on</label><span class="muted small" id="magMsg">Nearly balanced: only a small push is left.</span></div>
-        <figcaption>The same job done by magnets. A ring of magnets around the pivot pushes the arm up almost exactly as hard as gravity pulls it down, at every angle, with nothing touching. Magnets cannot match the weight perfectly, so a small push is left over (the red line is close to zero, not on it); the design work is in making that leftover as small as possible. Turning the ring re-sets it for a heavier or lighter load. From <a href="https://doi.org/10.1115/1.4069596">our 2026 paper</a> in the <em>ASME Journal of Mechanical Design</em>.</figcaption>
+        <figcaption>The same job done by magnets. A ring of magnets around the pivot pushes the arm up almost exactly as hard as gravity pulls it down, at every angle, with nothing touching. Magnets cannot match the weight perfectly, so a small push is left over (the red line is close to zero, not on it); the design work is in making that leftover as small as possible. Turning the eight outer magnets, alternate ones opposite ways, weakens the field evenly and re-sets it for a lighter load. From <a href="https://doi.org/10.1115/1.4069596">our 2026 paper</a> in the <em>ASME Journal of Mechanical Design</em>.</figcaption>
       </figure>
       <div>
         <p class="eyebrow">Magnetic balancing</p>

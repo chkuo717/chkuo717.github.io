@@ -150,18 +150,23 @@
 
 // Home: gravity compensation of a pendulum by a reconfigurable Halbach cylinder.
 // After Biggs, Kuo and Ren, ASME J. Mech. Des. 148 (2026) 033305.
-// Model: arm of length L with payload M, fixed to a centre magnet of dipole moment mu, inside the field of a
-// finite ring of magnets. With the dipole along the arm (theta from the upward vertical),
+// Model: arm of length L with payload M, fixed to a centre (rotor) magnet of dipole moment mu, inside the
+// field of a discretised Halbach cylinder of eight array magnets (the paper's Fig. 2). An array magnet at
+// azimuth delta is magnetised at the angle 2*delta, which gives a uniform field B across the bore; here the
+// field points up, so the magnet at the top is magnetised straight up, the ones at the sides straight down.
+// With the rotor dipole along the arm (theta from the upward vertical),
 //   torque_g = -M g L sin(theta)
 //   torque_m = +mu B [sin(theta) + a3 sin(3 theta) + a5 sin(5 theta)]
 // The harmonics stand for the non-uniformity of a real, discrete ring and the finite size of the magnets:
 // the match is close but not exact, so a small residual torque remains. Magnetic balancing is approximate,
 // unlike the exact spring solution above; the real curves are computed and measured in the paper.
-// Turning all outer magnets by delta changes the field; here B = Bmax cos(delta), an illustration of the lever.
+// Re-setting for another payload (the paper's Eq. 3 and 6): alternate array magnets are turned by +phi and
+// -phi, which keeps the field's direction and scales it by cos(phi). Here the full field carries M = 1, so
+// the home page shows the cylinder in its basic, phi = 0 configuration.
 (function () {
   var svg = document.getElementById('mag');
   if (!svg) return;
-  var C = { x: 170, y: 130 }, L = 95, R = 92, n = 10, g = 1, mu = 1, Bmax = 2.0 * 95;  // full field carries M = 2
+  var C = { x: 170, y: 130 }, L = 95, R = 92, n = 8, g = 1, mu = 1, Bmax = 1.0 * 95;  // full field carries M = 1 (phi = 0)
   var M = 1, Bmode = 'tuned', B0 = M * g * L / mu;  // field as set for M = 1
   var a3 = 0.12, a5 = 0.04;                            // illustrative ripple of a 10-magnet ring
   function shape(th) { return Math.sin(th) + a3 * Math.sin(3 * th) + a5 * Math.sin(5 * th); }
@@ -177,15 +182,16 @@
   function deltaFor(B) { return Math.acos(Math.min(1, B / Bmax)); }
 
   function drawOuter(delta) {
-    // Halbach (k = 2, "dipole") ring: magnetisation angle 2*phi + 90deg for a magnet at azimuth phi,
-    // which gives a uniform field inside; each magnet then turned by delta about its own axis.
+    // Discretised Halbach cylinder: a magnet at azimuth phi (screen angle, clockwise from +x) is magnetised
+    // at 2*phi + 90deg, measured the same way, so the field in the bore points up; magnet 0 sits at the top
+    // and points straight up. For re-setting, alternate magnets turn by +delta and -delta (the paper's Fig. 2b).
     // Drawn as the paper figures draw stator magnets: light-blue squares with a blue magnetisation arrow.
     var out = '';
     if (Bmode === 'off') { outer.innerHTML = ''; return; }
     for (var i = 0; i < n; i++) {
       var phi = 2 * Math.PI * i / n - Math.PI / 2;
       var c = { x: C.x + R * Math.cos(phi), y: C.y + R * Math.sin(phi) };
-      var mag = 2 * phi + Math.PI / 2 + delta;     // svg y is down: angles measured clockwise on screen
+      var mag = 2 * phi + Math.PI / 2 + (i % 2 ? -delta : delta);
       out += KD.magnet(c, 22, 22, (mag + Math.PI / 2) * 180 / Math.PI, 'var(--mag-stator)', 'var(--mag-arrow)');
     }
     outer.innerHTML = out;

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Chin-Hsing Kuo</title>
-  <meta name="description" content="Chin-Hsing Kuo, mechanical engineer at the University of Wollongong. Mechanisms, robots, and the balancing of gravity with springs and magnets.">
+  <meta name="description" content="Chin-Hsing Kuo, mechanical engineer at the University of Wollongong. Gravity balancing of mechanisms and robots with springs and magnets.">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,10 +26,7 @@
       <nav id="nav" class="site-nav">
         <a href="index.html" class="active" aria-current="page">Home</a>
         <a href="research/index.html">Research</a>
-        <a href="playground.html">Playground</a>
         <a href="talks-teaching.html">Talks &amp; Teaching</a>
-        <a href="notes.html">Notes</a>
-        <a href="collection.html">Collection</a>
         <a href="about.html">About</a>
       </nav>
     </div>
@@ -44,30 +41,62 @@
         <p>Senior Lecturer in Mechanical Engineering at the University of Wollongong, Australia. Fellow of ASME. Associate Editor of the <em>ASME Journal of Mechanical Design</em> and <em>Mechanism and Machine Theory</em>.</p>
         <p><a href="research/index.html">Research themes →</a> &nbsp;·&nbsp; <a href="about.html">About</a></p>
       </div>
-      <figure class="fig">
-        <svg id="fourbar" viewBox="0 0 320 260" role="img" aria-label="A crank-rocker four-bar linkage in motion, with the path traced by a point on its coupler">
+      <figure class="fig" id="balfig">
+        <svg id="bal" viewBox="0 0 340 352" role="img" aria-label="A four-bar linkage carrying a mass on its coupler, gravity balanced by two zero-free-length springs anchored to the ground. A graph below shows gravitational, spring and total potential energy against crank angle; the total is a flat line.">
           <defs>
-            <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" opacity=".5"/></pattern>
+            <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" opacity=".6"/></pattern>
+            <pattern id="masshatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="currentColor" stroke-width="1.2"/></pattern>
           </defs>
-          <g stroke="var(--fg-2)" stroke-width="1.2" fill="none" opacity=".55">
-            <line x1="20" y1="200" x2="300" y2="200"/>
-            <rect x="20" y="200" width="280" height="8" fill="url(#hatch)" stroke="none"/>
+          <!-- ground -->
+          <g id="ground" stroke="var(--fg-2)" stroke-width="1.2" fill="none" opacity=".6">
+            <line x1="40" y1="215" x2="300" y2="215"/>
+            <rect x="40" y="215" width="260" height="7" fill="url(#hatch)" stroke="none" color="var(--fg-2)"/>
           </g>
-          <path id="trace" d="" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 4" opacity=".7"/>
-          <polygon id="couplerBody" points="" fill="var(--bg-2)" stroke="none"/>
+          <!-- gravity arrow -->
+          <g stroke="var(--fg-2)" stroke-width="1.2" fill="var(--fg-2)" opacity=".7">
+            <line x1="172" y1="150" x2="172" y2="178"/><polygon points="168,176 176,176 172,184"/>
+            <text x="178" y="176" font-size="10" stroke="none" font-style="italic">g</text>
+          </g>
+          <!-- springs (toggle) -->
+          <g id="springs">
+            <g id="anchors" fill="var(--card)" stroke="var(--fg)" stroke-width="1.6"></g>
+            <polyline id="sprA" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/>
+            <polyline id="sprB" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/>
+            <g id="armA" stroke="var(--fg)" stroke-width="3" stroke-linecap="round"></g>
+            <g id="armB" stroke="var(--fg)" stroke-width="3" stroke-linecap="round"></g>
+          </g>
+          <!-- linkage -->
+          <polygon id="coupler" points="" fill="var(--bg-2)" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round"/>
           <g stroke="var(--fg)" stroke-width="3.5" stroke-linecap="round">
-            <line id="crank" x1="60" y1="200" x2="100" y2="170"/>
-            <line id="coupler" x1="100" y1="170" x2="230" y2="90"/>
-            <line id="rocker" x1="260" y1="200" x2="230" y2="90"/>
+            <line id="crank"/><line id="rocker"/>
           </g>
           <g fill="var(--card)" stroke="var(--fg)" stroke-width="2.2">
-            <circle cx="60" cy="200" r="5.5"/><circle cx="260" cy="200" r="5.5"/>
-            <circle id="jA" cx="100" cy="170" r="4.5"/><circle id="jB" cx="230" cy="90" r="4.5"/>
+            <circle id="jO" r="5.5"/><circle id="jQ" r="5.5"/>
+            <circle id="jM" r="4.5"/><circle id="jN" r="4.5"/>
           </g>
-          <circle id="jP" cx="0" cy="0" r="4" fill="var(--accent)"/>
+          <!-- coupler mass -->
+          <g id="mass" color="var(--fg)"><circle r="8" fill="var(--card)" stroke="var(--fg)" stroke-width="1.6"/><circle r="8" fill="url(#masshatch)" stroke="none"/></g>
+          <text id="massLbl" font-size="11" font-style="italic" fill="var(--fg)">m</text>
+          <!-- energy chart -->
+          <g id="chart" transform="translate(40,262)">
+            <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
+            <path id="cUg" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="cUs" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
+            <path id="cUt" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="cursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Potential energy vs crank angle</text>
+            <g font-size="9">
+              <text x="264" y="12" fill="var(--red)" font-weight="700" id="lblT">total</text>
+              <text x="264" y="42" fill="var(--accent)">spring</text>
+              <text x="264" y="66" fill="var(--fg-2)">gravity</text>
+            </g>
+          </g>
         </svg>
-        <div class="ctl"><label for="speed">Crank speed</label><input id="speed" type="range" min="0" max="3" step="0.1" value="1.2"></div>
-        <figcaption>A crank-rocker four-bar linkage. The dashed curve is the path of a point on the coupler. Most of what I do starts from a figure like this one.</figcaption>
+        <div class="ctl">
+          <label><input type="checkbox" id="toggleSprings" checked> Springs on</label>
+          <label for="speed">Speed</label><input id="speed" type="range" min="0" max="2.5" step="0.1" value="0.9">
+        </div>
+        <figcaption>A general four-bar linkage with a mass on its coupler, completely gravity balanced by two zero-free-length springs anchored to the ground, with no extra links. The total potential energy (red) stays flat, so the linkage rests in any posture. From Kuo, <em>Mechanism and Machine Theory</em> 214 (2025) 106140, <a href="https://doi.org/10.1016/j.mechmachtheory.2025.106140">open access</a>. Untick the springs to see the weight take over.</figcaption>
       </figure>
     </section>
 

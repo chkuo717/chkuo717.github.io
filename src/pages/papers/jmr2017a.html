@@ -1,0 +1,61 @@
+title: A balancer that re-sets itself to the load
+nav: research
+description: Animation of the self-regulated gravity balancer (Chu and Kuo, ASME Journal of Mechanisms and Robotics 2017): change the payload and the mechanism moves its own spring attachments to stay balanced.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/gravity-balancing.html">Gravity balancing</a> · Animation</p>
+    <h1>A balancer that <span class="hl">re-sets itself</span> to the load</h1>
+    <p class="lede">A spring balancer is tuned to one weight. Put a different weight on this one and it moves its own spring attachments until it is balanced again, with no motor, sensor or hand.</p>
+
+    <div class="anim-layout">
+      <figure class="fig" id="regfig">
+        <svg id="reg" viewBox="0 0 340 352" role="img" aria-label="A parallelogram arm carries a platform with a payload on top. A spring runs from a slider A on a vertical ground rail to a slider B on the arm. Two cables from the platform set the positions of both sliders. A graph below shows gravitational, spring and total potential energy against the arm angle; the total is flat.">
+          <defs>
+            <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" opacity=".6"/></pattern>
+            <pattern id="masshatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="currentColor" stroke-width="1.2"/></pattern>
+          </defs>
+          <g stroke="var(--fg-2)" stroke-width="1.2" fill="var(--fg-2)" opacity=".7">
+            <line x1="300" y1="30" x2="300" y2="58"/><polygon points="296,56 304,56 300,64"/>
+            <text x="306" y="56" font-size="10" stroke="none" font-style="italic">g</text>
+          </g>
+          <g id="rRail"></g>
+          <g id="rCables"></g>
+          <polyline id="rSpring" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/>
+          <g id="rBody"></g>
+          <text x="40" y="232" font-size="9" fill="var(--fg-2)">Both sliders sit the same distance s from the pivot; k·s² = M·g·L.</text>
+          <g transform="translate(40,262)">
+            <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
+            <path id="rUg" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="rUs" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
+            <path id="rUt" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="rCursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Stored energy over the swing, −65° to 65° (flat = balanced)</text>
+            <g font-size="9"><text x="264" y="12" fill="var(--red)" font-weight="700" id="rLblT">total</text><text x="264" y="42" fill="var(--accent)">spring</text><text x="264" y="66" fill="var(--fg-2)">gravity</text></g>
+          </g>
+        </svg>
+        <div class="ctl"><label for="regLoad">Payload <em>M</em></label><input type="range" id="regLoad" min="0.5" max="2" step="0.05" value="1"><output id="regLoadOut">1.00</output></div>
+        <div class="ctl radios">
+          <label><input type="radio" name="regmode" value="auto" checked> Self-regulating</label>
+          <label><input type="radio" name="regmode" value="fixed"> Sliders fixed</label>
+          <label><input type="radio" name="regmode" value="off"> Spring off</label>
+          <span class="muted small">s = <output id="regSOut">50 mm</output></span>
+        </div>
+        <div class="ctl"><span class="muted small" id="regMsg">Balanced.</span></div>
+        <figcaption>Move the payload slider. The arm returns upright, the cables pay out or take in, both sliders move, and the arm swings on, balanced for the new weight. Choose <em>Sliders fixed</em> to see what an ordinary balancer does with the wrong load.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The arm is a parallelogram, so the platform on top stays level. One spring balances everything: it runs from slider A, which moves up and down a rail through the pivot, to slider B, which moves along the arm. With both sliders the same distance <em>s</em> from the pivot, the arm is balanced when <em>k s</em>² equals the moment of the weight, <em>MgL</em>. A heavier load therefore needs the sliders further out, a lighter one closer in.</p>
+        <p>The platform is a <em>self-regulator</em>: the payload rests on a weighing mechanism, and two cables run from it, one to each slider. When a different weight is placed on the platform the regulator deflects by a matching amount, the cables pay out or take in by the same length, and both sliders settle where <em>k s</em>² = <em>MgL</em> again. Nothing is measured electronically and nothing is powered.</p>
+
+        <h2>The idea</h2>
+        <p>Every spring balancer obeys one equation, <em>k a b</em> = <em>mgL</em>, where <em>a</em> and <em>b</em> are the distances of the two spring ends from the pivot. To cope with a changing load you can change the stiffness, change the arm, or change <em>a</em> and <em>b</em>. Moving the spring ends is the easiest mechanically, but doing it while the arm is away from upright costs energy, because the spring is stretched. The paper's answer is to let the adjustment happen only in the upright position, where the spring is slack and the sliders move for free, and to make both ends move together so that one weighing motion sets both. That is why the animation brings the arm home before it re-sets.</p>
+
+        <h2>In the paper</h2>
+        <p>The paper sets out the regulator mechanism and its cable routing, implements the zero-free-length spring with a compression spring and a third slider, derives the slider positions with the masses of the links and platform included, and builds a prototype that was tested with payloads of 1 kg and 2 kg. The prototype is pictured on the <a href="../research/gravity-balancing.html">Gravity balancing</a> page.</p>
+        <p class="muted small">The animation keeps the paper's geometry and balancing condition but draws the regulator and cables schematically; see the paper for the mechanism inside the platform.</p>
+      </div>
+    </div>
+
+    {{cite:JMR2017a}}
+    <script src="../assets/anim/gravity.js" defer></script>

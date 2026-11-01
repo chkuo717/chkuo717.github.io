@@ -10,6 +10,9 @@ Everything after the blank line is the page body.
 Tokens inside a body:
     {{papers:gravity}}      representative papers of that theme (rep: true), as a list with a "soon" tag
     {{papers-all:gravity}}  the remaining papers of that theme
+    {{anims:gravity}}       cards linking to the theme's animation pages (papers with an "anim" path)
+    {{cite:MMT2023}}        one-line citation of one paper, for its animation page
+Animation pages live in src/pages/papers/<key>.html and load their script from assets/anim/.
 Data comes from src/data/papers.json. Pages under src/pages/_drafts/ are not built.
 
 Run:  python3 build.py
@@ -51,7 +54,7 @@ def build_nav(active, root):
     return "\n        ".join(items)
 
 
-def paper_item(p, rep):
+def paper_item(p, rep, root=""):
     e = html.escape
     title = e(p["title"])
     href = f'https://doi.org/{p["doi"]}' if p.get("doi") else p.get("url")
@@ -61,7 +64,7 @@ def paper_item(p, rep):
         link = f' <a href="{e(href)}">{"doi" if p.get("doi") else "link"}</a>'
     tag = ""
     if p.get("anim"):
-        tag = f' <a class="anim" href="{e(p["anim"])}">animation</a>'
+        tag = f' <a class="anim" href="{root}{e(p["anim"])}">animation</a>'
     elif rep:
         tag = ' <span class="soon">animation coming</span>'
     kind = TYPE_LABEL.get(p.get("type"), "")
@@ -71,18 +74,43 @@ def paper_item(p, rep):
             f'<span class="venue">{e(p["authors"])}, <em>{e(p["venue"])}</em>, {p["year"]}.{link}</span>{note}</li>')
 
 
-def papers_html(theme, rep_only):
+def papers_html(theme, rep_only, root):
     sel = [p for p in PAPERS if p["theme"] == theme and bool(p.get("rep")) == rep_only]
     if rep_only:
         sel.sort(key=lambda p: -p["year"])
     else:
         sel.sort(key=lambda p: (p.get("type") is not None, -p["year"]))
-    return '<ul class="papers">\n' + "\n".join(paper_item(p, rep_only) for p in sel) + "\n</ul>"
+    return '<ul class="papers">\n' + "\n".join(paper_item(p, rep_only, root) for p in sel) + "\n</ul>"
 
 
-def expand_tokens(body):
-    body = re.sub(r"\{\{papers:(\w+)\}\}", lambda m: papers_html(m.group(1), True), body)
-    body = re.sub(r"\{\{papers-all:(\w+)\}\}", lambda m: papers_html(m.group(1), False), body)
+def anims_html(theme, root):
+    """Cards linking to the animation pages of a theme (papers with an `anim` field), newest first."""
+    e = html.escape
+    sel = sorted([p for p in PAPERS if p["theme"] == theme and p.get("anim")], key=lambda p: -p["year"])
+    cards = []
+    for p in sel:
+        blurb = e(p.get("blurb", ""))
+        cards.append(f'<a class="card anim-card" href="{root}{e(p["anim"])}"><span class="tag">Animation · {p["year"]}</span>'
+                     f'<h3>{e(p.get("short", p["title"]))}</h3><p>{blurb}</p></a>')
+    return '<div class="grid cols-2">\n' + "\n".join(cards) + "\n</div>"
+
+
+def cite_html(key):
+    """One-line citation of a paper, for the foot of its animation page."""
+    e = html.escape
+    p = next(q for q in PAPERS if q["key"] == key)
+    href = f'https://doi.org/{p["doi"]}' if p.get("doi") else p.get("url")
+    title = f'<a href="{e(href)}">{e(p["title"])}</a>' if href else e(p["title"])
+    doi = f' doi:<a href="{e(href)}">{e(p["doi"])}</a>' if p.get("doi") else ""
+    return (f'<p class="cite"><strong>The paper.</strong> {e(p["authors"])}, "{title}," '
+            f'<em>{e(p["venue"])}</em>, {p["year"]}.{doi}</p>')
+
+
+def expand_tokens(body, root):
+    body = re.sub(r"\{\{papers:(\w+)\}\}", lambda m: papers_html(m.group(1), True, root), body)
+    body = re.sub(r"\{\{papers-all:(\w+)\}\}", lambda m: papers_html(m.group(1), False, root), body)
+    body = re.sub(r"\{\{anims:(\w+)\}\}", lambda m: anims_html(m.group(1), root), body)
+    body = re.sub(r"\{\{cite:(\w+)\}\}", lambda m: cite_html(m.group(1)), body)
     return body
 
 
@@ -105,7 +133,7 @@ def main():
                         .replace("{{root}}", root)
                         .replace("{{nav}}", build_nav(meta.get("nav", ""), root))
                         .replace("{{body_class}}", meta.get("nav", ""))
-                        .replace("{{content}}", expand_tokens(body).strip()))
+                        .replace("{{content}}", expand_tokens(body, root).strip()))
             out_path = os.path.join(ROOT, rel)
             os.makedirs(os.path.dirname(out_path), exist_ok=True)
             with open(out_path, "w", encoding="utf-8") as f:

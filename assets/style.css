@@ -178,3 +178,19 @@ dl.facts dd { max-width: var(--measure); }
 .hero-2 { margin-top: 3.5rem; }
 @media (min-width: 56rem) { .hero-2 { grid-template-columns: 1fr 1fr; } }
 .h2-tight { margin-top: .2em; }
+
+/* Animation pages (papers/) */
+.fig { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; margin: 1.5rem 0 2rem; }
+.fig svg { width: 100%; height: auto; display: block; }
+.fig figcaption { font-size: .85rem; color: var(--fg-2); margin-top: .6rem; }
+.fig .ctl { display: flex; align-items: center; gap: .6rem; margin-top: .6rem; font-size: .85rem; color: var(--fg-2); flex-wrap: wrap; }
+.fig .ctl label { display: inline-flex; align-items: center; gap: .3rem; }
+.fig .ctl input[type=checkbox], .fig .ctl input[type=radio] { accent-color: var(--accent); }
+.fig input[type=range] { flex: 1; min-width: 8rem; accent-color: var(--accent); }
+.fig .ctl output { font-variant-numeric: tabular-nums; min-width: 3.2em; display: inline-block; }
+.anim-layout { display: grid; gap: 2rem; align-items: start; }
+@media (min-width: 60rem) { .anim-layout { grid-template-columns: minmax(0, 26rem) minmax(0, 1fr); } .anim-layout .fig { margin: 0; position: sticky; top: 76px; } }
+.cite { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 2.5rem; font-size: .92rem; color: var(--fg-2); max-width: var(--measure); }
+.cite strong { color: var(--fg); }
+.anim-card .tag { color: var(--red); }
+.key { display: inline-block; padding: 0 .35em; border: 1px solid var(--line); border-radius: 3px; font-size: .85em; background: var(--bg-2); }

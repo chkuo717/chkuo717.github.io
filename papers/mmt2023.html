@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfect balancing with a Cardan gear · Chin-Hsing Kuo</title>
+  <meta name="description" content="Animation of the Cardan-gear spring balancer (Kuo and Wu, Mechanism and Machine Theory 2023): an inverted Cardan gear lets an ordinary linear spring balance a rotating arm exactly.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/gravity-balancing.html">Gravity balancing</a> · Animation</p>
+    <h1>Perfect balancing with a <span class="hl">Cardan gear</span></h1>
+    <p class="lede">A small gear turning inside one twice its size makes a point move in a straight line. Lay an ordinary spring along that line and it balances a swinging arm exactly, at every angle.</p>
+
+    <div class="anim-layout">
+      <figure class="fig" id="cardanfig">
+        <svg id="cardan" viewBox="0 0 340 352" role="img" aria-label="An arm with a weight swings about a pivot. The pivot carries a small gear that meshes inside a ring gear twice its size. A point A on the small gear slides along a diameter PQ of the ring, and two compression springs seated at P and Q act on A. A graph below shows gravitational, spring and total potential energy against the arm angle; the total is flat.">
+          <defs>
+            <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" opacity=".6"/></pattern>
+            <pattern id="masshatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="currentColor" stroke-width="1.2"/></pattern>
+          </defs>
+          <g stroke="var(--fg-2)" stroke-width="1.2" fill="var(--fg-2)" opacity=".7">
+            <line x1="40" y1="30" x2="40" y2="58"/><polygon points="36,56 44,56 40,64"/>
+            <text x="46" y="56" font-size="10" stroke="none" font-style="italic">g</text>
+          </g>
+          <g id="cRing"></g>
+          <g id="cLine"></g>
+          <g id="cSprings"></g>
+          <g id="cInner"></g>
+          <g id="cArm"></g>
+          <text x="40" y="232" font-size="9" fill="var(--fg-2)">Ring gear turns at half the arm's angle; A stays on the line PQ.</text>
+          <g transform="translate(40,262)">
+            <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
+            <path id="cUg" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="cUs" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
+            <path id="cUt" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="cCursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Stored energy over the swing, −120° to 120° (flat = balanced)</text>
+            <g font-size="9"><text x="264" y="12" fill="var(--red)" font-weight="700" id="cLblT">total</text><text x="264" y="42" fill="var(--accent)">spring</text><text x="264" y="66" fill="var(--fg-2)">gravity</text></g>
+          </g>
+        </svg>
+        <div class="ctl"><label><input type="checkbox" id="cardanOn" checked> Springs on</label><label><input type="checkbox" id="cardanLine" checked> Show the line PQ</label></div>
+        <div class="ctl"><span class="muted small" id="cardanMsg">Balanced: the arm rests at any angle.</span></div>
+        <figcaption>One arm, one weight, two plain compression springs. The red point A is fixed to the small gear, yet it moves back and forth along a straight line fixed to the ring gear. The springs push on A along that line.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The arm is fixed to a small gear that turns about the ground pivot. Around it, slightly below, is a ring gear twice its diameter, also pivoted to the ground and free to turn. Because the small gear meshes inside the ring, the ring turns through half the arm's angle. The point A, marked in red on the small gear's pitch circle, traces a straight line on the ring (the dashed line PQ): it is the Cardan straight-line motion, familiar from drawing instruments, turned inside out so that the line itself rotates with the ring.</p>
+        <p>Two compression springs sit on that line, one seated at each end. As the arm swings one way, A moves towards Q and compresses that spring; the other spring is left at its free length, touching nothing. Swing the other way and they exchange roles. The graph shows that the energy stored in the springs rises exactly as the energy of the weight falls, so the sum is a flat line and the arm rests at any angle. Switch the springs off and the weight takes over.</p>
+
+        <h2>The idea</h2>
+        <p>The usual spring balancer needs a <em>zero-free-length</em> spring, a spring whose force is proportional to its full length rather than to its stretch. Real springs are not like that, so most designs add pulleys, cables or extra links to imitate one. The Cardan gear does it with geometry instead. A point on the small gear sits a distance 2<em>r</em> sin(<em>θ</em>/2) from the centre of the ring, where <em>r</em> is the small gear's pitch radius and <em>θ</em> the arm's angle. The square of that distance is proportional to 1 − cos <em>θ</em>, which is precisely how the height of the weight varies. So an ordinary spring of stiffness <em>k</em> = <em>mgL</em>/<em>r</em>², at its free length when the arm is upright, stores exactly the energy that gravity gives up, whatever its free length happens to be. No pre-tension, no cable, no auxiliary linkage.</p>
+
+        <h2>In the paper</h2>
+        <p>The paper derives this condition with the masses of all the links included, and works through the practical choices: compression springs lose contact with A for half of each turn, so two of them, one on each side, give unlimited rotation (the design animated here); an extension spring carries an initial tension that spoils the balance, which a small counterweight on the ring gear restores. Several variants follow, the balancer is applied to two multi-degree-of-freedom manipulators, and a prototype of the one-degree-of-freedom design is built and tested for the friction it adds. The photograph on the <a href="../research/gravity-balancing.html">Gravity balancing</a> page shows that prototype holding its arm at different angles.</p>
+        <p class="muted small">The animation uses the paper's design conditions (Eq. 6 and Fig. 7) with illustrative dimensions; the energies are computed, not drawn by hand.</p>
+      </div>
+    </div>
+
+    <p class="cite"><strong>The paper.</strong> Kuo, C.-H. and Wu, Y.-X., "<a href="https://doi.org/10.1016/j.mechmachtheory.2023.105229">Perfect static balancing using Cardan-gear spring mechanisms</a>," <em>Mechanism and Machine Theory</em>, 2023. doi:<a href="https://doi.org/10.1016/j.mechmachtheory.2023.105229">10.1016/j.mechmachtheory.2023.105229</a></p>
+    <script src="../assets/anim/gravity.js" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author or taken from the author's own published papers, credited where shown.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js" defer></script>
+</body>
+</html>

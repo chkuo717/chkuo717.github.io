@@ -10,7 +10,10 @@
    "venue": "Mechanism and Machine Theory",
    "year": 2025,
    "doi": "10.1016/j.mechmachtheory.2025.106140",
-   "note": "Sole author. The home-page animation is drawn from this paper."
+   "note": "Sole author. The home-page animation is drawn from this paper.",
+   "anim": "papers/mmt2025b.html",
+   "short": "Balancing any four-bar linkage with two springs",
+   "blurb": "A weight on the coupler is equivalent to one on the crank and one on the rocker; two zero-free-length springs carry it exactly."
   },
   {
    "key": "MMT2023",
@@ -20,7 +23,10 @@
    "authors": "Kuo, C.-H. and Wu, Y.-X.",
    "venue": "Mechanism and Machine Theory",
    "year": 2023,
-   "doi": "10.1016/j.mechmachtheory.2023.105229"
+   "doi": "10.1016/j.mechmachtheory.2023.105229",
+   "anim": "papers/mmt2023.html",
+   "short": "Perfect balancing with a Cardan gear",
+   "blurb": "A gear turning inside one twice its size moves a point in a straight line, so an ordinary spring balances an arm exactly."
   },
   {
    "key": "MMT2020",
@@ -30,7 +36,10 @@
    "authors": "Nguyen, V. L., Lin, C.-Y. and Kuo, C.-H.",
    "venue": "Mechanism and Machine Theory",
    "year": 2020,
-   "doi": "10.1016/j.mechmachtheory.2020.104046"
+   "doi": "10.1016/j.mechmachtheory.2020.104046",
+   "anim": "papers/mmt2020.html",
+   "short": "The gear-spring module",
+   "blurb": "Gear pair, rod and spring packed along a robot arm; three of them take most of the weight off a Delta robot’s motors."
   },
   {
    "key": "JMR2017a",
@@ -40,7 +49,10 @@
    "authors": "Chu, Y.-L. and Kuo, C.-H.",
    "venue": "ASME Journal of Mechanisms and Robotics",
    "year": 2017,
-   "doi": "10.1115/1.4035561"
+   "doi": "10.1115/1.4035561",
+   "anim": "papers/jmr2017a.html",
+   "short": "A balancer that re-sets itself to the load",
+   "blurb": "Change the payload and the mechanism moves its own spring attachments until it is balanced again, unpowered."
   },
   {
    "key": "MMT2024",

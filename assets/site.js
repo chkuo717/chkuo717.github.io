@@ -181,7 +181,7 @@
   if (!svg) return;
   var C = { x: 170, y: 130 }, L = 95, R = 92, n = 10, g = 1, mu = 1, Bmax = 2.0 * 95;  // full field carries M = 2
   var M = 1, Bmode = 'tuned', B0 = M * g * L / mu;  // field as set for M = 1
-  var a3 = 0.07, a5 = 0.025;                          // illustrative ripple of a 10-magnet ring
+  var a3 = 0.12, a5 = 0.04;                            // illustrative ripple of a 10-magnet ring
   function shape(th) { return Math.sin(th) + a3 * Math.sin(3 * th) + a5 * Math.sin(5 * th); }
   var $ = function (id) { return svg.querySelector('#' + id); };
   var outer = $('outer'), rotor = $('rotor'), field = $('field'), tG = $('tG'), tM = $('tM'), tN = $('tN'), cursor = $('cursor2');
@@ -235,7 +235,7 @@
       '<text x="' + f(ex + r + 4) + '" y="' + f(ey + 4) + '" font-size="11" font-style="italic" fill="var(--fg)">M</text>';
   }
   // torque chart: theta from -180 to 180, fixed scale for M up to 2
-  var W = 260, H = 70, N = 181, scale = 2.2 * g * L;
+  var W = 260, H = 70, N = 181, scale = 1.25 * g * L;
   function Y(t) { return H / 2 - t / scale * (H / 2); }
   function path(fn) { var d = ''; for (var i = 0; i < N; i++) { var th = -Math.PI + 2 * Math.PI * i / (N - 1); d += (i ? 'L' : 'M') + f(W * i / (N - 1)) + ',' + f(Y(fn(th))); } return d; }
   function rechart(B) {

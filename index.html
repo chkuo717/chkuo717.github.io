@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chin-Hsing Kuo</title>
+  <meta name="description" content="Chin-Hsing Kuo, mechanical engineer at the University of Wollongong. Mechanisms, robots, and the balancing of gravity with springs and magnets.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="home">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="index.html" class="active" aria-current="page">Home</a>
+        <a href="research/index.html">Research</a>
+        <a href="playground.html">Playground</a>
+        <a href="talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="notes.html">Notes</a>
+        <a href="collection.html">Collection</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<section class="hero">
+      <div>
+        <p class="eyebrow">Mechanisms &amp; Robotics</p>
+        <h1>Chin-Hsing Kuo</h1>
+        <p class="lede">I design mechanisms and robots that manage mechanical energy well: machines whose weight is carried by springs or magnets rather than by motors, linkages that move exactly as intended, and devices for surgery and rehabilitation.</p>
+        <p>Senior Lecturer in Mechanical Engineering at the University of Wollongong, Australia. Fellow of ASME. Associate Editor of the <em>ASME Journal of Mechanical Design</em> and <em>Mechanism and Machine Theory</em>.</p>
+        <p><a href="research/index.html">Research themes →</a> &nbsp;·&nbsp; <a href="about.html">About</a></p>
+      </div>
+      <figure class="fig">
+        <svg id="fourbar" viewBox="0 0 320 260" role="img" aria-label="A crank-rocker four-bar linkage in motion, with the path traced by a point on its coupler">
+          <defs>
+            <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" opacity=".5"/></pattern>
+          </defs>
+          <g stroke="var(--fg-2)" stroke-width="1.2" fill="none" opacity=".55">
+            <line x1="20" y1="200" x2="300" y2="200"/>
+            <rect x="20" y="200" width="280" height="8" fill="url(#hatch)" stroke="none"/>
+          </g>
+          <path id="trace" d="" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 4" opacity=".7"/>
+          <polygon id="couplerBody" points="" fill="var(--accent-soft)" stroke="none"/>
+          <g stroke="var(--fg)" stroke-width="3.5" stroke-linecap="round">
+            <line id="crank" x1="60" y1="200" x2="100" y2="170"/>
+            <line id="coupler" x1="100" y1="170" x2="230" y2="90"/>
+            <line id="rocker" x1="260" y1="200" x2="230" y2="90"/>
+          </g>
+          <g fill="var(--card)" stroke="var(--fg)" stroke-width="2.2">
+            <circle cx="60" cy="200" r="5.5"/><circle cx="260" cy="200" r="5.5"/>
+            <circle id="jA" cx="100" cy="170" r="4.5"/><circle id="jB" cx="230" cy="90" r="4.5"/>
+          </g>
+          <circle id="jP" cx="0" cy="0" r="4" fill="var(--accent)"/>
+        </svg>
+        <div class="ctl"><label for="speed">Crank speed</label><input id="speed" type="range" min="0" max="3" step="0.1" value="1.2"></div>
+        <figcaption>A crank-rocker four-bar linkage. The dashed curve is the path of a point on the coupler. Most of what I do starts from a figure like this one.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Research themes</h2>
+      <div class="grid cols-3">
+        <a class="card" href="research/gravity-balancing.html"><h3>Gravity balancing</h3><p>Springs and gears arranged so that a mechanism's weight does no work at any posture.</p></a>
+        <a class="card" href="research/magnetic-mechanisms.html"><h3>Magnetic mechanisms</h3><p>Permanent-magnet arrays and Halbach cylinders as contact-free springs and gravity compensators.</p></a>
+        <a class="card" href="research/parallel-mechanisms.html"><h3>Parallel &amp; decoupled mechanisms</h3><p>Parallel manipulators whose motions are separated by design, not by control.</p></a>
+        <a class="card" href="research/reconfigurable-mechanisms.html"><h3>Reconfigurable mechanisms</h3><p>Mechanisms that change their own topology, and the theory that describes them.</p></a>
+        <a class="card" href="research/medical-mechanisms.html"><h3>Medical &amp; rehabilitation devices</h3><p>Remote-centre-of-motion mechanisms for surgery, balancers for therapy.</p></a>
+        <a class="card" href="research/mechanism-theory.html"><h3>Mechanism theory &amp; teaching</h3><p>Relative poles, structural analysis, and tools for learning kinematics by drawing.</p></a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Recent</h2>
+      <ul class="updates">
+        <li><time datetime="2026-10">Oct 2026</time><span>Term as Chair of the ASME Mechanisms and Robotics Committee (2024–2026) concluded; now Past Chair.</span></li>
+        <li><time datetime="2026">2026</time><span>Joined the <em>ASME Journal of Mechanical Design</em> as Associate Editor.</span></li>
+        <li><time datetime="2026">2026</time><span>A reconfigurable Halbach cylinder for gravity compensation of variable rotational payloads, with Ethan Biggs and Tao Ren, published in the <em>ASME Journal of Mechanical Design</em>.</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author. Published papers are linked to the publisher's page.</p>
+    </div>
+  </footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>

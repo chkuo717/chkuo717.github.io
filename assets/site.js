@@ -146,6 +146,11 @@
   Array.prototype.forEach.call(document.querySelectorAll('input[name=smode]'), function (r) {
     r.addEventListener('change', function () { if (r.checked) { mode = r.value; applyMode(); } });
   });
+  var sOn = document.getElementById('springsOn'), balMsg = document.getElementById('balMsg');
+  if (sOn) sOn.addEventListener('change', function () {
+    mode = sOn.checked ? 'tuned' : 'off'; applyMode();
+    if (balMsg) balMsg.textContent = sOn.checked ? 'Balanced: it rests in any position.' : 'Not balanced: the weight pulls it down.';
+  });
   applyMode();
 
   var theta = 0.9, last = null, omega = 0.7;  // slow, constant: speed has no bearing on balance
@@ -245,6 +250,11 @@
   if (massIn) massIn.addEventListener('input', apply);
   Array.prototype.forEach.call(document.querySelectorAll('input[name=bmode]'), function (r) {
     r.addEventListener('change', function () { if (r.checked) { Bmode = r.value; apply(); } });
+  });
+  var mOn = document.getElementById('magnetsOn'), magMsg = document.getElementById('magMsg');
+  if (mOn) mOn.addEventListener('change', function () {
+    Bmode = mOn.checked ? 'tuned' : 'off'; apply();
+    if (magMsg) magMsg.textContent = mOn.checked ? 'Balanced: the arm rests at any angle.' : 'Not balanced: the arm swings down.';
   });
   apply();
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

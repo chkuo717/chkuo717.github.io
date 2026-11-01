@@ -84,7 +84,7 @@
             <path id="cUs" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
             <path id="cUt" fill="none" stroke="var(--red)" stroke-width="2"/>
             <line id="cursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
-            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Potential energy vs crank angle</text>
+            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Stored energy as it moves (flat = balanced)</text>
             <g font-size="9">
               <text x="264" y="12" fill="var(--red)" font-weight="700" id="lblT">total</text>
               <text x="264" y="42" fill="var(--accent)">spring</text>
@@ -92,17 +92,8 @@
             </g>
           </g>
         </svg>
-        <div class="ctl ctl-col">
-          <label for="payload">Payload <em>m</em> = <output id="massOut">1.0</output></label>
-          <input id="payload" type="range" min="0.5" max="2" step="0.05" value="1">
-          <div class="radios" role="radiogroup" aria-label="Springs">
-            <label><input type="radio" name="smode" value="tuned" checked> springs retuned to <em>m</em></label>
-            <label><input type="radio" name="smode" value="fixed"> springs designed for <em>m</em> = 1</label>
-            <label><input type="radio" name="smode" value="off"> no springs</label>
-          </div>
-          <div class="readout muted small">k<sub>A</sub> = <output id="kAOut"></output>, k<sub>B</sub> = <output id="kBOut"></output> (from <em>k h l = m g r</em>)</div>
-        </div>
-        <figcaption>A general four-bar linkage with a mass on its coupler, completely gravity balanced by two zero-free-length springs anchored to the ground, with no extra links. The total potential energy (red) stays flat, so the linkage rests in any posture. Balance depends on posture only, never on speed. Change the payload: the two spring constants follow <em>k h l = m g r</em>, and the total stays flat; keep the original springs and the balance is lost. From Kuo, <em>Mechanism and Machine Theory</em> 214 (2025) 106140, <a href="https://doi.org/10.1016/j.mechmachtheory.2025.106140">open access</a>.</figcaption>
+        <div class="ctl"><label><input type="checkbox" id="springsOn" checked> Springs on</label><span class="muted small" id="balMsg">Balanced: it rests in any position.</span></div>
+        <figcaption>A linkage with a weight on it. Two springs, placed the right way, carry the weight at every position, so no motor or hand is needed to hold it. Switch the springs off and the weight takes over. From my 2025 paper in <em>Mechanism and Machine Theory</em>.</figcaption>
       </figure>
     </section>
 
@@ -121,26 +112,17 @@
             <path id="tM" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
             <path id="tN" fill="none" stroke="var(--red)" stroke-width="2"/>
             <line id="cursor2" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
-            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Torque on the arm vs arm angle</text>
+            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Push on the arm as it swings (zero = balanced)</text>
             <g font-size="9"><text x="264" y="38" fill="var(--red)" font-weight="700">net</text><text x="264" y="12" fill="var(--fg-2)">gravity</text><text x="264" y="66" fill="var(--accent)">magnet</text></g>
           </g>
         </svg>
-        <div class="ctl ctl-col">
-          <label for="mass2">Payload <em>M</em> = <output id="mass2Out">1.0</output></label>
-          <input id="mass2" type="range" min="0.5" max="2" step="0.05" value="1">
-          <div class="radios" role="radiogroup" aria-label="Field">
-            <label><input type="radio" name="bmode" value="tuned" checked> field retuned to <em>M</em> (lever)</label>
-            <label><input type="radio" name="bmode" value="fixed"> field set for <em>M</em> = 1</label>
-            <label><input type="radio" name="bmode" value="off"> outer magnets removed</label>
-          </div>
-          <div class="readout muted small">field <em>B</em> = <output id="BOut"></output> of maximum; outer magnets turned by <output id="dOut"></output></div>
-        </div>
-        <figcaption>Gravity compensation with no springs at all. A pendulum arm is fixed to a magnet at the centre of a ring of outer magnets arranged as a Halbach cylinder, which produces a near-uniform field inside. The torque of that field on the centre magnet is <em>mB</em> sin <em>θ</em>, the same shape as the gravity torque <em>MgL</em> sin <em>θ</em>, so one setting of <em>B</em> cancels the weight at every angle. Turning the outer magnets together changes <em>B</em>, which is how the device is re-set for a new payload. After Biggs, Kuo and Ren, <em>ASME Journal of Mechanical Design</em> 148 (2026) 033305.</figcaption>
+        <div class="ctl"><label><input type="checkbox" id="magnetsOn" checked> Outer magnets on</label><span class="muted small" id="magMsg">Balanced: the arm rests at any angle.</span></div>
+        <figcaption>The same job done by magnets. A ring of magnets around the pivot pushes the arm up exactly as hard as gravity pulls it down, at every angle, with nothing touching. Turning the ring re-sets it for a heavier or lighter load. From our 2026 paper in the <em>ASME Journal of Mechanical Design</em>.</figcaption>
       </figure>
       <div>
         <p class="eyebrow">Magnetic balancing</p>
         <h2 class="h2-tight">The same idea, <span class="hl">without contact</span></h2>
-        <p>A spring stores energy by stretching; a pair of magnets stores it in the field between them, with nothing touching and nothing to wear. At Wollongong my group works on using permanent magnets this way: arrays that compensate a weight over a long linear stroke, two magnets that levitate a load passively over a long vertical range, and reconfigurable Halbach cylinders like the one animated here, whose compensating torque can be re-set to the payload with a lever.</p>
+        <p>Springs wear, rub and need adjusting. Magnets can do the same job without touching anything. At Wollongong my group designs arrangements of permanent magnets that hold up a load along a long stroke, float it in mid-air, or, like the ring here, balance an arm and can be re-set for a different load.</p>
         <p><a href="research/magnetic-mechanisms.html">Magnetic mechanisms →</a></p>
       </div>
     </section>

@@ -168,16 +168,21 @@
 
 // Home: gravity compensation of a pendulum by a reconfigurable Halbach cylinder.
 // After Biggs, Kuo and Ren, ASME J. Mech. Des. 148 (2026) 033305.
-// Model: arm of length L with payload M, fixed to a centre magnet of dipole moment mu, inside a
-// near-uniform field B (direction fixed, pointing "up" in the figure). With the dipole along the arm,
-//   U_g = M g L cos(theta),   U_m = -mu B cos(theta)   (theta from the upward vertical)
-//   torque_g = -M g L sin(theta),  torque_m = +mu B sin(theta)  ->  net = 0 for all theta when mu B = M g L.
+// Model: arm of length L with payload M, fixed to a centre magnet of dipole moment mu, inside the field of a
+// finite ring of magnets. With the dipole along the arm (theta from the upward vertical),
+//   torque_g = -M g L sin(theta)
+//   torque_m = +mu B [sin(theta) + a3 sin(3 theta) + a5 sin(5 theta)]
+// The harmonics stand for the non-uniformity of a real, discrete ring and the finite size of the magnets:
+// the match is close but not exact, so a small residual torque remains. Magnetic balancing is approximate,
+// unlike the exact spring solution above; the real curves are computed and measured in the paper.
 // Turning all outer magnets by delta changes the field; here B = Bmax cos(delta), an illustration of the lever.
 (function () {
   var svg = document.getElementById('mag');
   if (!svg) return;
   var C = { x: 170, y: 130 }, L = 95, R = 92, n = 10, g = 1, mu = 1, Bmax = 2.0 * 95;  // full field carries M = 2
   var M = 1, Bmode = 'tuned', B0 = M * g * L / mu;  // field as set for M = 1
+  var a3 = 0.07, a5 = 0.025;                          // illustrative ripple of a 10-magnet ring
+  function shape(th) { return Math.sin(th) + a3 * Math.sin(3 * th) + a5 * Math.sin(5 * th); }
   var $ = function (id) { return svg.querySelector('#' + id); };
   var outer = $('outer'), rotor = $('rotor'), field = $('field'), tG = $('tG'), tM = $('tM'), tN = $('tN'), cursor = $('cursor2');
   var massIn = document.getElementById('mass2'), massOut = document.getElementById('mass2Out'), BOut = document.getElementById('BOut'), dOut = document.getElementById('dOut');
@@ -235,8 +240,8 @@
   function path(fn) { var d = ''; for (var i = 0; i < N; i++) { var th = -Math.PI + 2 * Math.PI * i / (N - 1); d += (i ? 'L' : 'M') + f(W * i / (N - 1)) + ',' + f(Y(fn(th))); } return d; }
   function rechart(B) {
     tG.setAttribute('d', path(function (th) { return -M * g * L * Math.sin(th); }));
-    tM.setAttribute('d', path(function (th) { return mu * B * Math.sin(th); }));
-    tN.setAttribute('d', path(function (th) { return (mu * B - M * g * L) * Math.sin(th); }));
+    tM.setAttribute('d', path(function (th) { return mu * B * shape(th); }));
+    tN.setAttribute('d', path(function (th) { return mu * B * shape(th) - M * g * L * Math.sin(th); }));
     tM.style.display = B > 0 ? '' : 'none';
   }
   function apply() {
@@ -254,7 +259,7 @@
   var mOn = document.getElementById('magnetsOn'), magMsg = document.getElementById('magMsg');
   if (mOn) mOn.addEventListener('change', function () {
     Bmode = mOn.checked ? 'tuned' : 'off'; apply();
-    if (magMsg) magMsg.textContent = mOn.checked ? 'Balanced: the arm rests at any angle.' : 'Not balanced: the arm swings down.';
+    if (magMsg) magMsg.textContent = mOn.checked ? 'Nearly balanced: only a small push is left.' : 'Not balanced: the arm swings down.';
   });
   apply();
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

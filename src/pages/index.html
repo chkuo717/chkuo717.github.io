@@ -68,7 +68,7 @@ description: Chin-Hsing Kuo, mechanical engineer at the University of Wollongong
 
     <section class="hero hero-2">
       <figure class="fig" id="magfig">
-        <svg id="mag" viewBox="0 0 340 352" role="img" aria-label="A pendulum arm with a payload, mounted on a magnet at the centre of a ring of outer magnets. The outer magnets produce a uniform field that applies a restoring torque on the centre magnet equal and opposite to the gravity torque at every angle. A graph below shows gravity torque, magnetic torque and their sum against arm angle; the sum is zero.">
+        <svg id="mag" viewBox="0 0 340 352" role="img" aria-label="A pendulum arm with a payload, mounted on a magnet at the centre of a ring of outer magnets. The outer magnets apply a torque on the centre magnet that nearly cancels the gravity torque at every angle. A graph below shows gravity torque, magnetic torque and their sum against arm angle; the sum stays close to zero but not exactly on it.">
           <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
           <g id="outer"></g>
           <circle cx="170" cy="130" r="26" fill="var(--card)" stroke="var(--fg)" stroke-width="2"/>
@@ -81,17 +81,17 @@ description: Chin-Hsing Kuo, mechanical engineer at the University of Wollongong
             <path id="tM" fill="none" stroke="var(--accent)" stroke-width="1.4"/>
             <path id="tN" fill="none" stroke="var(--red)" stroke-width="2"/>
             <line id="cursor2" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
-            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Push on the arm as it swings (zero = balanced)</text>
+            <text x="4" y="-5" font-size="9" fill="var(--fg-2)">Push on the arm as it swings (near zero = nearly balanced)</text>
             <g font-size="9"><text x="264" y="38" fill="var(--red)" font-weight="700">net</text><text x="264" y="12" fill="var(--fg-2)">gravity</text><text x="264" y="66" fill="var(--accent)">magnet</text></g>
           </g>
         </svg>
-        <div class="ctl"><label><input type="checkbox" id="magnetsOn" checked> Outer magnets on</label><span class="muted small" id="magMsg">Balanced: the arm rests at any angle.</span></div>
-        <figcaption>The same job done by magnets. A ring of magnets around the pivot pushes the arm up exactly as hard as gravity pulls it down, at every angle, with nothing touching. Turning the ring re-sets it for a heavier or lighter load. From <a href="https://doi.org/10.1115/1.4069596">our 2026 paper</a> in the <em>ASME Journal of Mechanical Design</em>.</figcaption>
+        <div class="ctl"><label><input type="checkbox" id="magnetsOn" checked> Outer magnets on</label><span class="muted small" id="magMsg">Nearly balanced: only a small push is left.</span></div>
+        <figcaption>The same job done by magnets. A ring of magnets around the pivot pushes the arm up almost exactly as hard as gravity pulls it down, at every angle, with nothing touching. Magnets cannot match the weight perfectly, so a small push is left over (the red line is close to zero, not on it); the design work is in making that leftover as small as possible. Turning the ring re-sets it for a heavier or lighter load. From <a href="https://doi.org/10.1115/1.4069596">our 2026 paper</a> in the <em>ASME Journal of Mechanical Design</em>.</figcaption>
       </figure>
       <div>
         <p class="eyebrow">Magnetic balancing</p>
-        <h2 class="h2-tight">The same idea, <span class="hl">without contact</span></h2>
-        <p>Springs wear, rub and need adjusting. Magnets can do the same job without touching anything. At Wollongong my group designs arrangements of permanent magnets that hold up a load along a long stroke, float it in mid-air, or, like the ring here, balance an arm and can be re-set for a different load.</p>
+        <h2 class="h2-tight">Nearly the same, <span class="hl">without contact</span></h2>
+        <p>Springs wear, rub and need adjusting. Magnets can do nearly the same job without touching anything, though never perfectly: a magnet's pull does not follow the simple curve a weight does, so the balance is always approximate. At Wollongong my group designs arrangements of permanent magnets that come as close as possible: arrays that hold up a load along a long stroke, two magnets that float a load in mid-air, and rings like the one here that balance an arm and can be re-set for a different load.</p>
         <p><a href="research/magnetic-mechanisms.html">Magnetic mechanisms →</a></p>
       </div>
     </section>

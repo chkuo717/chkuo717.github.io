@@ -1,0 +1,36 @@
+title: Counting freedoms when the topology keeps changing
+nav: research
+description: Animation of the push-button stopper lock from Kuo and Yan (ASME Journal of Mechanical Design 2007), a mechanism with variable topology whose mobility changes from stage to stage, computed by screw theory.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/reconfigurable-mechanisms.html">Reconfigurable mechanisms</a> · Animation</p>
+    <h1>Counting freedoms when the <span class="hl">topology keeps changing</span></h1>
+    <p class="lede">A push-button lock is a mechanism whose joints change type as you use it: a pin that could only slide can suddenly also turn. The ordinary formula for counting a mechanism’s freedoms fails on it; counting with screws does not.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="lock" viewBox="0 0 340 300" role="img" aria-label="Section through a push-button lock: a grey frame with a horizontal slider through it and a vertical button through the frame and slider; a stopper lug on the button sits in a groove of the slider. The button is pressed, the slider moves, then the button turns, in four stages.">
+          <g id="kBody"></g>
+          <text class="n" x="40" y="22" font-size="10" fill="var(--fg-2)" id="lkState"></text>
+
+        </svg>
+        <div class="ctl"><span class="muted small">Mobility by the screw-system method: <output id="lkMob"></output></span></div>
+        <div class="ctl"><span class="muted small" id="lkMsg"></span></div>
+        <figcaption>The paper’s one-step push-button stopper lock with variable passwords, Fig. 1. Each stage has a different set of active joints, so the mobility is counted afresh for each.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>Four parts: the frame, a slider that runs through it, a button that runs through both, and a stopper on the button. Locked, the stopper sits in a groove in the slider and the slider cannot move; only the button can, one freedom. Press the button and the stopper clears the groove: the slider is free as well, two freedoms. Move the slider and the button is trapped in it, one freedom again. At a special slider position the stopper can be turned into another groove, which changes the password: a transitional stage with two freedoms. The screw-system count under the figure gives 1, 2, 1, 2; the planar Grübler count gives 1, 0, 1 and −1, which is wrong in two stages out of four.</p>
+
+        <h2>The idea</h2>
+        <p>In a mechanism with variable topology the joints do not have fixed types: a prismatic pair may become a cylindrical pair when a groove lines up, or a fixed pair when a stop is met. The paper represents each configuration by the set of screws of its joints at that instant, so that a change of topology is a change in the set of screw coordinates, and takes the mobility from the rank of that set. The same screw representation describes the two kinds of singular configuration through which topology changes happen, stationary configurations and uncertainty configurations, which is the basis for designing when and how a mechanism should switch.</p>
+
+        <h2>In the paper</h2>
+        <p>Two examples carry the mobility analysis, the push-button lock and a kinematotropic PSPS chain with changeable mobility; the configuration singularity section works through stationary and uncertainty configurations with a four-bar and other chains. The paper is one of the early theoretical treatments of mechanisms with variable topologies, from Kuo’s doctoral work with Hong-Sen Yan.</p>
+        <p class="muted small">The lock is drawn in section and schematically; the joint types at each stage and the mobility numbers are the paper’s (Table 1).</p>
+      </div>
+    </div>
+
+    {{cite:JMD2007}}
+    <script src="../assets/anim/parallel.js" defer></script>
+    <script src="../assets/anim/reconfig.js" defer></script>

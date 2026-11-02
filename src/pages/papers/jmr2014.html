@@ -1,0 +1,36 @@
+title: One mechanism, three topologies
+nav: research
+description: Animation of the steel clamping and sawing mechanism from Kuo and Chang (ASME Journal of Mechanisms and Robotics 2014): a planar variable topology mechanism whose links lock and release in sequence, with the constraint-matrix view of its structure.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/reconfigurable-mechanisms.html">Reconfigurable mechanisms</a> · Animation</p>
+    <h1>One mechanism, <span class="hl">three topologies</span></h1>
+    <p class="lede">Push on one slider and a seven-link mechanism first closes a clamp, then stiffens into a structure, then lets a saw come down. Its topology changes twice on the way. The paper gives a matrix method that reads such changes off automatically.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="vtm" viewBox="0 0 340 300" role="img" aria-label="A planar seven-link mechanism: a vertical input slider drives a ternary link whose two couplers move a clamp arm and a saw arm pivoted on the ground, above a steel bar. The clamp closes, stops, then the saw descends. At the right a small graph shows links as circles and joints as lines; merged links are highlighted.">
+          <g id="vBody"></g>
+          <g id="vGraph" transform="translate(244,20)"></g>
+          <text class="n" x="40" y="22" font-size="10" fill="var(--fg-2)" id="vtState"></text>
+
+        </svg>
+        <div class="ctl"><span class="muted small" id="vtMsg"></span></div>
+        <figcaption>Links are numbered as in the paper; the graph at top right is the paper’s Fig. 2, drawn live: a grey vertex means a link that is, for the moment, part of the ground. Mobility counts use the planar Gruebler formula on the current topology.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>Seven links and eight joints: the ground 1, the saw arm 2 and the clamp arm 7 pivoted on it, the input slider 5, the ternary link 4, and the couplers 3 and 6. At first the saw arm rests on its stop under the payload, so the mechanism has one degree of freedom and the input drives the clamp towards the steel. When the clamp touches, link 7 is fixed too; what remains, links 3 to 6, is a structure with no mobility, and the input force rises. When it is large enough to lift the saw arm off its stop, the mechanism has one degree of freedom again, now with the clamp as ground, and the saw cuts. The graph at the right shows the three topologies the paper calls 1(2), 1(2,7) and 1(7).</p>
+
+        <h2>The idea</h2>
+        <p>Mechanisms like this one, whose topology changes during operation, need a representation that holds all their potential structures at once. The paper's <em>constraint matrix</em> does that: the upper triangle records each joint's type and orientation, the lower triangle the motions that may be constrained. From it, every embedded topology is enumerated, checked for feasibility by a mobility count, and drawn, which is the structure decomposition. The second problem the paper solves is comparison: given two such mechanisms, how similar are they? The <em>degree of homomorphism</em>, the share of topological states two mechanisms have in common, puts a number on it.</p>
+
+        <h2>In the paper</h2>
+        <p>The clamping and sawing mechanism is the worked example for decomposition; a seven-bar mechanism with two inputs and a pair of slider-crank variants illustrate homomorphism identification, including a case where two mechanisms that look different are fully homomorphic. The method is symbolic and programmable, intended for automated structural synthesis of reconfigurable mechanisms.</p>
+        <p class="muted small">Link dimensions in the animation are schematic; the joints, their types and the sequence of topology changes follow the paper's constraint matrix (Eq. 1) and Fig. 1.</p>
+      </div>
+    </div>
+
+    {{cite:JMR2014}}
+    <script src="../assets/anim/parallel.js" defer></script>
+    <script src="../assets/anim/reconfig.js" defer></script>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Where a moving body turns about · Chin-Hsing Kuo</title>
+  <meta name="description" content="Interactive construction of the relative pole from the e-book Linkage Synthesis and Force Analysis by Using Relative Poles (Kuo, GeoGebra, 2024): any displacement of a rigid body in the plane is a rotation about one point, found from two perpendicular bisectors.">
+  <script src="../assets/anim/draw.js?v=10a55783" defer></script>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css?v=b1f70a23">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/mechanism-theory.html">Mechanism theory &amp; teaching</a> · Animation</p>
+    <h1>Where a moving body <span class="hl">turns about</span></h1>
+    <p class="lede">Move a rigid body from one place to another in the plane, however you like, and there is always one point about which the whole move is a single rotation. Finding that point is the first construction of graphical kinematics, and most of linkage synthesis is built on it.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="pole" viewBox="0 0 340 300" role="img" aria-label="Two positions of a triangular body, A1B1 and A2B2, with the perpendicular bisectors of A1A2 and B1B2 drawn dashed; they meet at the pole P12, marked in red. A copy of the body swings from position 1 to position 2 about the pole. Sliders set position 2.">
+          <g id="poBody"></g>
+
+        </svg>
+        <div class="ctl"><label for="poDx">shift x</label><input type="range" id="poDx" min="-40" max="160" step="1" value="110"><label for="poDy">shift y</label><input type="range" id="poDy" min="-60" max="120" step="1" value="70"><label for="poTh">turn</label><input type="range" id="poTh" min="-170" max="170" step="1" value="70"></div>
+        <div class="ctl"><span class="muted small" id="poMsg"></span></div>
+        <figcaption>Set where position 2 is and how far the body has turned; the bisectors of A₁A₂ and B₁B₂ find the pole, and the body is seen to pass from 1 to 2 by rotating about it. Set the turn to zero and the pole goes to infinity: a translation.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The body is shown in its first and second positions. Each point of it, <em>A</em> and <em>B</em>, has moved along a chord; the perpendicular bisector of a chord is the set of points equidistant from its ends, so a centre of rotation that takes <em>A</em><sub>1</sub> to <em>A</em><sub>2</sub> must lie on one bisector, and one that takes <em>B</em><sub>1</sub> to <em>B</em><sub>2</sub> on the other. Their intersection is the only point that does both: the relative pole <em>P</em><sub>12</sub>. The moving copy confirms it, sweeping from position 1 to position 2 along arcs centred on the pole.</p>
+
+        <h2>The idea</h2>
+        <p>The pole turns problems about motion into problems about points and lines. To design a four-bar linkage that carries a body through two given positions, the fixed pivots can be anywhere on the bisectors, which is the classical two-position synthesis; three and four positions follow with further poles. The same point serves force analysis: in a mechanism, the instant centre between two links is the relative pole of their motion, and the lines joining instant centres give force directions without writing equations. The e-book develops both uses with constructions the reader can drag.</p>
+
+        <h2>In the paper</h2>
+        <p>The e-book, built in GeoGebra, is used in Kuo's teaching of kinematics of machinery; each page is a live construction where points can be moved and the consequences watched, from the relative pole through two- and three-position synthesis to force analysis by instant centres. It is open at <a href="https://www.geogebra.org/m/zyjgc9w5">geogebra.org</a>.</p>
+        <p class="muted small">This page reproduces the first construction only; the e-book has the rest.</p>
+      </div>
+    </div>
+
+    <p class="cite"><strong>The paper.</strong> Kuo, C.-H., "<a href="https://www.geogebra.org/m/zyjgc9w5">Linkage Synthesis and Force Analysis by Using Relative Poles</a>," <em>Interactive e-book, GeoGebra</em>, 2024.</p>
+    <script src="../assets/anim/theory.js?v=8873c278" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author or taken from the author's own published papers, credited where shown.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js?v=3ed2a42b" defer></script>
+</body>
+</html>

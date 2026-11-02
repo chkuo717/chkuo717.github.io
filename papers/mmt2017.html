@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A cube of eight cubes that folds into other shapes · Chin-Hsing Kuo</title>
+  <meta name="description" content="Animation of the reconfigurable cube mechanism (Kuo and Su, Mechanism and Machine Theory 2017): eight hinged sub-cubes form a single-loop 8R linkage with eight topological configurations and changeable mobility.">
+  <script src="../assets/anim/draw.js?v=10a55783" defer></script>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css?v=b1f70a23">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/reconfigurable-mechanisms.html">Reconfigurable mechanisms</a> · Animation</p>
+    <h1>A cube of eight cubes that <span class="hl">folds into other shapes</span></h1>
+    <p class="lede">Eight small cubes hinged in a loop make a puzzle that folds from a cube into a slab and back into a cube of a different arrangement. As a mechanism it is a single loop of eight revolute joints whose mobility changes as hinges line up.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="rcm" viewBox="0 0 340 300" role="img" aria-label="Isometric view of eight unit cubes forming a two-by-two-by-two cube. The top half folds about a hinge line to form a flat slab, then the far half folds under to form a cube again. The hinge line of the current fold is drawn dashed in red.">
+          <g id="rBody"></g>
+          <text class="n" x="40" y="22" font-size="10" fill="var(--fg-2)" id="rcState"></text>
+
+        </svg>
+        <div class="ctl"><span class="muted small" id="rcMsg"></span></div>
+        <figcaption>The shaded sub-cube is the one taken as fixed. Each fold is a rigid motion of four sub-cubes about two hinges that are coaxial at that moment; between folds the loop is locked.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The eight sub-cubes are connected in a closed chain by eight hinges, each along an edge shared by two neighbours. In the cube arrangement, two of the hinges lie on one line, so the half of the loop on one side of that line can swing as a rigid body: the cube opens into a flat slab of one by two by four. In the slab another pair of hinges is coaxial, and the far half folds under to make a cube again, but with the sub-cubes in a different arrangement. The real puzzle has eight such configurations, with pictures on its faces that appear one at a time; the paper's Fig. 1 shows them.</p>
+
+        <h2>The idea</h2>
+        <p>As a mechanism this is an 8R single-loop spatial linkage, and an unusual one: its topology is characterised not only by the relative orientations of the joint axes, as in most reconfigurable mechanisms, but also by the distances between them, since hinges on the same line (distance zero) behave differently from hinges that are merely parallel. The paper names these two properties orientation isomorphism and distance isomorphism, and shows that both are needed to say whether two configurations are the same. With screw theory it computes the mobility in each configuration and gives a unified procedure for identifying configuration isomorphism. Two examples make the point: two configurations that look quite different are shown to be identical, and two that look alike are shown to be distinct.</p>
+
+        <h2>In the paper</h2>
+        <p>The paper gives the schematic drawings and equivalent linkages of all eight configurations, the mobility analysis, the isomorphism criteria and the worked examples. The animation shows only the folds between a cube and a slab; the full set of configurations and their relationships are in the paper.</p>
+        <p class="muted small">The hinge arrangement in the animation is a consistent loop that produces the cube-slab-cube sequence; the paper's exact hinge labelling is in its Fig. 4.</p>
+      </div>
+    </div>
+
+    <p class="cite"><strong>The paper.</strong> Kuo, C.-H. and Su, J.-W., "<a href="https://doi.org/10.1016/j.mechmachtheory.2015.08.006">Configuration analysis of a class of reconfigurable cube mechanisms: mobility and configuration isomorphism</a>," <em>Mechanism and Machine Theory</em>, 2017. doi:<a href="https://doi.org/10.1016/j.mechmachtheory.2015.08.006">10.1016/j.mechmachtheory.2015.08.006</a></p>
+    <script src="../assets/anim/parallel.js?v=3456b0a7" defer></script>
+    <script src="../assets/anim/reconfig.js?v=03904ef6" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author or taken from the author's own published papers, credited where shown.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js?v=3ed2a42b" defer></script>
+</body>
+</html>

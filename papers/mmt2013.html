@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>One leg decides the motion, the others drive it · Chin-Hsing Kuo</title>
+  <meta name="description" content="Animation of the motion-constraint-generator idea for parallel manipulators (Kuo and Dai, Mechanism and Machine Theory 2013): a single serial leg fixes what the end-effector can do, and constraint-free legs carry the actuators.">
+  <script src="../assets/anim/draw.js?v=10a55783" defer></script>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css?v=b1f70a23">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/parallel-mechanisms.html">Parallel &amp; decoupled mechanisms</a> · Animation</p>
+    <h1>One leg decides the motion, the <span class="hl">others drive it</span></h1>
+    <p class="lede">Designing a parallel manipulator usually means choosing all the legs together so that their constraints add up to the motion wanted. Here one leg does all the constraining, built like a serial robot with exactly the right freedoms, and the other legs only push.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="mcg" viewBox="0 0 340 300" role="img" aria-label="A planar platform held by a vertical bar from a slider on a horizontal rail, which lets it translate sideways and turn. Two further legs of three revolute joints each connect the platform to motors on the ground. A tick box removes the constraint leg.">
+          <g id="mBody"></g>
+
+        </svg>
+        <div class="ctl"><label><input type="checkbox" id="mcConstraint" checked> Motion constraint leg in place</label><span class="muted small" id="mcMsg"></span></div>
+        <figcaption>Planar illustration. The constraint leg is a slider and a pin: with it, the platform can only move along the rail and turn, two freedoms, and the two motors determine them. Remove it and the platform has three freedoms for two motors.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The bar rising from the slider is the <em>motion constraint generator</em>: a serial chain of one prismatic and one revolute joint, so the platform it carries can translate along the rail and turn, and do nothing else. The two legs to the left and right each have three revolute joints, the full freedom of a planar body, so they constrain nothing; their base joints are the motors. With both in place the mechanism has exactly two degrees of freedom and is non-overconstrained. Untick the constraint leg and the same two motors face three freedoms: the platform's position is no longer determined.</p>
+
+        <h2>The idea</h2>
+        <p>The usual synthesis of a parallel manipulator starts from the end-effector's motion type and asks for a set of identical legs whose constraints together produce it, which is a hard combinatorial problem and often yields overconstrained designs. The paper turns it round. Build the required motion as a serial chain, the constraint leg; then add auxiliary legs that have as many freedoms as the space allows (six in space, three in the plane), so they add no constraint, and put the actuators on them. Because the general mobility criterion is obeyed at every step, every manipulator that comes out is non-overconstrained, and the constraint leg can be enumerated from the well-known serial chains. The procedure also suggests decoupled designs, since the auxiliary legs can be placed to act on one freedom each.</p>
+
+        <h2>In the paper</h2>
+        <p>The paper gives the procedure as a flow chart and runs it for two-, three-, four- and five-degree-of-freedom cases: parallel wrists, 1R2T and 3R1T manipulators (including remote-centre-of-motion ones), and 3R2T manipulators, with the feasible leg structures tabulated. It is the method used for the <a href="jmed2012.html">surgical RCM manipulator</a>.</p>
+        <p class="muted small">The paper's examples are spatial; the plane keeps the idea visible. Leg lengths and the platform motion are illustrative.</p>
+      </div>
+    </div>
+
+    <p class="cite"><strong>The paper.</strong> Kuo, C.-H. and Dai, J. S., "<a href="https://doi.org/10.1016/j.mechmachtheory.2013.08.010">Task-oriented structure synthesis of a class of parallel manipulators using motion constraint generator</a>," <em>Mechanism and Machine Theory</em>, 2013. doi:<a href="https://doi.org/10.1016/j.mechmachtheory.2013.08.010">10.1016/j.mechmachtheory.2013.08.010</a></p>
+    <script src="../assets/anim/parallel.js?v=3456b0a7" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author or taken from the author's own published papers, credited where shown.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js?v=3ed2a42b" defer></script>
+</body>
+</html>

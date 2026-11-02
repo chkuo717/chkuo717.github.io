@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Counting freedoms when the topology keeps changing · Chin-Hsing Kuo</title>
+  <meta name="description" content="Animation of the push-button stopper lock from Kuo and Yan (ASME Journal of Mechanical Design 2007), a mechanism with variable topology whose mobility changes from stage to stage, computed by screw theory.">
+  <script src="../assets/anim/draw.js?v=10a55783" defer></script>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css?v=b1f70a23">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/reconfigurable-mechanisms.html">Reconfigurable mechanisms</a> · Animation</p>
+    <h1>Counting freedoms when the <span class="hl">topology keeps changing</span></h1>
+    <p class="lede">A push-button lock is a mechanism whose joints change type as you use it: a pin that could only slide can suddenly also turn. The ordinary formula for counting a mechanism’s freedoms fails on it; counting with screws does not.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="lock" viewBox="0 0 340 300" role="img" aria-label="Section through a push-button lock: a grey frame with a horizontal slider through it and a vertical button through the frame and slider; a stopper lug on the button sits in a groove of the slider. The button is pressed, the slider moves, then the button turns, in four stages.">
+          <g id="kBody"></g>
+          <text class="n" x="40" y="22" font-size="10" fill="var(--fg-2)" id="lkState"></text>
+
+        </svg>
+        <div class="ctl"><span class="muted small">Mobility by the screw-system method: <output id="lkMob"></output></span></div>
+        <div class="ctl"><span class="muted small" id="lkMsg"></span></div>
+        <figcaption>The paper’s one-step push-button stopper lock with variable passwords, Fig. 1. Each stage has a different set of active joints, so the mobility is counted afresh for each.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>Four parts: the frame, a slider that runs through it, a button that runs through both, and a stopper on the button. Locked, the stopper sits in a groove in the slider and the slider cannot move; only the button can, one freedom. Press the button and the stopper clears the groove: the slider is free as well, two freedoms. Move the slider and the button is trapped in it, one freedom again. At a special slider position the stopper can be turned into another groove, which changes the password: a transitional stage with two freedoms. The screw-system count under the figure gives 1, 2, 1, 2; the planar Grübler count gives 1, 0, 1 and −1, which is wrong in two stages out of four.</p>
+
+        <h2>The idea</h2>
+        <p>In a mechanism with variable topology the joints do not have fixed types: a prismatic pair may become a cylindrical pair when a groove lines up, or a fixed pair when a stop is met. The paper represents each configuration by the set of screws of its joints at that instant, so that a change of topology is a change in the set of screw coordinates, and takes the mobility from the rank of that set. The same screw representation describes the two kinds of singular configuration through which topology changes happen, stationary configurations and uncertainty configurations, which is the basis for designing when and how a mechanism should switch.</p>
+
+        <h2>In the paper</h2>
+        <p>Two examples carry the mobility analysis, the push-button lock and a kinematotropic PSPS chain with changeable mobility; the configuration singularity section works through stationary and uncertainty configurations with a four-bar and other chains. The paper is one of the early theoretical treatments of mechanisms with variable topologies, from Kuo’s doctoral work with Hong-Sen Yan.</p>
+        <p class="muted small">The lock is drawn in section and schematically; the joint types at each stage and the mobility numbers are the paper’s (Table 1).</p>
+      </div>
+    </div>
+
+    <p class="cite"><strong>The paper.</strong> Kuo, C.-H. and Yan, H.-S., "<a href="https://doi.org/10.1115/1.2717230">On the mobility and configuration singularity of mechanisms with variable topologies</a>," <em>ASME Journal of Mechanical Design</em>, 2007. doi:<a href="https://doi.org/10.1115/1.2717230">10.1115/1.2717230</a></p>
+    <script src="../assets/anim/parallel.js?v=3456b0a7" defer></script>
+    <script src="../assets/anim/reconfig.js?v=03904ef6" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author or taken from the author's own published papers, credited where shown.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js?v=3ed2a42b" defer></script>
+</body>
+</html>

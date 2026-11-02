@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>One motor, one angle: projective motion · Chin-Hsing Kuo</title>
+  <meta name="description" content="Animation of projective angles, the orientation representation behind the fully decoupled parallel manipulators of Kuo and Dai (ASME Journal of Mechanisms and Robotics 2021): each actuator sets one projection of the moving axis and nothing else.">
+  <script src="../assets/anim/draw.js?v=10a55783" defer></script>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css?v=b1f70a23">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/parallel-mechanisms.html">Parallel &amp; decoupled mechanisms</a> · Animation</p>
+    <h1>One motor, <span class="hl">one angle</span>: projective motion</h1>
+    <p class="lede">Describe where an axis points by the angles of its shadows on two walls, and a parallel manipulator can be built in which each motor sets one shadow angle and nothing else. That is a fully decoupled manipulator, and the paper shows how to make one with any number of degrees of freedom.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="proj" viewBox="0 0 340 300" role="img" aria-label="A moving axis w on a ball at the origin of a fixed frame; its projections on the xz- and yz-planes are drawn dashed with the angles from the z-axis marked. Two sliders set the two angles independently.">
+          <g id="pBody"></g>
+
+        </svg>
+        <div class="ctl"><label for="pjA">θ<sub>xz</sub></label><input type="range" id="pjA" min="-40" max="40" step="1" value="20"><output id="pjAOut">20°</output><label for="pjB">θ<sub>yz</sub></label><input type="range" id="pjB" min="-40" max="40" step="1" value="-15"><output id="pjBOut">-15°</output></div>
+        <div class="ctl"><label><input type="checkbox" id="pjAuto" checked> Sweep automatically</label><span class="muted small" id="pjMsg"></span></div>
+        <figcaption>The two red arcs are the <em>projective angles</em> of the axis <em>w</em>: the angle of its shadow on the xz-plane and on the yz-plane, each measured from the vertical. Move one slider and only one shadow turns; the axis is wherever the two shadows meet.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>A fixed frame <em>xyz</em> and a moving axis <em>w</em> pivoted at the origin. Light falling along <em>y</em> casts <em>w</em>'s shadow on the xz-plane; light along <em>x</em> casts it on the yz-plane. The two shadow angles, θ<sub>xz</sub> and θ<sub>yz</sub>, fix the direction of <em>w</em>: it is parallel to (tan θ<sub>xz</sub>, tan θ<sub>yz</sub>, 1). Unlike Euler angles, which are applied one after another so that the second depends on the first, the two projective angles are independent of each other, and each can be read directly from one view of the mechanism.</p>
+
+        <h2>The idea</h2>
+        <p>A parallel manipulator is called fully decoupled when each motor drives exactly one output motion. For rotations this is usually said to be impossible beyond two degrees of freedom, because the usual angle sets are coupled. The paper's observation is that the coupling is in the representation, not in the mechanism: express the rotations as projective angles and a one-to-one correspondence between motors and outputs is available for any number of degrees of freedom up to six. The screw-theoretic reasoning identifies which joint arrangements leave a leg's actuator in command of one projective angle, and a systematic synthesis procedure follows.</p>
+
+        <h2>In the paper</h2>
+        <p>Two-, three-, four-, five- and six-degree-of-freedom manipulators with fully decoupled projective motion are synthesised, including spherical wrists, a 3R1T manipulator with a decoupled remote centre of motion, and a six-degree-of-freedom platform. The three-degree-of-freedom wrist built on this principle has <a href="rob2014.html">its own animation</a>, and the same representation is used in the group's <a href="jmed2012.html">surgical manipulator</a>.</p>
+        <p class="muted small">The animation shows the representation itself; the mechanisms that realise it are on the linked pages.</p>
+      </div>
+    </div>
+
+    <p class="cite"><strong>The paper.</strong> Kuo, C.-H. and Dai, J. S., "<a href="https://doi.org/10.1115/1.4050151">Structure synthesis of a class of parallel manipulators with fully decoupled projective motion</a>," <em>ASME Journal of Mechanisms and Robotics</em>, 2021. doi:<a href="https://doi.org/10.1115/1.4050151">10.1115/1.4050151</a></p>
+    <script src="../assets/anim/parallel.js?v=3456b0a7" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author or taken from the author's own published papers, credited where shown.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js?v=3ed2a42b" defer></script>
+</body>
+</html>

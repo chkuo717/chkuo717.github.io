@@ -1,0 +1,45 @@
+title: A leg support that balances hip or knee
+nav: research
+description: Animation of the reconfigurable gravity balancer for lower-limb rehabilitation (Tseng, Lin, Hsu, Lin and Kuo, ASME Journal of Mechanisms and Robotics 2017): a seven-link mechanism that supports the leg’s weight for knee-only or hip-only exercise, with one spring working in each mode.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/medical-mechanisms.html">Medical &amp; rehabilitation devices</a> · Animation</p>
+    <h1>A leg support that balances <span class="hl">hip or knee</span></h1>
+    <p class="lede">Some patients can move a leg only if someone else carries its weight, and the therapist must also keep the exercise to one joint at a time. This mechanism does both: it holds the leg’s weight at every angle, and it can be switched between knee-only and hip-only motion.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="rehab" viewBox="0 0 340 352" role="img" aria-label="Side view of a seated patient’s thigh and calf supported by a linkage: a vertical post with the hip at its top, a thigh link, a calf link, and a parallelogram below. Two springs are attached. In knee-only mode the calf swings; in hip-only mode the thigh swings and the calf translates. A graph below shows gravitational, spring and total energy.">
+          <g id="hBody"></g>
+          <g transform="translate(40,262)">
+            <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
+            <path id="hUg" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="hUs" fill="none" stroke="var(--spring)" stroke-width="1.4"/>
+            <path id="hUt" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="hCursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <text x="4" y="-5" font-size="10" fill="var(--fg-2)">Stored energy over the 50° swing (flat = balanced)</text>
+            <g font-size="10"><text x="264" y="12" fill="var(--red)" font-weight="700" id="hLblT">total</text><text x="264" y="42" fill="var(--spring)">spring</text><text x="264" y="66" fill="var(--fg-2)">gravity</text></g>
+          </g>
+
+        </svg>
+        <div class="ctl radios"><label><input type="radio" name="rhmode" value="knee" checked> Knee-only exercise</label><label><input type="radio" name="rhmode" value="hip"> Hip-only exercise</label><label><input type="checkbox" id="rhOn" checked> Springs on</label></div>
+        <div class="ctl"><span class="muted small"><output id="rhSpring"></output></span></div>
+        <div class="ctl"><span class="muted small" id="rhMsg"></span></div>
+        <figcaption>Limb masses and lengths are the paper’s (thigh 8.4 kg, calf 4.4 kg, foot 1.1 kg, 441 and 440 mm). Each mode locks one joint and lets the other swing through 50°; the spring for that mode keeps the total energy flat, and the other spring does not change length.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The patient sits with the thigh on link 3 and the calf on link 4. Link 2 is a vertical post with the hip joint B at its top; the knee A is at the other end of the thigh link; below, links 6 and 7 form a parallelogram with 2 and 3, so link 6 always stays vertical. For <em>knee-only</em> exercise a roller lock holds the thigh level and the calf swings about A: spring <em>k</em><sub>2</sub>, between a point on the vertical link above the knee and a point down the calf, is a zero-free-length spring balancing a pendulum, and its stiffness is set so that <em>k</em><sub>2</sub><em>h</em><sub>2</sub><em>l</em><sub>2</sub> equals the moment of calf and foot. For <em>hip-only</em> exercise the knee is held instead; the thigh swings about B and the calf, carried by the parallelogram, translates without turning, so its weight acts like a mass at the knee. Spring <em>k</em><sub>1</sub>, between the vertical link above the hip and the thigh, balances the whole. In each mode the other spring's ends move together, so it stores no energy and does not disturb the balance.</p>
+
+        <h2>The idea</h2>
+        <p>Reconfigurable mechanisms change their topology to do different jobs; gravity balancers remove the weight from a motion. The paper puts the two together for the first time in a rehabilitation device: one linkage, two working configurations selected by which joint is locked, and a spring installation chosen so that each configuration is balanced on its own, with the constant-potential-energy method applied to both. The design is sized from anthropometric data and verified in multibody simulation before building.</p>
+
+        <h2>In the paper</h2>
+        <p>A prototype was built in aluminium with linear springs arranged to act as zero-free-length springs through wire and pulley, and tested on a healthy subject with surface electromyography: with the balancer on, the muscle activity needed to move the leg in either mode fell markedly. The prototype is pictured on the <a href="../research/medical-mechanisms.html">Medical devices</a> page.</p>
+        <p class="muted small">Link masses are neglected in the animation, and the spring attachment distances are illustrative; the paper's Tables 1 to 3 give the full data and its computed stiffnesses, 5.69 and 1.50 N/mm.</p>
+      </div>
+    </div>
+
+    {{cite:JMR2017b}}
+    <script src="../assets/anim/parallel.js" defer></script>
+    <script src="../assets/anim/medical.js" defer></script>

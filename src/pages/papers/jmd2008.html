@@ -1,0 +1,34 @@
+title: Which links are the same link?
+nav: research
+description: Animation of link adjacency and joint incidence identification in kinematic chains (Kuo and Shih, ASME Journal of Mechanical Design 2008): finding, by computation, which links and joints of a chain are topologically equivalent.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/mechanism-theory.html">Mechanism theory &amp; teaching</a> · Animation</p>
+    <h1>Which links are <span class="hl">the same link</span>?</h1>
+    <p class="lede">Before a mechanism can be designed from a kinematic chain, one has to know which of its links are interchangeable and which are not, so that the frame and the input are chosen once for each truly different case. Doing that by eye works for small chains; the paper does it by computation.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="adj" viewBox="0 0 340 300" role="img" aria-label="A six-link kinematic chain drawn with bars and triangles for its links and circles for its joints. In turn, each class of topologically equivalent links or joints is highlighted in colour. A menu switches between the Watt and Stephenson chains, and a tick box fixes link 1 to make a mechanism.">
+          <g id="adBody"></g>
+
+        </svg>
+        <div class="ctl"><label for="adChain">Chain</label><select id="adChain"><option value="watt">Watt (6 links)</option><option value="stephenson">Stephenson (6 links)</option></select><label><input type="checkbox" id="adFix"> Fix link 1 (mechanism)</label></div>
+        <div class="ctl"><span class="muted small" id="adMsg"></span></div>
+        <figcaption>The classes are the orbits of the chain’s graph under its symmetries, computed here by checking every relabelling, which is exact for six links. Fix a link and the symmetries that move it are lost, so the classes split: that is the difference between a chain and a mechanism.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>A kinematic chain is drawn as its links (bars for binary links, triangles for ternary) joined at circles. Two links are topologically identical if some relabelling of the chain that preserves all the connections swaps them; the same goes for joints. The Watt chain, for instance, has two interchangeable ternary links and four interchangeable binary links, so there are only two distinct ways to choose its frame, which is why there are exactly two Watt mechanisms. Tick the box to fix link 1 and the chain becomes a mechanism: the relabellings must now leave link 1 in place, fewer links remain interchangeable, and the classes multiply.</p>
+
+        <h2>The idea</h2>
+        <p>By inspection this is manageable for six links and hopeless for twelve, yet structural synthesis, which enumerates all chains and mechanisms of a given size, needs it done automatically and reliably. The paper adapts a pseudogenetic algorithm, originally devised for detecting isomorphic chains, to the identification problem: a chain is encoded as its graph and its line graph, generation and crossover matrices are built from vertex strings, and the vertex family strings that result sort the links, and the joints, into their equivalence classes. The computation is simple to program and maps directly from graphs to chains and mechanisms.</p>
+
+        <h2>In the paper</h2>
+        <p>Worked examples cover the Watt chain and a ten-link chain, and the Watt-II mechanism with its frame fixed, giving the link and joint groups in each case; the method is offered as a building block for automated structural synthesis. The animation checks the classes by exhaustive symmetry search rather than by the paper's algorithm, which gives the same classes for these chains.</p>
+        <p class="muted small">Link shapes are schematic; what matters is the connection pattern.</p>
+      </div>
+    </div>
+
+    {{cite:JMD2008}}
+    <script src="../assets/anim/theory.js" defer></script>

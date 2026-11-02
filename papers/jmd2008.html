@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Which links are the same link? · Chin-Hsing Kuo</title>
+  <meta name="description" content="Animation of link adjacency and joint incidence identification in kinematic chains (Kuo and Shih, ASME Journal of Mechanical Design 2008): finding, by computation, which links and joints of a chain are topologically equivalent.">
+  <script src="../assets/anim/draw.js?v=10a55783" defer></script>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css?v=b1f70a23">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/mechanism-theory.html">Mechanism theory &amp; teaching</a> · Animation</p>
+    <h1>Which links are <span class="hl">the same link</span>?</h1>
+    <p class="lede">Before a mechanism can be designed from a kinematic chain, one has to know which of its links are interchangeable and which are not, so that the frame and the input are chosen once for each truly different case. Doing that by eye works for small chains; the paper does it by computation.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="adj" viewBox="0 0 340 300" role="img" aria-label="A six-link kinematic chain drawn with bars and triangles for its links and circles for its joints. In turn, each class of topologically equivalent links or joints is highlighted in colour. A menu switches between the Watt and Stephenson chains, and a tick box fixes link 1 to make a mechanism.">
+          <g id="adBody"></g>
+
+        </svg>
+        <div class="ctl"><label for="adChain">Chain</label><select id="adChain"><option value="watt">Watt (6 links)</option><option value="stephenson">Stephenson (6 links)</option></select><label><input type="checkbox" id="adFix"> Fix link 1 (mechanism)</label></div>
+        <div class="ctl"><span class="muted small" id="adMsg"></span></div>
+        <figcaption>The classes are the orbits of the chain’s graph under its symmetries, computed here by checking every relabelling, which is exact for six links. Fix a link and the symmetries that move it are lost, so the classes split: that is the difference between a chain and a mechanism.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>A kinematic chain is drawn as its links (bars for binary links, triangles for ternary) joined at circles. Two links are topologically identical if some relabelling of the chain that preserves all the connections swaps them; the same goes for joints. The Watt chain, for instance, has two interchangeable ternary links and four interchangeable binary links, so there are only two distinct ways to choose its frame, which is why there are exactly two Watt mechanisms. Tick the box to fix link 1 and the chain becomes a mechanism: the relabellings must now leave link 1 in place, fewer links remain interchangeable, and the classes multiply.</p>
+
+        <h2>The idea</h2>
+        <p>By inspection this is manageable for six links and hopeless for twelve, yet structural synthesis, which enumerates all chains and mechanisms of a given size, needs it done automatically and reliably. The paper adapts a pseudogenetic algorithm, originally devised for detecting isomorphic chains, to the identification problem: a chain is encoded as its graph and its line graph, generation and crossover matrices are built from vertex strings, and the vertex family strings that result sort the links, and the joints, into their equivalence classes. The computation is simple to program and maps directly from graphs to chains and mechanisms.</p>
+
+        <h2>In the paper</h2>
+        <p>Worked examples cover the Watt chain and a ten-link chain, and the Watt-II mechanism with its frame fixed, giving the link and joint groups in each case; the method is offered as a building block for automated structural synthesis. The animation checks the classes by exhaustive symmetry search rather than by the paper's algorithm, which gives the same classes for these chains.</p>
+        <p class="muted small">Link shapes are schematic; what matters is the connection pattern.</p>
+      </div>
+    </div>
+
+    <p class="cite"><strong>The paper.</strong> Kuo, C.-H. and Shih, J.-C., "<a href="https://doi.org/10.1115/1.2936931">Computational identification of link adjacency and joint incidence in kinematic chains and mechanisms</a>," <em>ASME Journal of Mechanical Design</em>, 2008. doi:<a href="https://doi.org/10.1115/1.2936931">10.1115/1.2936931</a></p>
+    <script src="../assets/anim/theory.js?v=8873c278" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia</p>
+      <p class="muted">Figures and animations on this site are drawn by the author or taken from the author's own published papers, credited where shown.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js?v=3ed2a42b" defer></script>
+</body>
+</html>

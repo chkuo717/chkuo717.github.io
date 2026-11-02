@@ -1,0 +1,44 @@
+title: A laparoscope holder that places, then aims
+nav: research
+description: Animation of the statically balanced laparoscope holder of Kuo and Lai (ASME Journal of Mechanisms and Robotics 2016): a double-parallelogram arm sets the remote centre of motion at the incision, a parallel wrist aims the scope about it, and springs balance the whole.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/medical-mechanisms.html">Medical &amp; rehabilitation devices</a> · Animation</p>
+    <h1>A laparoscope holder that <span class="hl">places, then aims</span></h1>
+    <p class="lede">A holder for the camera in keyhole surgery has two jobs that should not mix: put the pivot point exactly at the incision, then swing and push the scope about that point. This design gives each job its own mechanism, and balances both with springs so the holder stays wherever it is left.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="lap" viewBox="0 0 340 352" role="img" aria-label="Side view: a double parallelogram arm rises from a post on the ground and ends in an upright link that carries a point marked RCM. In the first phase the arm moves and the point moves with it; in the second the point sits at an incision and the laparoscope tilts and slides about it. Springs connect the vertical links to the arm links. A graph below shows the arm’s energies.">
+          <g id="lBody"></g>
+          <g transform="translate(40,262)">
+            <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
+            <path id="lUg" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="lUs" fill="none" stroke="var(--spring)" stroke-width="1.4"/>
+            <path id="lUt" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="lCursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <text x="4" y="-5" font-size="10" fill="var(--fg-2)">Energy of the positioning arm over its motion (flat = balanced)</text>
+            <g font-size="10"><text x="264" y="12" fill="var(--red)" font-weight="700" id="lLblT">total</text><text x="264" y="42" fill="var(--spring)">spring</text><text x="264" y="66" fill="var(--fg-2)">gravity</text></g>
+          </g>
+
+        </svg>
+        <div class="ctl"><label><input type="checkbox" id="lpOn" checked> Springs on</label><span class="muted small"><output id="lpPhase"></output></span></div>
+        <div class="ctl"><span class="muted small" id="lpMsg"></span></div>
+        <figcaption>Positioning and orientating alternate. The parallelograms keep the end link upright, so the RCM point rides along without turning; the orientating mechanism (drawn as a sector guide) then moves the scope about the fixed point. One zero-free-length spring in each loop balances the arm.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The positioning arm is two parallelograms in series on a base pivot. Whatever the arm does, the pseudo-base link between the loops and the end-effector link at the tip stay upright, so a point fixed to the end-effector link, the remote centre of motion, is carried around without rotating. The surgeon places it at the incision. The orientating mechanism, mounted on the end-effector link, is a four-degree-of-freedom parallel mechanism of two five-bar chains whose output turns and slides the laparoscope about that point: pan, tilt, spin and insertion, with the incision point never moving. Position and orientation are controlled by different mechanisms, which is what the title calls decoupled manipulation.</p>
+
+        <h2>The idea</h2>
+        <p>Passive holders must stay put without brakes, which means the mechanism must be statically balanced in every configuration. Because the arm is made of parallelograms whose vertical links keep their orientation, each loop can be balanced by a single zero-free-length spring between its vertical link and its swinging link, with <em>k h l</em> equal to the moment of the weight the loop carries; the graph shows the two gravitational and spring energies adding to a flat line. The orientating mechanism is balanced too, by springs in its five-bars, so the whole holder is passive: no motors, no locks, and it can be moved by hand and released anywhere in its workspace.</p>
+
+        <h2>In the paper</h2>
+        <p>The paper derives the kinematics and the balancing conditions for both mechanisms, checks them numerically and in commercial software, evaluates the workspaces from a CAD model, and reports a prototype that was built and tested by hand. The remaining imbalance, from the springs' practical implementation, is small and quantified.</p>
+        <p class="muted small">Dimensions and masses in the animation are illustrative; the structure, the two phases and the spring placement follow the paper's Figs. 2, 3 and 11.</p>
+      </div>
+    </div>
+
+    {{cite:JMR2016}}
+    <script src="../assets/anim/parallel.js" defer></script>
+    <script src="../assets/anim/medical.js" defer></script>

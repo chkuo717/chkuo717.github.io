@@ -1,0 +1,34 @@
+title: One motor, one angle: projective motion
+nav: research
+description: Animation of projective angles, the orientation representation behind the fully decoupled parallel manipulators of Kuo and Dai (ASME Journal of Mechanisms and Robotics 2021): each actuator sets one projection of the moving axis and nothing else.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/parallel-mechanisms.html">Parallel &amp; decoupled mechanisms</a> · Animation</p>
+    <h1>One motor, <span class="hl">one angle</span>: projective motion</h1>
+    <p class="lede">Describe where an axis points by the angles of its shadows on two walls, and a parallel manipulator can be built in which each motor sets one shadow angle and nothing else. That is a fully decoupled manipulator, and the paper shows how to make one with any number of degrees of freedom.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="proj" viewBox="0 0 340 300" role="img" aria-label="A moving axis w on a ball at the origin of a fixed frame; its projections on the xz- and yz-planes are drawn dashed with the angles from the z-axis marked. Two sliders set the two angles independently.">
+          <g id="pBody"></g>
+
+        </svg>
+        <div class="ctl"><label for="pjA">θ<sub>xz</sub></label><input type="range" id="pjA" min="-40" max="40" step="1" value="20"><output id="pjAOut">20°</output><label for="pjB">θ<sub>yz</sub></label><input type="range" id="pjB" min="-40" max="40" step="1" value="-15"><output id="pjBOut">-15°</output></div>
+        <div class="ctl"><label><input type="checkbox" id="pjAuto" checked> Sweep automatically</label><span class="muted small" id="pjMsg"></span></div>
+        <figcaption>The two red arcs are the <em>projective angles</em> of the axis <em>w</em>: the angle of its shadow on the xz-plane and on the yz-plane, each measured from the vertical. Move one slider and only one shadow turns; the axis is wherever the two shadows meet.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>A fixed frame <em>xyz</em> and a moving axis <em>w</em> pivoted at the origin. Light falling along <em>y</em> casts <em>w</em>'s shadow on the xz-plane; light along <em>x</em> casts it on the yz-plane. The two shadow angles, θ<sub>xz</sub> and θ<sub>yz</sub>, fix the direction of <em>w</em>: it is parallel to (tan θ<sub>xz</sub>, tan θ<sub>yz</sub>, 1). Unlike Euler angles, which are applied one after another so that the second depends on the first, the two projective angles are independent of each other, and each can be read directly from one view of the mechanism.</p>
+
+        <h2>The idea</h2>
+        <p>A parallel manipulator is called fully decoupled when each motor drives exactly one output motion. For rotations this is usually said to be impossible beyond two degrees of freedom, because the usual angle sets are coupled. The paper's observation is that the coupling is in the representation, not in the mechanism: express the rotations as projective angles and a one-to-one correspondence between motors and outputs is available for any number of degrees of freedom up to six. The screw-theoretic reasoning identifies which joint arrangements leave a leg's actuator in command of one projective angle, and a systematic synthesis procedure follows.</p>
+
+        <h2>In the paper</h2>
+        <p>Two-, three-, four-, five- and six-degree-of-freedom manipulators with fully decoupled projective motion are synthesised, including spherical wrists, a 3R1T manipulator with a decoupled remote centre of motion, and a six-degree-of-freedom platform. The three-degree-of-freedom wrist built on this principle has <a href="rob2014.html">its own animation</a>, and the same representation is used in the group's <a href="jmed2012.html">surgical manipulator</a>.</p>
+        <p class="muted small">The animation shows the representation itself; the mechanisms that realise it are on the linked pages.</p>
+      </div>
+    </div>
+
+    {{cite:JMR2021a}}
+    <script src="../assets/anim/parallel.js" defer></script>

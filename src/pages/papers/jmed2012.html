@@ -1,0 +1,36 @@
+title: Four motions about one point, one motor each
+nav: research
+description: Animation of the fully decoupled four-degree-of-freedom remote-centre-of-motion parallel manipulator for minimally invasive surgery (Kuo and Dai, ASME Journal of Medical Devices 2012): two projective angles, spin and insertion of the tool about the incision, each driven by one actuator.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/medical-mechanisms.html">Medical &amp; rehabilitation devices</a> · Animation</p>
+    <h1>Four motions about one point, <span class="hl">one motor each</span></h1>
+    <p class="lede">A surgical tool through a small incision may tilt two ways, spin, and slide in and out, always pivoting about the incision. This manipulator gives each of those four motions its own motor, so that commanding one changes nothing else.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="rcm4" viewBox="0 0 340 300" role="img" aria-label="Isometric view of a surgical tool passing through a remote centre of motion on a translucent abdominal wall. The tool’s projections on the xz- and yz-planes are drawn with their angles, a flag on the tool shows its spin, and the tool slides along its own axis. Four sliders set the four motions.">
+          <g id="qBody"></g>
+
+        </svg>
+        <div class="ctl"><label for="q1">θ<sub>xz</sub></label><input type="range" id="q1" min="-35" max="35" step="1" value="15"><label for="q2">θ<sub>yz</sub></label><input type="range" id="q2" min="-35" max="35" step="1" value="-10"></div>
+        <div class="ctl"><label for="q3">spin</label><input type="range" id="q3" min="-180" max="180" step="1" value="0"><label for="q4">insertion</label><input type="range" id="q4" min="0" max="60" step="1" value="40"></div>
+        <div class="ctl"><label><input type="checkbox" id="qAuto" checked> Sweep one motion at a time</label><span class="muted small" id="qMsg"></span></div>
+        <figcaption>The tool’s direction is given by its two projective angles, so each tilt slider turns one shadow only; spin and insertion are the other two actuated motions. The manipulator’s legs are not drawn; the motion they produce is.</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>The red dot is the remote centre of motion, the point on the abdominal wall where the tool enters. The tool's direction <em>w</em> is described by two projective angles, the angles of its shadows on the xz- and yz-planes; its spin about its own axis and its depth of insertion complete the four degrees of freedom a surgical instrument has at an incision. In the manipulator each of these four is driven by one actuator: moving a slider here does what moving that actuator does, and the other three readings do not change.</p>
+
+        <h2>The idea</h2>
+        <p>Earlier remote-centre-of-motion mechanisms for surgery coupled their motions, so a simple command such as tilting the tool in one plane needed several motors moving together under computer control. The paper first sets out the projective displacement representation for this special kinematics, then builds the manipulator from a <em>motion constraint leg</em>, an RRRP chain whose three revolute axes meet at the incision point, which alone gives the end-effector exactly the 3R1T remote-centre motion, and two auxiliary RRRUR legs that add no constraint and carry the actuators (the <a href="mmt2013.html">motion constraint generator</a> method). The geometry is arranged so that the Jacobian is the identity: fully decoupled kinematics, verified by screw-system analysis.</p>
+
+        <h2>In the paper</h2>
+        <p>The inverse kinematics follows from the decoupling, the Jacobian and singularities are obtained by the screw system approach, and the reachable and dexterous workspaces are analysed. A CAD model shows the manipulator over a patient's bed. The approach grew into the general theory of <a href="jmr2021a.html">decoupled projective motion</a>.</p>
+        <p class="muted small">Only the output motion is animated; the leg structure is described in the text and drawn in the paper's Fig. 4.</p>
+      </div>
+    </div>
+
+    {{cite:JMED2012}}
+    <script src="../assets/anim/parallel.js" defer></script>
+    <script src="../assets/anim/medical.js" defer></script>

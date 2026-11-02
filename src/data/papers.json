@@ -197,7 +197,10 @@
       "authors": "Kuo, C.-H. and Dai, J. S.",
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2021,
-      "doi": "10.1115/1.4050151"
+      "doi": "10.1115/1.4050151",
+      "anim": "papers/jmr2021a.html",
+      "short": "One motor, one angle: projective motion",
+      "blurb": "Describe an axis by the angles of its two shadows and each motor of a parallel manipulator can set one of them alone."
     },
     {
       "key": "ROB2014",
@@ -207,7 +210,10 @@
       "authors": "Kuo, C.-H., Dai, J. S. and Legnani, G.",
       "venue": "Robotica",
       "year": 2014,
-      "doi": "10.1017/S0263574713001100"
+      "doi": "10.1017/S0263574713001100",
+      "anim": "papers/rob2014.html",
+      "short": "A wrist whose three motors do not interfere",
+      "blurb": "Three planes hinged on the base axes each hold one point of a platform on a ball joint; one motor turns one plane."
     },
     {
       "key": "MMT2013",
@@ -217,7 +223,10 @@
       "authors": "Kuo, C.-H. and Dai, J. S.",
       "venue": "Mechanism and Machine Theory",
       "year": 2013,
-      "doi": "10.1016/j.mechmachtheory.2013.08.010"
+      "doi": "10.1016/j.mechmachtheory.2013.08.010",
+      "anim": "papers/mmt2013.html",
+      "short": "One leg decides the motion, the others drive it",
+      "blurb": "A serial constraint leg fixes what the platform can do; constraint-free legs carry the motors. Remove the leg and see why."
     },
     {
       "key": "BC03",
@@ -237,7 +246,10 @@
       "authors": "Kuo, C.-H. and Su, J.-W.",
       "venue": "Mechanism and Machine Theory",
       "year": 2017,
-      "doi": "10.1016/j.mechmachtheory.2015.08.006"
+      "doi": "10.1016/j.mechmachtheory.2015.08.006",
+      "anim": "papers/mmt2017.html",
+      "short": "A cube of eight cubes that folds into other shapes",
+      "blurb": "Eight hinged sub-cubes fold from cube to slab to cube: an 8R loop whose mobility appears when two hinges line up."
     },
     {
       "key": "JMR2014",
@@ -247,7 +259,10 @@
       "authors": "Kuo, C.-H. and Chang, L.-Y.",
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2014,
-      "doi": "10.1115/1.4026336"
+      "doi": "10.1115/1.4026336",
+      "anim": "papers/jmr2014.html",
+      "short": "One mechanism, three topologies",
+      "blurb": "The steel clamping and sawing mechanism closes a clamp, stiffens, then saws; its topology graph changes live."
     },
     {
       "key": "JMD2007",
@@ -257,7 +272,10 @@
       "authors": "Kuo, C.-H. and Yan, H.-S.",
       "venue": "ASME Journal of Mechanical Design",
       "year": 2007,
-      "doi": "10.1115/1.2717230"
+      "doi": "10.1115/1.2717230",
+      "anim": "papers/jmd2007.html",
+      "short": "Counting freedoms when the topology keeps changing",
+      "blurb": "A push-button lock through four stages, with the mobility that screw theory gets right and the planar formula gets wrong."
     },
     {
       "key": "MS2017",
@@ -314,7 +332,10 @@
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2017,
       "doi": "10.1115/1.4036218",
-      "note": "<a href=\"https://patents.google.com/patent/US9592415B2/en\">US Patent 9,592,415 B2, Auxiliary Device for Muscle Strength Training</a>."
+      "note": "<a href=\"https://patents.google.com/patent/US9592415B2/en\">US Patent 9,592,415 B2, Auxiliary Device for Muscle Strength Training</a>.",
+      "anim": "papers/jmr2017b.html",
+      "short": "A leg support that balances hip or knee",
+      "blurb": "Seven links, two springs, two modes: lock one joint, swing the other, and the leg’s weight is carried at every angle."
     },
     {
       "key": "JMR2016",
@@ -325,7 +346,10 @@
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2016,
       "doi": "10.1115/1.4029789",
-      "note": "<a href=\"https://patents.google.com/patent/US9232981B2/en\">US Patent 9,232,981 B2, Surgical Holder</a>."
+      "note": "<a href=\"https://patents.google.com/patent/US9232981B2/en\">US Patent 9,232,981 B2, Surgical Holder</a>.",
+      "anim": "papers/jmr2016.html",
+      "short": "A laparoscope holder that places, then aims",
+      "blurb": "A double parallelogram carries the pivot point to the incision; a parallel wrist aims the scope about it; springs balance both."
     },
     {
       "key": "JMED2012",
@@ -335,7 +359,10 @@
       "authors": "Kuo, C.-H. and Dai, J. S.",
       "venue": "ASME Journal of Medical Devices",
       "year": 2012,
-      "doi": "10.1115/1.4006541"
+      "doi": "10.1115/1.4006541",
+      "anim": "papers/jmed2012.html",
+      "short": "Four motions about one point, one motor each",
+      "blurb": "Two tilts, spin and insertion of a surgical tool about the incision, each on its own actuator."
     },
     {
       "key": "BIR2025",
@@ -401,7 +428,10 @@
       "authors": "Kuo, C.-H.",
       "venue": "Interactive e-book, GeoGebra",
       "year": 2024,
-      "url": "https://www.geogebra.org/m/zyjgc9w5"
+      "url": "https://www.geogebra.org/m/zyjgc9w5",
+      "anim": "papers/bk04.html",
+      "short": "Where a moving body turns about",
+      "blurb": "Set a second position of a body and watch the two bisectors find the relative pole; the body swings about it."
     },
     {
       "key": "JMD2008",
@@ -411,7 +441,10 @@
       "authors": "Kuo, C.-H. and Shih, J.-C.",
       "venue": "ASME Journal of Mechanical Design",
       "year": 2008,
-      "doi": "10.1115/1.2936931"
+      "doi": "10.1115/1.2936931",
+      "anim": "papers/jmd2008.html",
+      "short": "Which links are the same link?",
+      "blurb": "Watt and Stephenson chains with their equivalent links and joints highlighted class by class; fix a link and watch the classes split."
     },
     {
       "key": "BK01",

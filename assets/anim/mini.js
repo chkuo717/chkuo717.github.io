@@ -382,20 +382,22 @@
     // Sariyildiz, Mutlu, Roberts, Kuo and Ugurlu, IEEE/ASME T-Mech 2023: a variable stiffness series elastic
     // actuator. Rollers slide along leaf springs to change their effective length; the output gives less.
     TMech2023: function (s) {
-      // leaf spring clamped at x0; the output link pushes on it through the rollers at distance a from the clamp
-      // (paper Sec. III-B). Cantilever with a point load at a: y(x) = P x^2 (3a - x) / 6EI for x <= a, straight beyond,
-      // so the deflection under the rollers grows as a^3: rollers near the clamp = stiff, near the free end = soft.
-      var T = s % 10, u = T < 5 ? smooth(T / 5) : 1 - smooth((T - 5) / 5), x0 = 22, Lb = 112, a = 22 + (Lb - 22) * u;
-      var P0 = 20 * (0.8 + 0.2 * Math.sin(s * 5)), k = 3 * P0 / Math.pow(Lb, 3);      // same push throughout; deflection under the rollers is P0 (px) when a = Lb
-      function y(x) { return x <= a ? k * x * x * (3 * a - x) / 6 : k * a * a * a / 3 + k * a * a / 2 * (x - a); }
-      var d = 'M' + x0 + ',56'; for (var i = 1; i <= 40; i++) { var x = Lb * i / 40; d += ' L' + f(x0 + x) + ',' + f(56 + y(x)); }
-      var out = KD.wall(P(x0, 26), P(x0, 86), -1) + '<rect x="' + x0 + '" y="52" width="4" height="8" fill="var(--fg)"/>';
-      out += '<path d="M' + x0 + ',56 L' + (x0 + Lb) + ',56" stroke="var(--fg-2)" stroke-width=".8" stroke-dasharray="2 2"/>' + '<path d="' + d + '" fill="none" stroke="var(--spring)" stroke-width="2.6"/>';
-      var ry = 56 + y(a), rx = x0 + a;
-      out += '<circle cx="' + f(rx) + '" cy="' + f(ry - 5) + '" r="3.6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/><circle cx="' + f(rx) + '" cy="' + f(ry + 5) + '" r="3.6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
-      out += KD.arrow(P(rx, ry - 26), P(rx, ry - 9), 'var(--red)', 1.4, 5) + KD.label(P(rx + 4, ry - 18), 'F', { size: 9, fill: 'var(--red)' });
-      return out + txt(P(6, 12), u < 0.35 ? 'rollers near the clamp: stiff' : u > 0.65 ? 'rollers near the free end: soft' : 'rollers moving', 8, 'var(--fg)') +
-        txt(P(6, 106), 'same push, deflection under the rollers ∝ a³', 7, 'var(--fg-2)');
+      // leaf spring clamped at the wall; the output pushes on its tip with a fixed force F. The roller pair rides
+      // along the undeformed line and holds the beam there, so the beam left of the rollers stays straight and only
+      // the overhang c from the rollers to the tip bends: y(xi) = F xi^2 (3c - xi) / 6EI, tip deflection F c^3 / 3EI.
+      // Rollers far from the tip (long overhang) = soft; rollers near the tip (short overhang) = stiff.
+      var T = s % 10, u = T < 5 ? smooth(T / 5) : 1 - smooth((T - 5) / 5), x0 = 22, Lb = 112, y0 = 56;
+      var a = 14 + (Lb - 30) * u, c = Lb - a, F = 0.85 + 0.15 * Math.sin(s * 5), k = 3 * 20 / Math.pow(Lb - 14, 3);
+      function y(xi) { return k * F * xi * xi * (3 * c - xi) / 6; }
+      var d = 'M' + x0 + ',' + y0 + ' L' + f(x0 + a) + ',' + y0;
+      for (var i = 1; i <= 30; i++) { var xi = c * i / 30; d += ' L' + f(x0 + a + xi) + ',' + f(y0 + y(xi)); }
+      var out = KD.wall(P(x0, 26), P(x0, 86), -1) + '<rect x="' + x0 + '" y="' + (y0 - 4) + '" width="4" height="8" fill="var(--fg)"/>';
+      out += '<path d="M' + x0 + ',' + y0 + ' L' + (x0 + Lb) + ',' + y0 + '" stroke="var(--fg-2)" stroke-width=".8" stroke-dasharray="2 2"/>' + '<path d="' + d + '" fill="none" stroke="var(--spring)" stroke-width="2.6"/>';
+      var rx = x0 + a, tip = P(x0 + Lb, y0 + y(c));
+      out += '<circle cx="' + f(rx) + '" cy="' + (y0 - 5) + '" r="3.6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/><circle cx="' + f(rx) + '" cy="' + (y0 + 5) + '" r="3.6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
+      out += KD.arrow(P(tip.x, tip.y - 20), P(tip.x, tip.y - 2), 'var(--red)', 1.4, 5) + KD.label(P(tip.x - 12, tip.y - 12), 'F', { size: 9, fill: 'var(--red)' });
+      return out + txt(P(6, 12), u < 0.35 ? 'rollers far from the tip: soft' : u > 0.65 ? 'rollers near the tip: stiff' : 'rollers moving', 8, 'var(--fg)') +
+        txt(P(6, 106), 'same F at the tip; only the overhang bends', 7, 'var(--fg-2)');
 
     }
   };

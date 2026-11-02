@@ -12,6 +12,7 @@ Tokens inside a body:
     {{papers-all:gravity}}  the remaining papers of that theme
     {{anims:gravity}}       cards linking to the theme's animation pages (papers with an "anim" path)
     {{cite:MMT2023}}        one-line citation of one paper, for its animation page
+    {{publications}}        the full publication list, from src/data/publications.json (made by tools/import_cv.py)
 Animation pages live in src/pages/papers/<key>.html and load their script from assets/anim/.
 Data comes from src/data/papers.json. Pages under src/pages/_drafts/ are not built.
 
@@ -26,10 +27,12 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src", "pages")
 BASE = open(os.path.join(ROOT, "src", "base.html"), encoding="utf-8").read()
 PAPERS = json.load(open(os.path.join(ROOT, "src", "data", "papers.json"), encoding="utf-8"))["papers"]
+PUBS = json.load(open(os.path.join(ROOT, "src", "data", "publications.json"), encoding="utf-8"))["sections"]
 
 NAV = [
     ("index.html", "home", "Home"),
     ("research/index.html", "research", "Research"),
+    ("publications.html", "publications", "Publications"),
     ("talks-teaching.html", "talks", "Talks &amp; Teaching"),
     ("about.html", "about", "About"),
 ]
@@ -133,7 +136,23 @@ def cite_html(key):
             f'<em>{e(p["venue"])}</em>, {p["year"]}.{doi}</p>')
 
 
+def publications_html(root):
+    """The full list, one section per kind, newest first as in the CV; links to an animation page where one exists."""
+    anim = {p["key"].lower(): p["anim"] for p in PAPERS if p.get("anim")}
+    counts = " ".join(f'<a href="#{s["id"]}">{s["label"]} <span class="count">{len(s["items"])}</span></a>' for s in PUBS)
+    out = [f'<nav class="pub-jump" aria-label="Sections">{counts}</nav>']
+    for s in PUBS:
+        out.append(f'<h2 id="{s["id"]}">{s["label"]}</h2>\n<ol class="pubs" reversed>')
+        for it in sorted(s["items"], key=lambda it: -(it["year"] or 0)):   # stable: CV order within a year
+            a = anim.get(it["key"].lower())
+            tag = f' <a class="anim" href="{root}{html.escape(a)}">animation</a>' if a else ""
+            out.append(f'<li id="{html.escape(it["key"])}">{it["html"]}{tag}</li>')
+        out.append("</ol>")
+    return "\n".join(out)
+
+
 def expand_tokens(body, root):
+    body = body.replace("{{publications}}", publications_html(root))
     body = re.sub(r"\{\{papers:(\w+)\}\}", lambda m: papers_html(m.group(1), True, root), body)
     body = re.sub(r"\{\{papers-all:(\w+)\}\}", lambda m: papers_html(m.group(1), False, root), body)
     body = re.sub(r"\{\{anims:(\w+)\}\}", lambda m: anims_html(m.group(1), root), body)

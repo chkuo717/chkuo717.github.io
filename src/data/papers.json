@@ -505,7 +505,7 @@
       "venue": "IEEE/ASME Transactions on Mechatronics",
       "year": 2023,
       "doi": "10.1109/TMECH.2022.3232471",
-      "mini": "Rollers slide along leaf springs to change their working length, and with it the actuator's stiffness, from about 20 N·m/rad to about 1 kN·m/rad."
+      "mini": "The output's twist pushes the rollers against leaf springs; sliding the rollers changes the springs' working length, and with it the actuator's stiffness, from about 20 N·m/rad to about 1 kN·m/rad."
     },
     {
       "key": "MMT2022",

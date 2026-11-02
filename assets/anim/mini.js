@@ -508,23 +508,42 @@
     // Sariyildiz, Mutlu, Roberts, Kuo and Ugurlu, IEEE/ASME T-Mech 2023: a variable stiffness series elastic
     // actuator. Rollers slide along leaf springs to change their effective length; the output gives less.
     TMech2023: function (s) {
-      // leaf spring clamped at the wall; the output pushes on its tip with a fixed force F. The roller pair rides
-      // along the undeformed line and holds the beam there, so the beam left of the rollers stays straight and only
-      // the overhang c from the rollers to the tip bends: y(xi) = F xi^2 (3c - xi) / 6EI, tip deflection F c^3 / 3EI.
-      // Rollers far from the tip (long overhang) = soft; rollers near the tip (short overhang) = stiff.
-      var T = s % 10, u = T < 5 ? smooth(T / 5) : 1 - smooth((T - 5) / 5), x0 = 22, Lb = 112, y0 = 56;
-      var a = 14 + (Lb - 30) * u, c = Lb - a, F = 0.85 + 0.15 * Math.sin(s * 5), k = 3 * 20 / Math.pow(Lb - 14, 3);
-      function y(xi) { return k * F * xi * xi * (3 * c - xi) / 6; }
-      var d = 'M' + x0 + ',' + y0 + ' L' + f(x0 + a) + ',' + y0;
-      for (var i = 1; i <= 30; i++) { var xi = c * i / 30; d += ' L' + f(x0 + a + xi) + ',' + f(y0 + y(xi)); }
-      var out = KD.wall(P(x0, 26), P(x0, 86), -1) + '<rect x="' + x0 + '" y="' + (y0 - 4) + '" width="4" height="8" fill="var(--fg)"/>';
-      out += '<path d="M' + x0 + ',' + y0 + ' L' + (x0 + Lb) + ',' + y0 + '" stroke="var(--fg-2)" stroke-width=".8" stroke-dasharray="2 2"/>' + '<path d="' + d + '" fill="none" stroke="var(--spring)" stroke-width="2.6"/>';
-      var rx = x0 + a, tip = P(x0 + Lb, y0 + y(c));
-      out += '<circle cx="' + f(rx) + '" cy="' + (y0 - 5) + '" r="3.6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/><circle cx="' + f(rx) + '" cy="' + (y0 + 5) + '" r="3.6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
-      out += KD.arrow(P(tip.x, tip.y - 20), P(tip.x, tip.y - 2), 'var(--red)', 1.4, 5) + KD.label(P(tip.x - 12, tip.y - 12), 'F', { size: 9, fill: 'var(--red)' });
-      return out + txt(P(6, 12), u < 0.35 ? 'rollers far from the tip: soft' : u > 0.65 ? 'rollers near the tip: stiff' : 'rollers moving', 8, 'var(--fg)') +
-        txt(P(6, 106), 'same F at the tip; only the overhang bends', 7, 'var(--fg-2)');
-
+      // Paper Figs. 4(d) and 6, Eq. (2): the input is the output link's twist q_l. The rollers ride on the output's
+      // mobile frame at radius r, so a twist moves them sideways by delta = 2 r sin(q_l/2) and they push the leaf
+      // spring at x_r. The spring is a cantilever from the fixed end loaded at x_r: it bends between the fixed end
+      // and the rollers, y = delta x^2 (3 x_r - x) / (2 x_r^3), and runs on straight beyond them. Stiffness ~ 1/x_r^3,
+      // so for the same twist the output torque tau_l is large with the rollers near the fixed end, small near the free end.
+      var T = s % 10, u = T < 5 ? smooth(T / 5) : 1 - smooth((T - 5) / 5);
+      var x0 = 14, L = 88, y0 = 52, amin = 36, a = amin + (L - 6 - amin) * u;
+      var qn = Math.sin(s * Math.PI), dl = 6 * qn, kr = Math.pow(amin / a, 3);
+      function y(x) { return x <= a ? dl * x * x * (3 * a - x) / (2 * a * a * a) : dl + 1.5 * dl / a * (x - a); }
+      var d = 'M' + x0 + ',' + y0;
+      for (var i = 1; i <= 40; i++) { var xi = L * i / 40; d += ' L' + f(x0 + xi) + ',' + f(y0 + y(xi)); }
+      var out = KD.wall(P(x0, 30), P(x0, 76), -1) + '<rect x="' + x0 + '" y="' + (y0 - 4) + '" width="4" height="8" fill="var(--fg)"/>';
+      out += '<path d="M' + x0 + ',' + y0 + ' L' + (x0 + L) + ',' + y0 + '" stroke="var(--fg-2)" stroke-width=".8" stroke-dasharray="2 2"/><path d="' + d + '" fill="none" stroke="var(--spring)" stroke-width="2.6"/>';
+      var rx = x0 + a, ry = y0 + dl;
+      out += '<circle cx="' + f(rx) + '" cy="' + f(ry - 5) + '" r="3.6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/><circle cx="' + f(rx) + '" cy="' + f(ry + 5) + '" r="3.6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
+      out += txt(P(x0 + 1, 86), 'fixed end', 6.5) + txt(P(x0 + L, 86), 'free end', 6.5, 'var(--fg-2)', 'end');
+      out += KD.label(P(rx - 4, y0 - 20), 'x', { size: 8 }) + txt(P(rx + 1, y0 - 18), 'r', 5.5, 'var(--fg)');
+      // end view: output hub, rollers on the mobile frame at radius R, twist q_l and the torque it takes
+      var C = P(138, 56), R = 15, q = 0.5 * qn, th = -Math.PI / 2 + q;
+      out += '<circle cx="' + C.x + '" cy="' + C.y + '" r="' + R + '" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="1.2"/><circle cx="' + C.x + '" cy="' + C.y + '" r="2" fill="var(--fg)"/>';
+      out += '<path d="M' + C.x + ',' + (C.y - R - 13) + ' L' + C.x + ',' + (C.y - R + 2) + '" stroke="var(--fg-2)" stroke-width=".8" stroke-dasharray="2 2"/>';
+      var pr = P(C.x + (R + 5) * Math.cos(th), C.y + (R + 5) * Math.sin(th));
+      out += '<path d="M' + C.x + ',' + C.y + ' L' + f(pr.x) + ',' + f(pr.y) + '" stroke="var(--fg)" stroke-width="1"/>';
+      [-5, 5].forEach(function (o) { var pp = P(pr.x + o * Math.cos(th), pr.y + o * Math.sin(th)); out += '<circle cx="' + f(pp.x) + '" cy="' + f(pp.y) + '" r="3" fill="var(--card)" stroke="var(--fg)" stroke-width="1.1"/>'; });
+      out += '<rect x="' + f(pr.x - 1.4) + '" y="' + f(pr.y - 5) + '" width="2.8" height="10" fill="var(--spring)" transform="rotate(' + f(q * 180 / Math.PI) + ' ' + f(pr.x) + ' ' + f(pr.y) + ')"/>';
+      var span = (0.25 + 2.6 * kr) * Math.abs(qn), sg = qn >= 0 ? 1 : -1, Rt = 8.5, a0 = Math.PI / 2 - sg * span / 2, a1 = Math.PI / 2 + sg * span / 2;
+      if (Math.abs(qn) > 0.08) {
+        var p0 = P(C.x + Rt * Math.cos(a0), C.y + Rt * Math.sin(a0)), p1 = P(C.x + Rt * Math.cos(a1), C.y + Rt * Math.sin(a1));
+        out += '<path d="M' + f(p0.x) + ',' + f(p0.y) + ' A' + Rt + ',' + Rt + ' 0 ' + (span > Math.PI ? 1 : 0) + ',' + (sg > 0 ? 1 : 0) + ' ' + f(p1.x) + ',' + f(p1.y) + '" fill="none" stroke="var(--red)" stroke-width="' + f(1 + 1.4 * kr) + '"/>';
+        var tg = P(-Math.sin(a1) * sg, Math.cos(a1) * sg);
+        out += KD.arrow(P(p1.x - 2 * tg.x, p1.y - 2 * tg.y), P(p1.x + 2.5 * tg.x, p1.y + 2.5 * tg.y), 'var(--red)', 1.2, 4);
+      }
+      out += KD.label(P(C.x - 4, C.y + R + 11), 'τ', { size: 9, fill: 'var(--red)' }) + txt(P(C.x + 1, C.y + R + 13), 'l', 5.5, 'var(--red)');
+      out += KD.label(P(C.x + 7, C.y - R - 14), 'q', { size: 8 }) + txt(P(C.x + 12, C.y - R - 12), 'l', 5.5, 'var(--fg)');
+      return out + txt(P(6, 12), u < 0.35 ? 'rollers near the fixed end: stiff' : u > 0.65 ? 'rollers near the free end: soft' : 'rollers moving', 8, 'var(--fg)') +
+        txt(P(6, 106), 'same twist qₗ, torque τₗ ∝ 1/xᵣ³', 7, 'var(--fg-2)');
     }
   };
   window.KD_MINI = MINI;

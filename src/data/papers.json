@@ -485,7 +485,7 @@
       "venue": "Engineering Structures",
       "year": 2025,
       "doi": "10.1016/j.engstruct.2025.121412",
-      "mini": "Bistable units derived from Waterbomb origami deploy as a strip; snapping some of them to their second state arches the strip to fit uneven ground."
+      "mini": "Four bistable units derived from Waterbomb origami form a channel module between two panels. Snapping the units on one side from concave to convex tilts the module by about 6.78°, so a chain of modules arches, or bends into an S, to fit the terrain."
     },
     {
       "key": "IJMS2025",
@@ -495,7 +495,7 @@
       "venue": "International Journal of Mechanical Sciences",
       "year": 2025,
       "doi": "10.1016/j.ijmecsci.2025.110746",
-      "mini": "A curved loop strip that folds and wraps around an object when its axis is twisted: a soft gripper with no sensing or control."
+      "mini": "A loop strip is bonded at the middle into a figure-eight; rotating the middle about the long axis makes the two lobes fold down and wrap the object. Rotating the other way gives a second mode for heavier loads."
     },
     {
       "key": "TMech2023",

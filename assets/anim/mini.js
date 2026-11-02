@@ -315,25 +315,69 @@
     // Wang et al., Eng. Struct. 2025: a bistable unit derived from Waterbomb origami; a strip of units deploys,
     // then some snap to their second state and the strip arches to fit the ground.
     ES2025: function (s) {
-      var T = s % 10, dep = T < 3 ? smooth(T / 3) : T < 7 ? 1 : 1 - smooth((T - 7) / 3), arch = T < 3.5 ? 0 : T < 5 ? smooth((T - 3.5) / 1.5) : T < 7 ? 1 : 1 - smooth((T - 7) / 1.5);
-      var n = 6, w = 8 + 12 * dep, out = KD.wall(P(10, 100), P(150, 100), 1), x0 = 80 - n * w / 2;
-      for (var i = 0; i < n; i++) {
-        var cx = x0 + (i + 0.5) * w, k = (i - (n - 1) / 2), y = 70 - arch * (18 - 2.2 * k * k) - 6 * (1 - dep);
-        var snap = arch > 0.5 && (i === 2 || i === 3), h = 6 + 6 * dep;
-        out += '<polygon points="' + f(cx - w / 2) + ',' + f(y) + ' ' + f(cx) + ',' + f(y + (snap ? h : -h)) + ' ' + f(cx + w / 2) + ',' + f(y) + '" fill="' + (snap ? 'var(--mag-rotor)' : 'var(--link-fill)') + '" stroke="var(--fg)" stroke-width="1"/>';
+      // side view of a chain of channel modules (paper Fig. 6D-E): each module is two panels with a
+      // Waterbomb-derived unit on each side. Every unit is bistable, concave or convex. A module whose upper
+      // unit is convex and lower unit concave tilts by gamma ~ 6.78 deg (Fig. 6A); a chain of them bends.
+      var N = 8, H = 9, sp = 14, g0 = 6.78 * Math.PI / 180, T = s % 16;
+      function snap(t0, i) { return smooth((T - t0 - 0.45 * i) / 0.35); }
+      var up = [], lo = [];
+      for (var i = 0; i < N; i++) {
+        var a = 0, b = 0;
+        if (T >= 2 && T < 8.5) b = snap(2, i) * (T < 7.5 ? 1 : 1 - smooth((T - 7.5) / 0.8));   // all lower units snap: the chain arches up
+        if (T >= 9 && T < 15.5) {                                                          // S shape: upper on the left half, lower on the right half
+          var v = smooth((T - 9 - 0.45 * i) / 0.35) * (T < 14.5 ? 1 : 1 - smooth((T - 14.5) / 0.8));
+          if (i < 4) a = v; else b = v;
+        }
+        up.push(a); lo.push(b);
       }
-      return out + txt(P(6, 12), T < 3 ? 'deploying' : arch > 0.5 ? 'units snapped: the strip arches' : 'deployed', 8, 'var(--fg)');
+      var p = P(14, T >= 9 ? 56 : 74), phi = 0, pts = [P(p.x, p.y)], ph = [0];
+      for (i = 0; i < N; i++) { var gi = (up[i] - lo[i]) * g0; var m = phi + gi / 2; p = P(p.x + sp * Math.cos(m), p.y + sp * Math.sin(m)); phi += gi; pts.push(p); ph.push(phi); }
+      function nrm(k) { return P(Math.sin(ph[k]), -Math.cos(ph[k])); }
+      var out = '';
+      for (i = 0; i < N; i++) {
+        [1, -1].forEach(function (side) {
+          var n0 = nrm(i), n1 = nrm(i + 1), A = P(pts[i].x + side * H * n0.x, pts[i].y + side * H * n0.y), B = P(pts[i + 1].x + side * H * n1.x, pts[i + 1].y + side * H * n1.y);
+          var c = side === 1 ? up[i] : lo[i], nm = P((n0.x + n1.x) / 2, (n0.y + n1.y) / 2), bump = (2 * c - 1) * 4.5;
+          var M = P((A.x + B.x) / 2 + side * bump * nm.x, (A.y + B.y) / 2 + side * bump * nm.y);
+          out += '<polygon points="' + KD.pt(A) + ' ' + KD.pt(M) + ' ' + KD.pt(B) + '" fill="' + (c > 0.5 ? 'var(--mag-rotor)' : 'var(--link-fill)') + '" stroke="var(--fg)" stroke-width=".9" stroke-linejoin="round"/>';
+        });
+      }
+      for (i = 0; i <= N; i++) { var n = nrm(i); out += KD.line(P(pts[i].x + (H + 1.5) * n.x, pts[i].y + (H + 1.5) * n.y), P(pts[i].x - (H + 1.5) * n.x, pts[i].y - (H + 1.5) * n.y), 'stroke="var(--fg)" stroke-width="2" stroke-linecap="round"'); }
+      var lab = T < 2 ? 'all units concave: straight' : T < 8.5 ? 'lower units snap convex: the chain arches' : T < 9 ? 'straight again' : 'upper left, lower right: an S';
+      return out + txt(P(6, 12), lab, 7.5, 'var(--fg)') + txt(P(6, 106), 'each convex unit tilts its module by ≈ 6.78°', 7, 'var(--fg-2)');
     },
     // Liu et al., Int. J. Mech. Sci. 2025: a curved loop strip that folds and wraps an object when twisted.
     IJMS2025: function (s) {
-      var tw = 0.5 - 0.5 * Math.cos(s * 0.9), C = P(80, 62), out = '<circle cx="' + C.x + '" cy="' + C.y + '" r="12" fill="var(--pin)" stroke="var(--fg)" stroke-width="1.2"/>';
-      [-1, 1].forEach(function (sg) {
-        var span = 34 - 18 * tw, curl = 0.2 + 1.3 * tw, d = 'M' + f(C.x) + ',' + f(C.y - 40);
-        for (var i = 1; i <= 16; i++) { var u = i / 16, a = -Math.PI / 2 + sg * (u * curl * 2), r = span * (1 - 0.35 * u * tw) + 14 * tw; d += ' L' + f(C.x + sg * Math.sin(u * Math.PI) * r) + ',' + f(C.y - 40 + 80 * u * (0.55 + 0.45 * (1 - tw)) + 14 * tw * Math.sin(u * Math.PI)); }
-        out += '<path d="' + d + '" fill="none" stroke="var(--spring)" stroke-width="2.4" stroke-linecap="round"/>';
-      });
-      out += KD.link(P(C.x, 4), P(C.x, C.y - 40), 2.4) + '<path d="M' + (C.x - 8) + ',14 A8,4 0 1 0 ' + (C.x + 8) + ',14" fill="none" stroke="var(--red)" stroke-width="1.2"/>';
-      return out + txt(P(154, 12), tw > 0.5 ? 'twisted: the loop wraps' : 'twist the axis', 7.5, 'var(--fg)', 'end');
+      // after the paper's Fig. 1b: (1) a loop strip; (2) pressed along a diameter and bonded at the middle: a
+      // figure-eight; (3) the middle is rotated about the long axis, the lobes turn out of the plane; (4) seen from
+      // the side, the two lobes fold down and wrap the object (first grasping mode, Fig. 1d).
+      var T = s % 12, out = '', C = P(80, 44), lab;
+      function path(fn, n) { var d = ''; for (var i = 0; i <= n; i++) { var q = fn(i / n); d += (i ? 'L' : 'M') + f(q.x) + ',' + f(q.y); } return d + 'Z'; }
+      if (T < 6.5) {
+        // top view: ring -> figure-eight (lemniscate of Gerono) -> apparent width shrinks as the lobes roll
+        var m = smooth((T - 1) / 2), roll = smooth((T - 4) / 2.2), a = 34 + 12 * m;
+        out += '<path d="' + path(function (u) { var t = 2 * Math.PI * u, rx = C.x + 34 * Math.cos(t), ry = C.y + 34 * Math.sin(t);
+          var gx = C.x + 46 * Math.cos(t), gy = C.y + 46 * Math.sin(t) * Math.cos(t) * (1 - 0.8 * roll);
+          return P(rx + (gx - rx) * m, ry + (gy - ry) * m); }, 72) + '" fill="none" stroke="var(--mass)" stroke-width="3" stroke-linejoin="round"/>';
+        if (m > 0.6) out += '<rect x="' + (C.x - 3) + '" y="' + (C.y - 4) + '" width="6" height="8" fill="var(--spring)"/>';
+        if (T >= 4) out += '<path d="M' + (C.x - 9) + ',' + (C.y + 13) + ' A9,4 0 1 0 ' + (C.x + 9) + ',' + (C.y + 13) + '" fill="none" stroke="var(--fg)" stroke-width="1.1"/>' + KD.arrow(P(C.x + 8, C.y + 15), P(C.x + 10, C.y + 12), 'var(--fg)', 1, 4);
+        lab = T < 1 ? '1  loop strip (top view)' : T < 4 ? '2  bonded at the middle: a figure-eight' : '3  rotate the middle about the long axis';
+      } else {
+        // side view: the lobes go from edge-on (flat) to hanging down round the object
+        var w = smooth((T - 6.5) / 2.5), R = 24, B = P(80, 22);
+        var key = [[0, 0], [0.6, 0.15], [1.05, 0.55], [1.12, 1.05], [0.88, 1.5], [0.5, 1.62], [0.33, 1.3], [0.4, 0.85], [0.27, 0.35], [0, 0]];
+        var flat = [[0, 0], [0.5, -0.04], [1, -0.04], [1.5, -0.04], [1.9, 0], [1.55, 0.04], [1.15, 0.04], [0.75, 0.04], [0.35, 0.04], [0, 0]];
+        [1, -1].forEach(function (sg) {
+          var pts = key.map(function (k, i) { var x = flat[i][0] + (k[0] - flat[i][0]) * w, y = flat[i][1] + (k[1] - flat[i][1]) * w; return P(B.x + sg * R * x, B.y + R * y); });
+          var d = 'M' + KD.pt(pts[0]); for (var i = 1; i < pts.length - 1; i++) { var mid = P((pts[i].x + pts[i + 1].x) / 2, (pts[i].y + pts[i + 1].y) / 2); d += ' Q' + KD.pt(pts[i]) + ' ' + KD.pt(mid); } d += ' L' + KD.pt(pts[pts.length - 1]);
+          out += '<path d="' + d + '" fill="none" stroke="var(--mass)" stroke-width="3" stroke-linejoin="round"/>';
+        });
+        var ballY = B.y + R * (0.55 + 0.5 * w) + 4 * (1 - w);
+        out = '<circle cx="' + B.x + '" cy="' + f(ballY + 10 * (1 - w)) + '" r="8" fill="#C8D86A" stroke="var(--fg)" stroke-width="1"/>' + out;
+        out += KD.link(P(B.x, 4), P(B.x, B.y - 3), 2.4) + '<rect x="' + (B.x - 4) + '" y="' + (B.y - 5) + '" width="8" height="6" fill="var(--spring)"/>';
+        lab = '4  the lobes fold down and grasp (side view)';
+      }
+      return out + txt(P(6, 96), lab, 7.5, 'var(--fg)') + txt(P(6, 106), 'reverse rotation gives a second mode for heavier loads', 6.5, 'var(--fg-2)');
     },
     // Sariyildiz, Mutlu, Roberts, Kuo and Ugurlu, IEEE/ASME T-Mech 2023: a variable stiffness series elastic
     // actuator. Rollers slide along leaf springs to change their effective length; the output gives less.

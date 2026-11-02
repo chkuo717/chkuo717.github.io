@@ -235,4 +235,6 @@ dl.facts dd { max-width: var(--measure); }
 .papers svg.mini { width: 100%; height: auto; display: block; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
 .papers .mini-cap { display: inline-block; margin-top: .35rem; color: var(--fg-2); font-size: .86rem; }
 @media (max-width: 34rem) { .papers li.has-mini { grid-template-columns: 1fr; } .papers svg.mini { max-width: 15rem; } }
+/* The two home-page animations use the site's own typeface (his request, 2026-11-02) */
+.hero .fig svg text { font-family: var(--sans); }
 

@@ -99,7 +99,7 @@
       el.cUs.setAttribute('d', chartPath(W, H, -AMP, AMP, lo, hi, function (t) { return state(t).Us; }));
       el.cUt.setAttribute('d', chartPath(W, H, -AMP, AMP, lo, hi, function (t) { var s = state(t); return s.Ug + s.Us; }));
       el.cUs.style.display = on ? '' : 'none';
-      el.lblT.textContent = on ? 'total' : 'total = gravity';
+      el.lblT.textContent = 'total';
     }
     var cOn = document.getElementById('cardanOn'), cLine = document.getElementById('cardanLine'), msg = document.getElementById('cardanMsg');
     if (cOn) cOn.addEventListener('change', function () { on = cOn.checked; rechart(); if (msg) msg.textContent = on ? 'Balanced: the arm rests at any angle.' : 'Not balanced: the weight pulls the arm down.'; });
@@ -186,7 +186,7 @@
       el.cUs.setAttribute('d', chartPath(W, H, -AMP, AMP, lo, hi, function (t) { return state(t, s).Us; }));
       el.cUt.setAttribute('d', chartPath(W, H, -AMP, AMP, lo, hi, function (t) { var st = state(t, s); return st.Ug + st.Us; }));
       el.cUs.style.display = mode === 'off' ? 'none' : '';
-      el.lblT.textContent = mode === 'off' ? 'total = gravity' : 'total';
+      el.lblT.textContent = mode === 'off' ? 'total' : 'total';
     }
     var loadIn = document.getElementById('regLoad'), loadOut = document.getElementById('regLoadOut'), sOut = document.getElementById('regSOut'), msg = document.getElementById('regMsg');
     var phase = 'swing', phaseT = 0, sFrom = 50;

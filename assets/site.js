@@ -58,7 +58,7 @@
 
   // frame: y up -> svg
   // scaled and centred so the whole turn (crank tip, spring anchors) stays inside the figure and above the chart
-  var OX = 95, OY = 190, SC = 0.85;
+  var OX = 95, OY = 183, SC = 0.8;
   function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
   function f(v) { return v.toFixed(1); }
 
@@ -117,7 +117,7 @@
     if (massOut) massOut.value = m.toFixed(2);
     if (kAOut) kAOut.value = (mode === 'off' ? 0 : kA).toFixed(3);
     if (kBOut) kBOut.value = (mode === 'off' ? 0 : kB).toFixed(3);
-    el.lblT.textContent = mode === 'off' ? 'total = gravity' : 'total';
+    el.lblT.textContent = mode === 'off' ? 'total' : 'total';
     rechart();
   }
   function rechart() {

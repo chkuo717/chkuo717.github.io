@@ -85,7 +85,7 @@
       el.cUg.setAttribute('d', chartPath(W, H, 0, AMP, lo, hi, function (x) { return st(x).Ug; }));
       el.cUs.setAttribute('d', chartPath(W, H, 0, AMP, lo, hi, function (x) { return st(x).Us; }));
       el.cUt.setAttribute('d', chartPath(W, H, 0, AMP, lo, hi, function (x) { var s = st(x); return s.Ug + s.Us; }));
-      el.cUs.style.display = on ? '' : 'none'; el.lblT.textContent = on ? 'total' : 'total = gravity';
+      el.cUs.style.display = on ? '' : 'none'; el.lblT.textContent = 'total';
       if (sOut) sOut.value = 'k₁ = ' + k1.toFixed(2) + ' N/mm, k₂ = ' + k2.toFixed(2) + ' N/mm';
       if (msg) msg.textContent = !on ? 'Springs off: the leg falls.' : mode === 'knee' ? 'Knee-only: the thigh is held level, the calf swings; only spring k₂ changes length and the total stays flat.' : 'Hip-only: the knee is held, the thigh swings and the calf translates; only spring k₁ changes length.';
     }
@@ -161,7 +161,7 @@
       lo = Infinity; hi = -Infinity; pts.forEach(function (s) { lo = Math.min(lo, s.Ug, s.Us); hi = Math.max(hi, s.Ug + s.Us, s.Ug); }); var p = (hi - lo) * 0.1 + 1; lo -= p; hi += p;
       function path(fn) { return pts.map(function (s, i) { return (i ? 'L' : 'M') + f(W * i / 40) + ',' + f(H - (fn(s) - lo) / (hi - lo) * H); }).join(''); }
       el.cUg.setAttribute('d', path(function (s) { return s.Ug; })); el.cUs.setAttribute('d', path(function (s) { return s.Us; })); el.cUt.setAttribute('d', path(function (s) { return s.Ug + s.Us; }));
-      el.cUs.style.display = on ? '' : 'none'; el.lblT.textContent = on ? 'total' : 'total = gravity';
+      el.cUs.style.display = on ? '' : 'none'; el.lblT.textContent = 'total';
     }
     var onIn = document.getElementById('lpOn'); if (onIn) onIn.addEventListener('change', function () { on = onIn.checked; rechart(); });
     rechart();

@@ -188,6 +188,8 @@
       var z = 14 * Math.sin(s * 0.45), my = 58 - z, out = '<rect x="30" y="8" width="70" height="96" fill="none" stroke="var(--fg)" stroke-width="1.2"/>' + KD.wall(P(24, 104), P(106, 104), 1);
       out += '<rect x="45" y="12" width="40" height="10" fill="var(--mag-stator)" stroke="var(--fg)" stroke-width="1.1"/><rect x="45" y="90" width="40" height="10" fill="var(--mag-stator)" stroke="var(--fg)" stroke-width="1.1"/>';
       out += '<rect x="40" y="' + f(my - 4) + '" width="50" height="8" fill="var(--mag-rotor)" stroke="var(--fg)" stroke-width="1.1"/>' + KD.link(P(90, my), P(108, my), 2) + KD.mass(P(114, my), 5, '');
+      // magnetisation per the paper's Fig. 2: upper stator and mover N up, lower stator N down (like poles face below, opposite poles above)
+      out += KD.arrow(P(52, 21), P(52, 13), 'var(--mag-arrow)', 1.4, 4) + KD.arrow(P(52, 91), P(52, 99), 'var(--mag-arrow)', 1.4, 4) + KD.arrow(P(84, my + 3.5), P(84, my - 3.5), 'var(--mag-arrow-2)', 1.4, 4);
       var push = 12 * (1 - z / 40), pull = 12 * (1 + z / 40);
       out += KD.arrow(P(60, my + 22), P(60, my + 22 - push), 'var(--spring)', 1.4, 5) + KD.arrow(P(70, my - 22 + pull), P(70, my - 22), 'var(--spring)', 1.4, 5);
       out += '<line x1="128" y1="56" x2="154" y2="56" stroke="var(--line)"/>' + bar(136, 56, 24, 10, 'var(--spring)');

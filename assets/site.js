@@ -31,8 +31,11 @@
   var cB = { re: (r5 / r3) * ea.re, im: (r5 / r3) * ea.im };
   var rA = Math.hypot(cA.re, cA.im) * r2, dA = Math.atan2(cA.im, cA.re);
   var rB = Math.hypot(cB.re, cB.im) * r4, dB = Math.atan2(cB.im, cB.re);
-  var phiA = 35 * Math.PI / 180, hA = 95, lA = 55;
-  var phiB = -35 * Math.PI / 180, hB = 95, lB = 55;
+  // Spring ends sit on the links themselves (his request, 2026-11-02): the link-side attachment lies on the
+  // crank / rocker line (phi = -d), and the ground anchor is turned by the same angle from the vertical,
+  // which keeps the balancing condition k h l = m g r exact.
+  var phiA = -dA, hA = 55, lA = 60;
+  var phiB = -dB, hB = 60, lB = 70;
   var kA = m * g * rA / (hA * lA), kB = m * g * rB / (hB * lB);
   var Q = { x: r1, y: 0 };
   var HA = { x: hA * Math.cos(Math.PI / 2 + phiA), y: hA * Math.sin(Math.PI / 2 + phiA) };

@@ -222,11 +222,17 @@ dl.facts dd { max-width: var(--measure); }
 .key { display: inline-block; padding: 0 .35em; border: 1px solid var(--line); border-radius: 3px; font-size: .85em; background: var(--bg-2); }
 
 /* Figure text: the serif face of the paper figures; .v = a variable (italic), .n = an upright note */
-.fig svg text, .pfig svg text { font-family: var(--fig-serif); }
-.fig svg text.v, .pfig svg text.v, .fig svg g.v text, .pfig svg g.v text { font-style: italic; }
+.fig svg text, .pfig svg text, .papers svg.mini text { font-family: var(--fig-serif); }
+.fig svg text.v, .pfig svg text.v, .fig svg g.v text, .pfig svg g.v text, .papers svg.mini text.v { font-style: italic; }
 .fig svg text.n, .pfig svg text.n { font-style: normal; }
 .btn-small { font: inherit; font-size: .85rem; padding: .2rem .7rem; border: 1px solid var(--fg); border-radius: var(--radius); background: var(--card); color: var(--fg); cursor: pointer; }
 .btn-small:hover { background: var(--bg-2); }
 .card .icon { width: 100%; height: auto; max-height: 7.5rem; display: block; margin: -.25rem 0 .6rem; }
 .card .icon text { font-family: var(--fig-serif); }
 .card .icon text.v { font-style: italic; }
+/* Small animated figures beside non-representative papers (assets/anim/mini.js) */
+.papers li.has-mini { display: grid; grid-template-columns: 12rem 1fr; gap: 1.1rem; align-items: start; }
+.papers svg.mini { width: 100%; height: auto; display: block; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
+.papers .mini-cap { display: inline-block; margin-top: .35rem; color: var(--fg-2); font-size: .86rem; }
+@media (max-width: 34rem) { .papers li.has-mini { grid-template-columns: 1fr; } .papers svg.mini { max-width: 15rem; } }
+

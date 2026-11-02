@@ -88,8 +88,14 @@ def paper_item(p, rep, root=""):
     kind = TYPE_LABEL.get(p.get("type"), "")
     kind_html = f'<span class="kind">{kind}</span> ' if kind else ""
     note = f'<br><span class="note">{p["note"]}</span>' if p.get("note") else ""  # note may carry a link
-    return (f'<li>{kind_html}<strong>{title}.</strong>{tag}<br>'
-            f'<span class="venue">{e(p["authors"])}, <em>{e(p["venue"])}</em>, {p["year"]}.{link}</span>{note}</li>')
+    body = (f'{kind_html}<strong>{title}.</strong>{tag}<br>'
+            f'<span class="venue">{e(p["authors"])}, <em>{e(p["venue"])}</em>, {p["year"]}.{link}</span>{note}')
+    if p.get("mini"):
+        # a small animated figure beside the entry, drawn by assets/anim/mini.js; "mini" holds its one-line caption
+        aria = e(p.get("mini_alt") or p["mini"])
+        return (f'<li class="has-mini"><svg class="mini" data-mini="{e(p["key"])}" viewBox="0 0 160 110" role="img" aria-label="{aria}"></svg>'
+                f'<div>{body}<br><span class="mini-cap">{p["mini"]}</span></div></li>')
+    return f'<li>{body}</li>'
 
 
 def papers_html(theme, rep_only, root):
@@ -98,7 +104,10 @@ def papers_html(theme, rep_only, root):
         sel.sort(key=lambda p: -p["year"])
     else:
         sel.sort(key=lambda p: (p.get("type") is not None, -p["year"]))
-    return '<ul class="papers">\n' + "\n".join(paper_item(p, rep_only, root) for p in sel) + "\n</ul>"
+    out = '<ul class="papers">\n' + "\n".join(paper_item(p, rep_only, root) for p in sel) + "\n</ul>"
+    if any(p.get("mini") for p in sel):
+        out += f'\n<script src="{root}assets/anim/mini.js" defer></script>'
+    return out
 
 
 def anims_html(theme, root):

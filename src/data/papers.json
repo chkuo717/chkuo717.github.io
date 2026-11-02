@@ -61,7 +61,8 @@
       "authors": "Nguyen, V. L., Kuo, C.-H. and Lin, P. T.",
       "venue": "Mechanism and Machine Theory",
       "year": 2024,
-      "doi": "10.1016/j.mechmachtheory.2023.105519"
+      "doi": "10.1016/j.mechmachtheory.2023.105519",
+      "mini": "A gravity-balanced arm needs almost no torque when it moves slowly; moved fast, its inertia still needs the motor. The paper measures how much balancing is worth under dynamic loads."
     },
     {
       "key": "JMR2022",
@@ -70,7 +71,8 @@
       "authors": "Nguyen, V. L., Kuo, C.-H. and Lin, P. T.",
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2022,
-      "doi": "10.1115/1.4053048"
+      "doi": "10.1115/1.4053048",
+      "mini": "Real springs and links are never exactly as designed. Sampling their scatter turns the flat balance into a band of leftover torque, which the paper analyses and optimises for reliability."
     },
     {
       "key": "JMR2021b",
@@ -79,7 +81,8 @@
       "authors": "Kuo, C.-H., Nguyen, V. L., Robertson, D., Chou, L.-T. and Herder, J. L.",
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2021,
-      "doi": "10.1115/1.4050682"
+      "doi": "10.1115/1.4050682",
+      "mini": "A reconfigurable leg-exercise linkage has two working modes; a cable over pulleys carries both motions to one grounded spring, so a single element balances both. The paper's point: N configurations, fewer than N balancers."
     },
     {
       "key": "JMR2020",
@@ -88,7 +91,8 @@
       "authors": "Nguyen, V. L., Lin, C.-Y. and Kuo, C.-H.",
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2020,
-      "doi": "10.1115/1.4045650"
+      "doi": "10.1115/1.4045650",
+      "mini": "One gear-spring module on each link of a planar arm cancels the weight at every joint, whatever the posture."
     },
     {
       "key": "MMT2019",
@@ -97,7 +101,8 @@
       "authors": "Nguyen, V. L. and Kuo, C.-H.",
       "venue": "Mechanism and Machine Theory",
       "year": 2019,
-      "doi": "10.1016/j.mechmachtheory.2019.03.015"
+      "doi": "10.1016/j.mechmachtheory.2019.03.015",
+      "mini": "A link held by a compliant joint sags under a tip load by an amount that depends on its posture (exaggerated here); the paper gives the stiffness analytically, springs and weight included."
     },
     {
       "key": "JMES2015",
@@ -107,7 +112,8 @@
       "venue": "Proc. IMechE Part C: Journal of Mechanical Engineering Science",
       "year": 2015,
       "doi": "10.1177/0954406214546365",
-      "note": "Technology transferred to Syncmold Enterprise Co.; <a href=\"https://patents.google.com/patent/US20150053830A1/en\">US Patent 2015/0053830 A1, Display Lifting Device</a>."
+      "note": "Technology transferred to Syncmold Enterprise Co.; <a href=\"https://patents.google.com/patent/US20150053830A1/en\">US Patent 2015/0053830 A1, Display Lifting Device</a>.",
+      "mini": "A monitor stand balanced with a two-step disk, a bent lever and an ordinary extension spring in place of a machined cam or a custom constant-force spring (schematic)."
     },
     {
       "key": "BC02",
@@ -117,7 +123,8 @@
       "authors": "Nguyen, V. L. and Kuo, C.-H.",
       "venue": "In: Arakelian, V. (ed.), Gravity Compensation in Robotics, Springer",
       "year": 2022,
-      "doi": "10.1007/978-3-030-95750-6_1"
+      "doi": "10.1007/978-3-030-95750-6_1",
+      "mini": "Gear-spring modules used as building blocks, here on a quasi-serial arm with a parallelogram."
     },
     {
       "key": "BC01",
@@ -187,7 +194,8 @@
       "authors": "Li, S., Zeng, X. and Kuo, C.-H.",
       "venue": "ASME Letters in Translational Robotics",
       "year": 2026,
-      "doi": "10.1115/1.4072727"
+      "doi": "10.1115/1.4072727",
+      "mini": "Three magnets: two fixed on a frame, the mover between them. As the mover rises the lower magnet's push weakens and the upper one's pull grows, so the lift stays nearly constant; the design search is cut from nine variables to two one-dimensional steps."
     },
     {
       "key": "JMR2021a",
@@ -236,7 +244,8 @@
       "authors": "Kuo, C.-H. and Dai, J. S.",
       "venue": "In: Legnani, G. and Fassi, I. (eds), Robotics: State of the Art and Future Trends, Nova Science",
       "year": 2012,
-      "url": "https://books.google.com/books?vid=ISBN9781621004035"
+      "url": "https://books.google.com/books?vid=ISBN9781621004035",
+      "mini": "Three extensible SPS legs and a central PS leg carry the platform: a four-degree-of-freedom parallel manipulator with partially decoupled motion."
     },
     {
       "key": "MMT2017",
@@ -284,7 +293,8 @@
       "authors": "Kuo, C.-H., Su, J.-W. and Wu, L.-C.",
       "venue": "Mechanical Sciences",
       "year": 2017,
-      "doi": "10.5194/ms-8-101-2017"
+      "doi": "10.5194/ms-8-101-2017",
+      "mini": "The cube puzzle's eight configurations, each derived from the previous one by a joint-screw matrix; here the cube opens to a slab and closes again."
     },
     {
       "key": "JSI2012",
@@ -293,7 +303,8 @@
       "authors": "Kuo, C.-H., Dai, J. S. and Yan, H.-S.",
       "venue": "Journal of Science and Innovation",
       "year": 2012,
-      "doi": "10.6654/JSI.201201_2(1).0004"
+      "doi": "10.6654/JSI.201201_2(1).0004",
+      "mini": "One of the ways a mechanism changes its topology: a pin in an L-shaped slot whose prismatic joint turns from P(y) to P(x). The paper sets out four principles and five strategies."
     },
     {
       "key": "TCSME2006",
@@ -302,7 +313,8 @@
       "authors": "Yan, H.-S. and Kuo, C.-H.",
       "venue": "Transactions of the Canadian Society for Mechanical Engineering",
       "year": 2006,
-      "doi": "10.1139/tcsme-2006-0003"
+      "doi": "10.1139/tcsme-2006-0003",
+      "mini": "A Geneva mechanism whose slider clamps and releases the wheel. The slider–wheel joint passes through fixed, sliding and separated states, which the paper represents with joint sequences and state graphs."
     },
     {
       "key": "JMD2006",
@@ -311,7 +323,8 @@
       "authors": "Yan, H.-S. and Kuo, C.-H.",
       "venue": "ASME Journal of Mechanical Design",
       "year": 2006,
-      "doi": "10.1115/1.2166854"
+      "doi": "10.1115/1.2166854",
+      "mini": "A two-member key ring: one joint that slides, then slides and turns, then only turns. The paper writes such variable joints as joint codes and digraphs of their states."
     },
     {
       "key": "BK02",
@@ -321,7 +334,8 @@
       "authors": "Kuo, C.-H.",
       "venue": "VDM Verlag Dr. Müller, Saarbrücken",
       "year": 2008,
-      "url": "https://books.google.com/books?vid=ISBN9783836488907"
+      "url": "https://books.google.com/books?vid=ISBN9783836488907",
+      "mini": "A joint whose pin leaves an arc for a straight slot, turning about z and then sliding along x: the kind of variable joint whose configurations the book analyses."
     },
     {
       "key": "JMR2017b",
@@ -371,7 +385,8 @@
       "authors": "Yeow, B. S., Wang, A., Kuo, C.-H. and Ren, H.",
       "venue": "Biomimetic Intelligence and Robotics",
       "year": 2025,
-      "doi": "10.1016/j.birob.2025.100251"
+      "doi": "10.1016/j.birob.2025.100251",
+      "mini": "A double parallelogram keeps the tool pointing through one fixed point with nothing pivoted there; the paper reads such linkages as kirigami folds."
     },
     {
       "key": "JMED2017",
@@ -380,7 +395,8 @@
       "authors": "Kuo, C.-H. and Wang, C.-W.",
       "venue": "ASME Journal of Medical Devices",
       "year": 2017,
-      "doi": "10.1115/1.4035689"
+      "doi": "10.1115/1.4035689",
+      "mini": "Acupoint catgut embedding in two hand-powered steps instead of five: feed and cut the catgut, flip the needle seat to load it, then push it out through the needle (schematic)."
     },
     {
       "key": "JMES2017",
@@ -389,7 +405,8 @@
       "authors": "Li, G.-K., Essomba, T., Wu, C.-T., Lee, S.-T. and Kuo, C.-H.",
       "venue": "Proc. IMechE Part C: Journal of Mechanical Engineering Science",
       "year": 2017,
-      "doi": "10.1177/0954406216636918"
+      "doi": "10.1177/0954406216636918",
+      "mini": "Craniotomy as a remote-centre motion: drill through the skull with one freedom, then cut by pivoting about the entry point with two."
     },
     {
       "key": "IJMRCAS2012",
@@ -398,7 +415,8 @@
       "authors": "Kuo, C.-H., Dai, J. S. and Dasgupta, P.",
       "venue": "International Journal of Medical Robotics and Computer Assisted Surgery",
       "year": 2012,
-      "doi": "10.1002/rcs.453"
+      "doi": "10.1002/rcs.453",
+      "mini": "Two of the eight remote-centre-of-motion types the overview classifies, a circular tracking arc and a parallelogram; in both the instrument pivots about the incision."
     },
     {
       "key": "BJUI2011",
@@ -407,7 +425,8 @@
       "authors": "Vyas, L., Aquino, D., Kuo, C.-H., Dai, J. S. and Dasgupta, P.",
       "venue": "BJU International",
       "year": 2011,
-      "doi": "10.1111/j.1464-410X.2010.09886.x"
+      "doi": "10.1111/j.1464-410X.2010.09886.x",
+      "mini": "Flexibility along the whole arm rather than only at the wrist, one of the directions this short review describes for surgical robots."
     },
     {
       "key": "PA01",
@@ -417,7 +436,8 @@
       "authors": "Kuo, C.-H., Liu, T.-H. and Wang, R.-J.",
       "venue": "US Patent 10,456,153 B2; technology transferred to HIWIN Technologies Corp.",
       "year": 2019,
-      "url": "https://patents.google.com/patent/US10456153B2/en"
+      "url": "https://patents.google.com/patent/US10456153B2/en",
+      "mini": "A screw turned through universal joints moves a nut; two links swing the jaws open and shut, giving a steadier grip than cables. Patent licensed to HIWIN."
     },
     {
       "key": "BK04",
@@ -454,7 +474,8 @@
       "authors": "Yan, H.-S., Huang, H.-H. and Kuo, C.-H.",
       "venue": "National Cheng Kung University Museum, Tainan",
       "year": 2008,
-      "url": "https://books.google.com/books?vid=ISBN9789860139488"
+      "url": "https://books.google.com/books?vid=ISBN9789860139488",
+      "mini": "A crank and slider on its base board, the kind of teaching model the book catalogues from Taiwan's antique collections."
     },
     {
       "key": "ES2025",
@@ -463,7 +484,8 @@
       "authors": "Wang, Y., Wang, X., Qu, H., Hu, B., Kuo, C.-H. and Guo, S.",
       "venue": "Engineering Structures",
       "year": 2025,
-      "doi": "10.1016/j.engstruct.2025.121412"
+      "doi": "10.1016/j.engstruct.2025.121412",
+      "mini": "Bistable units derived from Waterbomb origami deploy as a strip; snapping some of them to their second state arches the strip to fit uneven ground."
     },
     {
       "key": "IJMS2025",
@@ -472,7 +494,8 @@
       "authors": "Liu, W., Qu, H., Wang, H., Wang, X., Kuang, Y., Hu, B., Li, X., Liu, D., Kuo, C.-H. and Guo, S.",
       "venue": "International Journal of Mechanical Sciences",
       "year": 2025,
-      "doi": "10.1016/j.ijmecsci.2025.110746"
+      "doi": "10.1016/j.ijmecsci.2025.110746",
+      "mini": "A curved loop strip that folds and wraps around an object when its axis is twisted: a soft gripper with no sensing or control."
     },
     {
       "key": "TMech2023",
@@ -481,7 +504,8 @@
       "authors": "Sariyildiz, E., Mutlu, R., Roberts, J., Kuo, C.-H. and Ugurlu, B.",
       "venue": "IEEE/ASME Transactions on Mechatronics",
       "year": 2023,
-      "doi": "10.1109/TMECH.2022.3232471"
+      "doi": "10.1109/TMECH.2022.3232471",
+      "mini": "Rollers slide along leaf springs to change their working length, and with it the actuator's stiffness, from about 20 N·m/rad to about 1 kN·m/rad."
     },
     {
       "key": "MMT2022",
@@ -490,7 +514,8 @@
       "authors": "Nguyen, V. L., Kuo, C.-H. and Lin, P. T.",
       "venue": "Mechanism and Machine Theory",
       "year": 2022,
-      "doi": "10.1016/j.mechmachtheory.2021.104717"
+      "doi": "10.1016/j.mechmachtheory.2021.104717",
+      "mini": "A Delta robot on an industrial arm mills along a line; joint compliance bends the cut (dashed). Springs at the Delta's joints, sized by the paper's formulas, keep it on the line."
     }
   ]
 }

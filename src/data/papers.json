@@ -72,7 +72,7 @@
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2022,
       "doi": "10.1115/1.4053048",
-      "mini": "Real springs and links are never exactly as designed. Sampling their scatter turns the flat balance into a band of leftover torque, which the paper analyses and optimises for reliability."
+      "mini": "A serial arm balanced at the shoulder and elbow by gear-spring modules: over a trajectory the balanced torque is far below the unbalanced one but not zero, and with uncertain dimensions, masses and stiffness it spreads into a band, which the paper analyses and optimises for reliability."
     },
     {
       "key": "JMR2021b",
@@ -92,7 +92,7 @@
       "venue": "ASME Journal of Mechanisms and Robotics",
       "year": 2020,
       "doi": "10.1115/1.4045650",
-      "mini": "One gear-spring module on each link of a planar arm cancels the weight at every joint, whatever the posture."
+      "mini": "One gear-spring module on each link of a planar arm nearly cancels the weight in every posture (exactly at one chosen posture)."
     },
     {
       "key": "MMT2019",
@@ -304,7 +304,7 @@
       "venue": "Journal of Science and Innovation",
       "year": 2012,
       "doi": "10.6654/JSI.201201_2(1).0004",
-      "mini": "One of the ways a mechanism changes its topology: a pin in an L-shaped slot whose prismatic joint turns from P(y) to P(x). The paper sets out four principles and five strategies."
+      "mini": "One way a mechanism changes its configuration: block A in an L-shaped slot of link B, whose prismatic joint turns from P(y) to P(x). The paper sets out four principles and five strategies."
     },
     {
       "key": "TCSME2006",
@@ -406,7 +406,7 @@
       "venue": "Proc. IMechE Part C: Journal of Mechanical Engineering Science",
       "year": 2017,
       "doi": "10.1177/0954406216636918",
-      "mini": "Craniotomy as a remote-centre motion: drill through the skull with one freedom, then cut by pivoting about the entry point with two."
+      "mini": "Craniotomy as a remote-centre motion about the centre of the skull: a parallelogram linkage keeps the drill pointing at that centre. Drill a burr hole along the tool axis with one freedom, then cut by swinging about the centre with two."
     },
     {
       "key": "IJMRCAS2012",
@@ -426,7 +426,7 @@
       "venue": "BJU International",
       "year": 2011,
       "doi": "10.1111/j.1464-410X.2010.09886.x",
-      "mini": "Flexibility along the whole arm rather than only at the wrist, one of the directions this short review describes for surgical robots."
+      "mini": "Two directions this short review proposes: a transmission with offset or angled shafts so instruments do not clash, and a parallel robot whose remote centre of motion re-aligns itself to the trocar point on the skin."
     },
     {
       "key": "PA01",
@@ -437,7 +437,7 @@
       "venue": "US Patent 10,456,153 B2; technology transferred to HIWIN Technologies Corp.",
       "year": 2019,
       "url": "https://patents.google.com/patent/US10456153B2/en",
-      "mini": "A screw turned through universal joints moves a nut; two links swing the jaws open and shut, giving a steadier grip than cables. Patent licensed to HIWIN."
+      "mini": "A screw turned through universal joints across a bendable wrist moves a nut; rigid rods from the nut swing two crossed claw arms open and shut, giving a steadier grip than cables. Technology transferred to HIWIN."
     },
     {
       "key": "BK04",
@@ -515,7 +515,7 @@
       "venue": "Mechanism and Machine Theory",
       "year": 2022,
       "doi": "10.1016/j.mechmachtheory.2021.104717",
-      "mini": "A Delta robot on an industrial arm mills along a line; joint compliance bends the cut (dashed). Springs at the Delta's joints, sized by the paper's formulas, keep it on the line."
+      "mini": "A Delta robot carried by a parked industrial arm mills along a path; joint compliance makes the cut deviate (dashed). Springs on the Delta's actuated arms, sized by the paper's formulas, reduce the deviation."
     }
   ]
 }

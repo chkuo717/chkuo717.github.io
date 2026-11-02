@@ -57,8 +57,9 @@
   }
 
   // frame: y up -> svg
-  var OX = 70, OY = 215;
-  function S(p) { return { x: OX + p.x, y: OY - p.y }; }
+  // scaled and centred so the whole turn (crank tip, spring anchors) stays inside the figure and above the chart
+  var OX = 95, OY = 190, SC = 0.85;
+  function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
   function f(v) { return v.toFixed(1); }
 
   var $ = function (id) { return svg.querySelector('#' + id); };

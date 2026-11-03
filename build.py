@@ -160,8 +160,24 @@ def expand_tokens(body, root):
     return body
 
 
+SITE = "https://chkuo717.github.io/"
+
+
+def write_sitemap(rels):
+    """sitemap.xml (every built page except 404) and robots.txt pointing to it, for search engines."""
+    urls = sorted(r.replace(os.sep, "/") for r in rels if r != "404.html")
+    urls = [u[: -len("index.html")] if u.endswith("index.html") else u for u in urls]
+    body = "\n".join(f"  <url><loc>{SITE}{html.escape(u)}</loc></url>" for u in urls)
+    with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
+                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + body + "\n</urlset>\n")
+    with open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8") as f:
+        f.write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}sitemap.xml\n")
+
+
 def main():
     count = 0
+    rels = []
     for dirpath, dirs, files in os.walk(SRC):
         dirs[:] = [d for d in dirs if not d.startswith("_")]
         for fn in sorted(files):
@@ -186,7 +202,9 @@ def main():
             with open(out_path, "w", encoding="utf-8") as f:
                 f.write(page)
             count += 1
-    print(f"built {count} pages")
+            rels.append(rel)
+    write_sitemap(rels)
+    print(f"built {count} pages, sitemap.xml and robots.txt")
 
 
 if __name__ == "__main__":

@@ -12,7 +12,14 @@ Run:  python3 tools/traffic.py                  text summary, last 7 days
                                                  kind, key, label, grp, n, n2, n3), plus the text summary
 Days are Sydney days, as in the GoatCounter account settings. Each period is compared with the
 period of the same length just before it.
+
+Google Search Console (optional): a service account added to the property as a Restricted user.
+Its JSON key, compacted to one line, lives in the Keychain (service gsc-service-account):
+    security add-generic-password -U -a chkuo717 -s gsc-service-account -w "$(python3 -c 'import json,sys;print(json.dumps(json.load(open(sys.argv[1]))))' KEY.json)"
+The access token is signed with the system openssl (RS256), so no Google library is needed. Search
+Console days are Pacific-time days and lag by two or three days.
 """
+import base64
 import datetime as dt
 import html
 import json
@@ -39,6 +46,14 @@ THEMES = {  # research page slug -> (theme id in papers.json, label)
     "medical-mechanisms": ("medical", "Medical & rehabilitation devices"),
     "mechanism-theory": ("theory", "Mechanism theory & teaching"),
 }
+GSC_SITE = "https://chkuo717.github.io/"
+GSC_DEVICES = {"DESKTOP": "Desktop", "MOBILE": "Phone", "TABLET": "Tablet"}
+COUNTRIES3 = {"aus": "Australia", "twn": "Taiwan", "chn": "China", "hkg": "Hong Kong", "jpn": "Japan", "kor": "South Korea",
+              "sgp": "Singapore", "mys": "Malaysia", "ind": "India", "usa": "United States", "can": "Canada", "gbr": "United Kingdom",
+              "deu": "Germany", "fra": "France", "ita": "Italy", "esp": "Spain", "nld": "Netherlands", "bel": "Belgium",
+              "che": "Switzerland", "aut": "Austria", "swe": "Sweden", "pol": "Poland", "tur": "Turkey", "irn": "Iran",
+              "vnm": "Vietnam", "tha": "Thailand", "idn": "Indonesia", "phl": "Philippines", "nzl": "New Zealand", "bra": "Brazil",
+              "mex": "Mexico", "rus": "Russia", "pak": "Pakistan", "egy": "Egypt", "sau": "Saudi Arabia", "are": "United Arab Emirates"}
 SIZES = {"phone": "Phone", "tablet": "Tablet", "desktop": "Desktop", "desktophd": "Large desktop", "unknown": "Unknown"}
 
 
@@ -70,6 +85,83 @@ class Api:
                     time.sleep(5 * (attempt + 1))
                     continue
                 raise
+
+
+def gsc_key():
+    try:
+        raw = subprocess.run(["security", "find-generic-password", "-a", "chkuo717", "-s", "gsc-service-account", "-w"],
+                             capture_output=True, text=True, check=True).stdout.strip()
+    except subprocess.CalledProcessError:
+        return None
+    return json.loads(raw)
+
+
+def gsc_token(key):
+    """OAuth access token for the service account: a JWT signed RS256 by the system openssl."""
+    b64 = lambda b: base64.urlsafe_b64encode(b).rstrip(b"=")
+    now = int(time.time())
+    head = b64(json.dumps({"alg": "RS256", "typ": "JWT"}).encode())
+    claims = b64(json.dumps({"iss": key["client_email"], "scope": "https://www.googleapis.com/auth/webmasters.readonly",
+                             "aud": "https://oauth2.googleapis.com/token", "iat": now, "exp": now + 3600}).encode())
+    signing = head + b"." + claims
+    r, w = os.pipe()                       # the private key goes to openssl through a pipe, never to disk
+    os.write(w, key["private_key"].encode())
+    os.close(w)
+    try:
+        sig = subprocess.run(["openssl", "dgst", "-sha256", "-sign", f"/dev/fd/{r}"], input=signing,
+                             capture_output=True, check=True, pass_fds=(r,)).stdout
+    finally:
+        os.close(r)
+    body = urllib.parse.urlencode({"grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+                                   "assertion": (signing + b"." + b64(sig)).decode()}).encode()
+    with urllib.request.urlopen(urllib.request.Request("https://oauth2.googleapis.com/token", data=body), timeout=30) as resp:
+        return json.load(resp)["access_token"]
+
+
+def gsc_query(tok, start, end, dims, limit=250):
+    url = ("https://searchconsole.googleapis.com/webmasters/v3/sites/"
+           f"{urllib.parse.quote(GSC_SITE, safe='')}/searchAnalytics/query")
+    body = json.dumps({"startDate": start.isoformat(), "endDate": end.isoformat(), "dimensions": dims,
+                       "rowLimit": limit, "type": "web", "dataState": "all"}).encode()
+    req = urllib.request.Request(url, data=body, headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return json.load(resp).get("rows", [])
+
+
+def collect_gsc(row, start, end, pstart, pend):
+    """Google Search rows: clicks (n), impressions (n2), average position (n3). Adds meta 'gsc': 1 ok, 0 no key, -1 error."""
+    key = gsc_key()
+    if not key:
+        row("meta", "gsc", "no key in the Keychain", n=0)
+        return
+    try:
+        tok = gsc_token(key)
+        cur, prev = gsc_query(tok, start, end, []), gsc_query(tok, pstart, pend, [])
+        c = cur[0] if cur else {}
+        p = prev[0] if prev else {}
+        for k, lab in (("clicks", "Clicks"), ("impressions", "Impressions"), ("ctr", "Click-through rate"), ("position", "Average position")):
+            row("gsc_total", k, lab, n=c.get(k, 0 if k in ("clicks", "impressions") else None),
+                n2=p.get(k, 0 if k in ("clicks", "impressions") else None))
+        daily = {r["keys"][0]: r for r in gsc_query(tok, start, end, ["date"])}
+        for i in range((end - start).days + 1):
+            d = (start + dt.timedelta(days=i)).isoformat()
+            row("gsc_daily", d, n=daily.get(d, {}).get("clicks", 0), n2=daily.get(d, {}).get("impressions", 0))
+        for r in gsc_query(tok, start, end, ["query"]):
+            row("gsc_query", r["keys"][0], n=r["clicks"], n2=r["impressions"], n3=round(r["position"], 1))
+        for r in gsc_query(tok, start, end, ["page"]):
+            path = "/" + r["keys"][0][len(GSC_SITE):] if r["keys"][0].startswith(GSC_SITE) else r["keys"][0]
+            row("gsc_page", path, n=r["clicks"], n2=r["impressions"], n3=round(r["position"], 1))
+        for r in gsc_query(tok, start, end, ["country"]):
+            row("gsc_country", r["keys"][0], COUNTRIES3.get(r["keys"][0], r["keys"][0].upper()),
+                n=r["clicks"], n2=r["impressions"], n3=round(r["position"], 1))
+        for r in gsc_query(tok, start, end, ["device"]):
+            row("gsc_device", r["keys"][0], GSC_DEVICES.get(r["keys"][0], r["keys"][0].title()),
+                n=r["clicks"], n2=r["impressions"], n3=round(r["position"], 1))
+        row("meta", "gsc", "connected", n=1)
+    except Exception as err:  # keep the GoatCounter part even when Google refuses
+        msg = err.read().decode()[:300] if isinstance(err, urllib.error.HTTPError) else str(err)[:300]
+        print(f"Search Console: {msg}", file=sys.stderr)
+        row("meta", "gsc", f"error: {msg}", n=-1)
 
 
 def papers():
@@ -224,6 +316,7 @@ def collect(api, start, end):
     for s in api.get("stats/sizes", start, end)["stats"]:
         row("size", s["id"], SIZES.get(s["id"], s["id"]), n=s["count"])
 
+    collect_gsc(row, start, end, pstart, pend)
     countries = sum(1 for s in locs if s.get("id") and s["count"])
     row("total", "visits", "Visits", n=sum(h["count"] for h in pages), n2=sum(v for k, v in phits.items() if not k.startswith("out: ")))
     row("total", "outbound", "Clicks on links leaving the site", n=sum(out_cur.values()), n2=sum(out_prev.values()))
@@ -262,6 +355,16 @@ def summary(rows):
     table("Screen sizes", [(r["label"], r["n"]) for r in srt("size")])
     table("Campaign tags", [(r["label"], r["n"]) for r in srt("campaign")])
     table("Missing pages people tried to open (404)", [(r["key"], r["n"]) for r in srt("notfound")])
+    gsc = meta.get("gsc", {})
+    print(f'\nGoogle Search (Search Console): {gsc.get("label")}')
+    if gsc.get("n") == 1:
+        g = {r["key"]: r for r in by("gsc_total")}
+        print(f'Clicks {g["clicks"]["n"]} (previous {g["clicks"]["n2"]}), impressions {g["impressions"]["n"]} '
+              f'(previous {g["impressions"]["n2"]}), average position {g["position"]["n"]}')
+        table("Search queries (clicks, impressions)", [(f'{r["key"]}  [{r["n2"]} impressions, position {r["n3"]}]', r["n"])
+              for r in sorted(by("gsc_query"), key=lambda r: (-r["n"], -r["n2"]))])
+        table("Pages in Google results (clicks)", [(f'{r["key"]}  [{r["n2"]} impressions]', r["n"])
+              for r in sorted(by("gsc_page"), key=lambda r: (-r["n"], -r["n2"]))])
 
 
 def main(args):

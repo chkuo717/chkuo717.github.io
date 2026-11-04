@@ -114,13 +114,17 @@
              '<path d="M118,86 A14,14 0 0 1 142,70" fill="none" stroke="var(--fg)" stroke-width="1" stroke-dasharray="3 2"/>' +
              KD.disc(md.R, 3.2, 'var(--mass)') + KD.label(P(138, 88), 'RCM', { size: 9 });
     },
-    // a link displaced from position 1 to position 2 turns about their relative pole P12, where the
-    // perpendicular bisectors of A1A2 and B1B2 meet
+    // the relative pole P12 of two positions of a link (as in his GeoGebra book): the perpendicular bisectors of the
+    // chords A1A2 and B1B2 meet at P12, and the link turns from position 1 to position 2 about it
     theory: function (s) {
       var a = th.al * ease(s, 2.6), A = rot(th.P, th.A1, a), B = rot(th.P, th.B1, a), Pp = th.P;
-      function bis(p, q) { var m = P((p.x + q.x) / 2, (p.y + q.y) / 2); return KD.dashed(Pp, P(m.x + (m.x - Pp.x) * 0.3, m.y + (m.y - Pp.y) * 0.3)); }   // through P12 and the chord's midpoint
+      function bis(p, q) {                                           // chord, its perpendicular bisector to P12, right-angle mark
+        var m = P((p.x + q.x) / 2, (p.y + q.y) / 2), u = KD.unit(p, q), v = KD.unit(m, Pp), r = 3.5;
+        return KD.dashed(p, q) + KD.thin(P(m.x - v.x * 7, m.y - v.y * 7), Pp) +
+               '<polyline points="' + KD.pt(P(m.x + u.x * r, m.y + u.y * r)) + ' ' + KD.pt(P(m.x + (u.x + v.x) * r, m.y + (u.y + v.y) * r)) + ' ' +
+               KD.pt(P(m.x + v.x * r, m.y + v.y * r)) + '" fill="none" stroke="var(--fg)" stroke-width=".9"/>';
+      }
       return bis(th.A1, th.A2) + bis(th.B1, th.B2) +
-             '<g stroke="var(--spring)" stroke-width="1" stroke-dasharray="2 3">' + KD.line(Pp, A) + KD.line(Pp, B) + '</g>' +
              '<g opacity=".4">' + KD.link(th.A1, th.B1) + KD.link(th.A2, th.B2) + KD.joint(th.A1, 3) + KD.joint(th.B1, 3) + KD.joint(th.A2, 3) + KD.joint(th.B2, 3) + '</g>' +
              KD.link(A, B) + KD.joint(A, 3.5) + KD.joint(B, 3.5) +
              KD.disc(Pp, 3.5, 'var(--mass)') + KD.label(P(Pp.x + 7, Pp.y + 4), 'P', { size: 11, sub: '12' });

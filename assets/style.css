@@ -127,6 +127,7 @@ main { padding: 2.5rem 0 4rem; }
 .hero h1 { margin-bottom: .4em; }
 .hero .fig { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; }
 .hero .fig svg { width: 100%; height: auto; display: block; }
+.fig video { width: 100%; height: auto; display: block; border-radius: 6px; background: var(--line); }
 .hero .fig figcaption { font-size: .85rem; color: var(--fg-2); margin-top: .6rem; }
 .hero .fig .ctl { display: flex; align-items: center; gap: .6rem; margin-top: .6rem; font-size: .85rem; color: var(--fg-2); }
 .hero .fig input[type=range] { flex: 1; accent-color: var(--accent); }

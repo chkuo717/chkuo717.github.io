@@ -112,11 +112,11 @@ window.KD = (function () {
   }
 
   // ---- labels ----------------------------------------------------------------------------------
-  // a variable label (serif italic); opts: size, anchor, fill, sub (subscript text)
+  // a variable label (serif italic); opts: size, anchor, fill, sub (subscript text; upright when it is a number)
   function label(p, text, opts) {
     opts = opts || {};
     return '<text class="v" x="' + f(p.x) + '" y="' + f(p.y) + '"' + attrs({ 'font-size': opts.size || 12, 'text-anchor': opts.anchor, fill: opts.fill || 'var(--fg)' }) + '>' + text +
-           (opts.sub ? '<tspan font-size="' + f((opts.size || 12) * 0.72) + '" baseline-shift="sub">' + opts.sub + '</tspan>' : '') + '</text>';
+           (opts.sub ? '<tspan font-size="' + f((opts.size || 12) * 0.72) + '" baseline-shift="sub"' + (/^[0-9]+$/.test(opts.sub) ? ' style="font-style:normal"' : '') + '>' + opts.sub + '</tspan>' : '') + '</text>';
   }
   // an upright note in the figure's serif face
   function note(p, text, opts) {

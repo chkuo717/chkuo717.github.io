@@ -24,7 +24,7 @@
   rc.a = dist(rc.O, rc.A); rc.b = dist(rc.A, rc.B); rc.c = dist(rc.Q, rc.B); rc.al0 = Math.atan2(rc.A.y - rc.O.y, rc.A.x - rc.O.x);
   var md = { G: P(40, 24), A: P(78, 18), B: P(104, 50), R: P(130, 78) };
   md.ga = dist(md.G, md.A); md.ab = dist(md.A, md.B); md.rb = dist(md.R, md.B); md.ph0 = Math.atan2(md.B.y - md.R.y, md.B.x - md.R.x);
-  var th = { P: P(110, 82), A1: P(22, 58), B1: P(62, 40), al: 38 * Math.PI / 180 };
+  var th = { P: P(108, 82), A1: P(36, 76), B1: P(74, 58), al: 80 * Math.PI / 180 };   // a large turn, so each arc stands well clear of its chord
   th.A2 = rot(th.P, th.A1, th.al); th.B2 = rot(th.P, th.B1, th.al);
   // the crank stands nearly upright, at an acute angle to the rod, so that the angle between them, and with it the
   // spring across them, changes a good deal as the float rises and falls
@@ -115,14 +115,16 @@
              KD.disc(md.R, 3.2, 'var(--mass)') + KD.label(P(138, 88), 'RCM', { size: 9 });
     },
     // the relative pole P12 of two positions of a link (as in his GeoGebra book): the perpendicular bisectors of the
-    // chords A1A2 and B1B2 meet at P12, and the link turns from position 1 to position 2 about it
+    // chords A1A2 and B1B2 meet at P12, and the link turns from position 1 to position 2 about it, its ends on arcs
     theory: function (s) {
       var a = th.al * ease(s, 2.6), A = rot(th.P, th.A1, a), B = rot(th.P, th.B1, a), Pp = th.P;
-      function bis(p, q) {                                           // chord, its perpendicular bisector to P12, right-angle mark
-        var m = P((p.x + q.x) / 2, (p.y + q.y) / 2), u = KD.unit(p, q), v = KD.unit(m, Pp), r = 3.5;
-        return KD.dashed(p, q) + KD.thin(P(m.x - v.x * 7, m.y - v.y * 7), Pp) +
-               '<polyline points="' + KD.pt(P(m.x + u.x * r, m.y + u.y * r)) + ' ' + KD.pt(P(m.x + (u.x + v.x) * r, m.y + (u.y + v.y) * r)) + ' ' +
-               KD.pt(P(m.x + v.x * r, m.y + v.y * r)) + '" fill="none" stroke="var(--fg)" stroke-width=".9"/>';
+      function bis(p, q) {                                           // chord, arc about P12, perpendicular bisector, right-angle mark
+        var m = P((p.x + q.x) / 2, (p.y + q.y) / 2), u = KD.unit(p, q), v = KD.unit(m, Pp), r = dist(Pp, p), k = 3.5;
+        var far = P(Pp.x - v.x * (r + 5), Pp.y - v.y * (r + 5));    // just past the arc's midpoint
+        return KD.dashed(p, q) + KD.dashed(far, Pp) +
+               '<path d="M' + KD.pt(p) + ' A' + KD.f(r) + ',' + KD.f(r) + ' 0 0 1 ' + KD.pt(q) + '" fill="none" stroke="var(--fg-2)" stroke-width="1.1" stroke-dasharray="1.5 2.5"/>' +
+               '<polyline points="' + KD.pt(P(m.x + u.x * k, m.y + u.y * k)) + ' ' + KD.pt(P(m.x + (u.x + v.x) * k, m.y + (u.y + v.y) * k)) + ' ' +
+               KD.pt(P(m.x + v.x * k, m.y + v.y * k)) + '" fill="none" stroke="var(--fg)" stroke-width=".9"/>';
       }
       return bis(th.A1, th.A2) + bis(th.B1, th.B2) +
              '<g opacity=".4">' + KD.link(th.A1, th.B1) + KD.link(th.A2, th.B2) + KD.joint(th.A1, 3) + KD.joint(th.B1, 3) + KD.joint(th.A2, 3) + KD.joint(th.B2, 3) + '</g>' +

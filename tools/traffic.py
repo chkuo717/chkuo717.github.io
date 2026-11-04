@@ -41,6 +41,7 @@ CV = os.path.expanduser("~/Library/CloudStorage/OneDrive-UniversityofWollongong/
 THEMES = {  # research page slug -> (theme id in papers.json, label)
     "gravity-balancing": ("gravity", "Gravity balancing"),
     "magnetic-mechanisms": ("magnetic", "Magnetic mechanisms"),
+    "renewable-energy": ("energy", "Mechanisms for renewable energy"),
     "parallel-mechanisms": ("parallel", "Parallel & decoupled mechanisms"),
     "reconfigurable-mechanisms": ("reconfigurable", "Reconfigurable mechanisms"),
     "medical-mechanisms": ("medical", "Medical & rehabilitation devices"),

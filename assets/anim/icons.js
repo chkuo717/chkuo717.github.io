@@ -20,6 +20,14 @@
              '<g transform="rotate(' + (th * 180 / Math.PI).toFixed(1) + ' 80 46)"><rect x="75" y="38" width="10" height="16" rx="1.5" fill="var(--mag-rotor)" stroke="var(--fg)" stroke-width="1"/>' +
              KD.arrow(P(80, 51), P(80, 40), 'var(--mag-arrow-2)', 1.4, 5) + '</g>' + KD.link(P(C.x + 8 * Math.sin(th), C.y - 8 * Math.cos(th)), end, 2) + KD.mass(end, 5, '');
     },
+    energy: function () {
+      var Bc = P(48, 63), G = P(118, 40), th = 200 * Math.PI / 180, C = P(G.x + 16 * Math.cos(th), G.y + 16 * Math.sin(th)), d = '', i, x;
+      for (i = 0; i <= 38; i++) { x = 10 + 2 * i; d += (i ? 'L' : 'M') + x + ',' + (68 + 3 * Math.sin(2 * Math.PI * (x - 10) / 38)).toFixed(2); }
+      return '<path d="' + d + 'L86,84L10,84Z" fill="var(--mag-stator)" opacity=".6"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="1.4"/>' +
+             KD.arrow(P(32, 57), P(32, 44), 'var(--cable)', 1.3, 6) + KD.arrow(P(32, 51), P(32, 64), 'var(--cable)', 1.3, 6) +
+             KD.ground(G, { w: 16 }) + KD.mass(Bc, 7, '') + KD.link(Bc, C) + KD.link(G, C) + KD.joint(G, 4.5) + KD.joint(C, 3.5) + KD.joint(Bc, 3) +
+             '<path d="M111.2,21.2 A20,20 0 0 1 133.3,27.1" fill="none" stroke="var(--cable)" stroke-width="1.3"/>' + KD.arrow(P(130.7, 24), P(134.6, 28.6), 'var(--cable)', 1.3, 6);
+    },
     parallel: function () {
       var g = [P(26, 76), P(134, 76), P(80, 80)], k = [P(34, 50), P(126, 50), P(62, 60)], t = [P(56, 36), P(104, 36), P(80, 20)];
       var out = KD.ground(g[0], { w: 13 }) + KD.ground(g[1], { w: 13 }) + KD.ground(g[2], { w: 13 });

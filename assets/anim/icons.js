@@ -67,20 +67,51 @@
              '<path d="M' + KD.pt(a1) + ' A26,26 0 0 1 ' + KD.pt(a2) + '" fill="none" stroke="var(--cable)" stroke-width="1.3"/>' +
              KD.arrow(en.arc(-58), en.arc(-64), 'var(--cable)', 1.3, 5) + KD.arrow(en.arc(-14), en.arc(-8), 'var(--cable)', 1.3, 5);
     },
-    // a variable joint: a pin in a slot of the frame is a cam pair (it slides and turns) until it reaches the
-    // end of the slot, where it can only turn, a revolute pair (Yan and Kuo, J. Mech. Des. 2006, Fig. 2)
+    // variable joints after Yan and Kuo, J. Mech. Des. 2006, shown in turn. Fig. 2: a round pin in a slot is a cam pair
+    // (it slides and turns) until it reaches the end of the slot, where it can only turn, a revolute pair. Fig. 3: a
+    // D-shaped pin in a slot that narrows at a rounded step is a cam pair in the wide part, a revolute pair against the
+    // step, a cam pair again as it turns its flat to the slot, and a prismatic pair in the narrow part, where it can only
+    // slide. The red arrows show the motions each pair allows.
     structural: function (s) {
-      var A = P(26, 66), B = P(112, 30), u = KD.unit(A, B), n = P(-u.y, u.x), w = 5, T = s % 9, k, q;
-      if (T < 3) { k = ease(T, 3); q = -0.5 + 0.7 * k; }                        // slides toward the end and turns a little
-      else if (T < 6) { k = 1; q = 0.2 + 0.75 * Math.sin(Math.PI * (T - 3) / 1.5); }   // at the end: turns only
-      else { k = 1 - ease(T - 6, 3); q = -0.5 + 0.7 * (1 - ease(T - 6, 3)); }
-      var p = P(A.x + 12 * u.x + (u.L - 12) * k * u.x, A.y + 12 * u.y + (u.L - 12) * k * u.y), dir = Math.atan2(u.y, u.x) + Math.PI / 2 + q;
-      var e = P(p.x + 36 * Math.cos(dir), p.y + 36 * Math.sin(dir)), cap = Math.atan2(u.y, u.x) * 180 / Math.PI;
-      var lo = function (d) { return P(d.x + n.x * w, d.y + n.y * w); }, hi = function (d) { return P(d.x - n.x * w, d.y - n.y * w); };
-      var out = KD.wall(hi(A), hi(B), -1) + KD.wall(lo(A), lo(B), 1) +
-                '<path d="M' + KD.pt(hi(B)) + ' A' + w + ',' + w + ' 0 0 1 ' + KD.pt(lo(B)) + '" fill="none" stroke="var(--fg)" stroke-width="1.2" transform="rotate(0)"/>';
-      out += KD.link(p, e) + KD.joint(p, w - 0.6) + KD.joint(e, 3);
-      return out + KD.note(P(8, 12), k > 0.99 ? 'revolute pair' : 'cam pair', { size: 9, fill: 'var(--fg-2)' });
+      var R = 8.5, a = 25 * Math.PI / 180, u = P(Math.cos(a), Math.sin(a)), n = P(Math.sin(a), -Math.cos(a)), O = P(20, 22);
+      function S(sv, t) { return P(O.x + sv * u.x + t * n.x, O.y + sv * u.y + t * n.y); }    // s along the slot, t across it
+      function sm(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+      function arcS(cs, ct, r, f0, f1) { var o = []; for (var i = 0; i <= 12; i++) { var f = f0 + (f1 - f0) * i / 12; o.push(S(cs + r * Math.cos(f), ct + r * Math.sin(f))); } return o; }
+      function line(pts) { return '<polyline points="' + pts.map(KD.pt).join(' ') + '" fill="none" stroke="var(--fg)" stroke-width="1.5" stroke-linejoin="round"/>'; }
+      function at(c, r, f) { return P(c.x + r * Math.cos(f), c.y + r * Math.sin(f)); }
+      function cross(c) { return '<g stroke="var(--fg)" stroke-width="1">' + KD.line(P(c.x - 2.5, c.y), P(c.x + 2.5, c.y)) + KD.line(P(c.x, c.y - 2.5), P(c.x, c.y + 2.5)) + '</g>'; }
+      function slide(sv, tw) { return KD.arrow(S(sv - 21, tw + 6), S(sv - 8, tw + 6), 'var(--red)', 1.4, 5); }
+      function turn(c, b) {                                          // a curved arrow round the pin, across the link at angle b
+        var o = []; for (var i = 0; i <= 8; i++) o.push(at(c, R + 4.5, b - 0.7 + 0.95 * i / 8));
+        return '<polyline points="' + o.map(KD.pt).join(' ') + '" fill="none" stroke="var(--red)" stroke-width="1.4"/>' + KD.arrow(at(c, R + 4.5, b + 0.1), at(c, R + 4.5, b + 0.55), 'var(--red)', 1.4, 5);
+      }
+      var link = function (p, q) { return '<line x1="' + KD.f(p.x) + '" y1="' + KD.f(p.y) + '" x2="' + KD.f(q.x) + '" y2="' + KD.f(q.y) + '" stroke="var(--fg)" stroke-width="2" stroke-linecap="round"/>'; };
+      var T = s % 19, out, name, sv, c, b, cam, rev;
+      if (T < 7) {                                                   // Fig. 2: round pin, slot with a rounded end
+        var sE = 96;
+        if (T < 3) { sv = 22 + (sE - 22) * sm(T / 3); b = (115 - 20 * sm(T / 3)) * Math.PI / 180; name = 'cam pair'; }
+        else { sv = sE; b = (95 + 35 * Math.sin(2 * Math.PI * Math.min(T - 3, 3) / 3)) * Math.PI / 180; name = 'revolute pair'; }
+        c = S(sv, 0);
+        out = line([S(0, R), S(sE, R)].concat(arcS(sE, 0, R, Math.PI / 2, -Math.PI / 2))) + line([S(0, -R), S(sE + 14, -R)]) +
+              link(at(c, R, b), at(c, R + 22, b)) + '<circle cx="' + KD.f(c.x) + '" cy="' + KD.f(c.y) + '" r="' + R + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.5"/>' + cross(c) +
+              (name === 'cam pair' ? slide(sv, R) : '') + turn(c, b);
+      } else {                                                       // Fig. 3: D-shaped pin, slot narrowing at a rounded step
+        var t = T - 7, sS = 64, sN = 104, psi;
+        if (t < 3) { sv = 22 + (sS - 22) * sm(t / 3); psi = -80 + 30 * sm(t / 3); name = 'cam pair'; cam = true; }
+        else if (t < 6) { sv = sS; psi = -50 - 30 * Math.sin(2 * Math.PI * (t - 3) / 3); name = 'revolute pair'; rev = true; }
+        else if (t < 8) { sv = sS; psi = -50 + 75 * sm((t - 6) / 2); name = 'cam pair'; cam = true; }
+        else { sv = sS + (sN - R - sS) * sm((t - 8) / 3); psi = 25; name = 'prismatic pair'; }
+        psi *= Math.PI / 180;
+        c = S(sv, 0);
+        var X = P(Math.cos(psi), Math.sin(psi)), Y = P(Math.sin(psi), -Math.cos(psi));
+        var pin = function (x, y) { return P(c.x + x * X.x + y * Y.x, c.y + x * X.y + y * Y.y); };
+        var d = [pin(-R, 0), pin(R, 0)]; for (var i = 1; i < 12; i++) d.push(pin(R * Math.cos(-Math.PI * i / 12), R * Math.sin(-Math.PI * i / 12)));
+        var k0 = pin(-R, 0), k1 = pin(-R - 22 * 0.966, -22 * 0.259);  // the link, fixed to the pin at the end of its flat
+        out = line([S(0, R), S(sS, R)].concat(arcS(sS, 0, R, Math.PI / 2, 0), arcS(sN, -R / 2, R / 2, Math.PI / 2, -Math.PI / 2))) + line([S(0, -R), S(sN + 14, -R)]) +
+              link(k0, k1) + '<polygon points="' + d.map(KD.pt).join(' ') + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.5" stroke-linejoin="round"/>' + cross(c) +
+              (rev ? '' : slide(sv, name === 'prismatic pair' ? 0 : R)) + (cam || rev ? turn(c, Math.atan2(k0.y - c.y, k0.x - c.x)) : '');
+      }
+      return out + KD.note(P(152, 12), name, { size: 9, anchor: 'end', fill: 'var(--fg-2)' });
     },
     // three legs of fixed link lengths carry the platform as it moves
     parallel: function (s) {

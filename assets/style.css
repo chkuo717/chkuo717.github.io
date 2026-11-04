@@ -156,6 +156,8 @@ dl.facts dd { margin: 0; }
 
 /* Notice */
 .notice { background: var(--bg-2); border-left: 3px solid var(--accent); padding: .8rem 1rem; border-radius: 0 8px 8px 0; max-width: var(--measure); color: var(--fg); }
+.direction { background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; box-shadow: var(--shadow); padding: 1.2rem 1.4rem .4rem; margin: 1.5rem 0 1rem; scroll-margin-top: 5rem; }
+.direction p { max-width: var(--measure); }
 .notice.plain { background: var(--bg-2); border-color: var(--line); color: var(--fg-2); }
 
 /* Footer */

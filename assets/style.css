@@ -128,6 +128,12 @@ main { padding: 2.5rem 0 4rem; }
 .hero .fig { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; }
 .hero .fig svg { width: 100%; height: auto; display: block; }
 .fig video { width: 100%; height: auto; display: block; border-radius: 6px; background: var(--line); }
+.yt { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; border-radius: 6px; overflow: hidden; background: #000; cursor: pointer; }
+.yt img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.yt .play { position: absolute; left: 50%; top: 50%; width: 68px; height: 48px; margin: -24px 0 0 -34px; border-radius: 12px; background: rgba(0, 0, 0, .7); transition: background .15s; }
+.yt .play::after { content: ""; position: absolute; left: 27px; top: 14px; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent #fff; }
+.yt:hover .play, .yt:focus-visible .play { background: var(--red); }
+.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .hero .fig figcaption { font-size: .85rem; color: var(--fg-2); margin-top: .6rem; }
 .hero .fig .ctl { display: flex; align-items: center; gap: .6rem; margin-top: .6rem; font-size: .85rem; color: var(--fg-2); }
 .hero .fig input[type=range] { flex: 1; accent-color: var(--accent); }

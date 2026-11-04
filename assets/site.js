@@ -260,3 +260,18 @@
   theta = 0.6; tick();
   if (!reduce) requestAnimationFrame(function loop(t) { tick(t); requestAnimationFrame(loop); });
 })();
+
+// YouTube videos: a still with a play button; the player (youtube-nocookie) loads only when the visitor presses play
+(function () {
+  Array.prototype.forEach.call(document.querySelectorAll('button.yt[data-yt]'), function (b) {
+    b.addEventListener('click', function () {
+      var w = document.createElement('div'), f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + b.getAttribute('data-yt') + '?autoplay=1&rel=0';
+      f.title = (b.getAttribute('aria-label') || 'Video').replace(/^Play the video: /, '');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      w.className = 'yt'; w.appendChild(f);
+      b.parentNode.replaceChild(w, b);
+    });
+  });
+})();

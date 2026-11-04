@@ -45,6 +45,7 @@ THEMES = {  # research page slug -> (theme id in papers.json, label)
     "parallel-mechanisms": ("parallel", "Parallel & decoupled mechanisms"),
     "reconfigurable-mechanisms": ("reconfigurable", "Reconfigurable mechanisms"),
     "medical-mechanisms": ("medical", "Medical & rehabilitation devices"),
+    "structural-synthesis": ("structural", "Structural synthesis of mechanisms"),
     "mechanism-theory": ("theory", "Mechanism theory & teaching"),
 }
 GSC_SITE = "https://chkuo717.github.io/"

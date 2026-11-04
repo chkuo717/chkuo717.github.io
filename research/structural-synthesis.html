@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Structural synthesis of mechanisms · Chin-Hsing Kuo</title>
+  <meta name="description" content="Earlier work of Chin-Hsing Kuo, no longer active. Representations of mechanisms with variable topologies and their variable kinematic joints, their mobility and configuration singularity, and the computational identification of equivalent links and joints in kinematic chains.">
+  <meta name="google-site-verification" content="VUdEHcKiONjiuwJ1pfdeDw3GwtqAZgly32lkbdm-p28">
+  <script src="../assets/anim/draw.js?v=10a55783" defer></script>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="../assets/style.css?v=0fa15d68">
+</head>
+<body class="research">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="25" r="2.4"/><circle cx="25" cy="25" r="2.4"/><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="8" r="2.4"/><path d="M7 25 L11 11 L23 8 L25 25"/></svg>
+        <span>Chin-Hsing Kuo</span>
+      </a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../research/index.html" class="active" aria-current="page">Research</a>
+        <a href="../publications.html">Publications</a>
+        <a href="../talks-teaching.html">Talks &amp; Teaching</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+<p class="eyebrow"><a href="index.html">Research</a> · Earlier work</p>
+    <h1>Structural synthesis of mechanisms</h1>
+    <p class="notice">Earlier work. My first four journal papers, from my bachelor's research at Tamkang University and my master's research with Hong-Sen Yan at National Cheng Kung University. The line is no longer active; the page is kept as a record of the published work.</p>
+    <p class="lede">Structural synthesis designs a mechanism from its topology: which links it has, how they are joined, and which of them are really different. These papers worked on two cases the classical theory left open: mechanisms whose topology changes while they run, and the automatic sorting of a chain's links and joints into equivalent groups.</p>
+
+    <p>A push-button lock, a key ring or a walking machine changes its structure during one cycle of operation: a pin that slides in a slot becomes a revolute joint when it reaches the end, a slider in an L-shaped slot changes direction at the corner, two parts are fastened for a while and then let go. The first paper treats the joint itself, the <em>variable kinematic joint</em>: its states are written as a sequence of joint codes, drawn as a digraph whose vertices are the states and whose arcs are the changes, and stored as matrices. From the digraph follow the joint's topological properties, among them reversibility, continuity, the variation of its degrees of freedom, and when two variable joints are homomorphic. The second paper does the same for the whole mechanism, adding its motion states as a finite-state machine with state tables and state graphs, and defines topological and motion homomorphism to tell when two such mechanisms are structurally, and kinematically, the same.</p>
+
+    <p>The third paper counts the freedoms. Each stage of a mechanism with variable topologies is described by the screws of its joints at that stage, so that a change of topology is a change in the set of screw coordinates and the mobility follows from its rank; the configurations at which the topology changes are then read as stationary or uncertainty configurations. The fourth paper turns to ordinary kinematic chains and finds, by computation rather than inspection, which links and which joints are topologically equivalent, so that a synthesis that enumerates mechanisms does not produce the same one twice.</p>
+
+    <p>The master's thesis was also published as a book. The ideas carried on into my later work on <a href="reconfigurable-mechanisms.html">reconfigurable mechanisms</a>.</p>
+
+    <h2>Animations</h2>
+    <p>One animated page per representative paper, drawn in the style of the papers’ own figures.</p>
+    <div class="grid cols-2">
+<a class="card anim-card" href="../papers/jmd2008.html"><span class="tag">Animation · 2008</span><h3>Which links are the same link?</h3><p>Watt and Stephenson chains with their equivalent links and joints highlighted class by class; fix a link and watch the classes split.</p></a>
+<a class="card anim-card" href="../papers/jmd2007.html"><span class="tag">Animation · 2007</span><h3>Counting freedoms when the topology keeps changing</h3><p>A push-button lock through four stages, with the mobility that screw theory gets right and the planar formula gets wrong.</p></a>
+</div>
+
+    <h2>Representative papers</h2>
+    <ul class="papers">
+<li><strong><a href="https://doi.org/10.1115/1.2936931">Computational identification of link adjacency and joint incidence in kinematic chains and mechanisms</a>.</strong> <a class="anim" href="../papers/jmd2008.html">animation</a><br><span class="venue">Kuo, C.-H. and Shih, J.-C., <em>ASME Journal of Mechanical Design</em>, 2008. <a href="https://doi.org/10.1115/1.2936931">doi</a></span></li>
+<li><strong><a href="https://doi.org/10.1115/1.2717230">On the mobility and configuration singularity of mechanisms with variable topologies</a>.</strong> <a class="anim" href="../papers/jmd2007.html">animation</a><br><span class="venue">Kuo, C.-H. and Yan, H.-S., <em>ASME Journal of Mechanical Design</em>, 2007. <a href="https://doi.org/10.1115/1.2717230">doi</a></span></li>
+</ul>
+
+    <h2>Also under this theme</h2>
+    <ul class="papers">
+<li class="has-mini"><svg class="mini" data-mini="TCSME2006" viewBox="0 0 160 110" role="img" aria-label="A Geneva mechanism whose slider clamps and releases the wheel. The slider–wheel joint passes through fixed, sliding and separated states, which the paper represents with joint sequences and state graphs."></svg><div><strong><a href="https://doi.org/10.1139/tcsme-2006-0003">Representations and identifications of structural and motion state characteristics of mechanisms with variable topologies</a>.</strong><br><span class="venue">Yan, H.-S. and Kuo, C.-H., <em>Transactions of the Canadian Society for Mechanical Engineering</em>, 2006. <a href="https://doi.org/10.1139/tcsme-2006-0003">doi</a></span><br><span class="mini-cap">A Geneva mechanism whose slider clamps and releases the wheel. The slider–wheel joint passes through fixed, sliding and separated states, which the paper represents with joint sequences and state graphs.</span></div></li>
+<li class="has-mini"><svg class="mini" data-mini="JMD2006" viewBox="0 0 160 110" role="img" aria-label="A two-member key ring: one joint that slides, then slides and turns, then only turns. The paper writes such variable joints as joint codes and digraphs of their states."></svg><div><strong><a href="https://doi.org/10.1115/1.2166854">Topological representations and characteristics of variable kinematic joints</a>.</strong><br><span class="venue">Yan, H.-S. and Kuo, C.-H., <em>ASME Journal of Mechanical Design</em>, 2006. <a href="https://doi.org/10.1115/1.2166854">doi</a></span><br><span class="mini-cap">A two-member key ring: one joint that slides, then slides and turns, then only turns. The paper writes such variable joints as joint codes and digraphs of their states.</span></div></li>
+<li class="has-mini"><svg class="mini" data-mini="BK02" viewBox="0 0 160 110" role="img" aria-label="A joint whose pin leaves an arc for a straight slot, turning about z and then sliding along x: the kind of variable joint whose configurations the book analyses."></svg><div><span class="kind">Book</span> <strong><a href="https://books.google.com/books?vid=ISBN9783836488907">Structural Characteristics of Mechanisms with Variable Topologies: Taking into Account the Configuration Singularity</a>.</strong><br><span class="venue">Kuo, C.-H., <em>VDM Verlag Dr. Müller, Saarbrücken</em>, 2008. <a href="https://books.google.com/books?vid=ISBN9783836488907">link</a></span><br><span class="mini-cap">A joint whose pin leaves an arc for a straight slot, turning about z and then sliding along x: the kind of variable joint whose configurations the book analyses.</span></div></li>
+</ul>
+<script src="../assets/anim/mini.js?v=24b4a507" defer></script>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© Chin-Hsing Kuo · University of Wollongong, Australia · <a href="https://scholar.google.com/citations?user=7G5Y5qkAAAAJ&amp;hl=en">Google Scholar</a> · <a href="../publications.html">Publications</a></p>
+      <p class="muted">Pages, figures and animations drafted with Claude Code. The research is in the papers linked on each page; figures reproduced from them are credited where shown. Visits are counted anonymously with GoatCounter, without cookies.</p>
+    </div>
+  </footer>
+  <script src="../assets/site.js?v=72189833" defer></script>
+  <script src="../assets/stats.js?v=cbdef3fb" defer></script>
+  <script data-goatcounter="https://chkuo717.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

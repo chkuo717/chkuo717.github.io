@@ -231,6 +231,11 @@ dl.facts dd { max-width: var(--measure); }
 .card .icon { width: 100%; height: auto; max-height: 7.5rem; display: block; margin: -.25rem 0 .6rem; }
 .card .icon text { font-family: var(--fig-serif); }
 .card .icon text.v { font-style: italic; }
+.card.side { display: grid; grid-template-columns: minmax(7rem, 40%) 1fr; column-gap: 1.1rem; align-items: center; }
+.card.side .icon { grid-column: 1; grid-row: 1 / span 2; margin: 0; max-height: 6.5rem; }
+.card.side h3, .card.side p { grid-column: 2; }
+.card.side h3 { align-self: end; }
+.card.side p { align-self: start; }
 /* Small animated figures beside non-representative papers (assets/anim/mini.js) */
 .papers li.has-mini { display: grid; grid-template-columns: 12rem 1fr; gap: 1.1rem; align-items: start; }
 .papers svg.mini { width: 100%; height: auto; display: block; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }

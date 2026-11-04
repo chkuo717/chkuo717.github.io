@@ -26,7 +26,7 @@
   md.ga = dist(md.G, md.A); md.ab = dist(md.A, md.B); md.rb = dist(md.R, md.B); md.ph0 = Math.atan2(md.B.y - md.R.y, md.B.x - md.R.x);
   var th = { P: P(110, 82), A1: P(22, 58), B1: P(62, 40), al: 38 * Math.PI / 180 };
   th.A2 = rot(th.P, th.A1, th.al); th.B2 = rot(th.P, th.B1, th.al);
-  var en = { G: P(118, 40), r: 16, x: 48, th0: 200 * Math.PI / 180 };
+  var en = { G: P(118, 40), r: 16, x: 48, th0: 250 * Math.PI / 180 };
   en.C0 = P(en.G.x + en.r * Math.cos(en.th0), en.G.y + en.r * Math.sin(en.th0)); en.l = dist(P(en.x, 63), en.C0);
 
   var icons = {
@@ -56,10 +56,26 @@
       for (i = 0; i <= 38; i++) { x = 10 + 2 * i; d += (i ? 'L' : 'M') + x + ',' + wave(x).toFixed(2); }
       var Bc = P(en.x, wave(en.x) - 5);
       var C = meet(en.G, en.r, Bc, en.l, P(100, 20));                // crank pin: on the crank circle and one rod length from the float
+      var ur = KD.unit(C, Bc), M = P(C.x + ur.x * 24, C.y + ur.y * 24), K = P(en.G.x + (C.x - en.G.x) * 0.5, en.G.y + (C.y - en.G.y) * 0.5);   // spring across rod and crank
       return '<path d="' + d + 'L86,84L10,84Z" fill="var(--mag-stator)" opacity=".6"/><path d="' + d + '" fill="none" stroke="var(--accent)" stroke-width="1.4"/>' +
              KD.arrow(P(32, 57), P(32, 44), 'var(--cable)', 1.3, 6) + KD.arrow(P(32, 51), P(32, 64), 'var(--cable)', 1.3, 6) +
-             KD.ground(en.G, { w: 16 }) + KD.mass(Bc, 7, '') + KD.link(Bc, C) + KD.link(en.G, C) + KD.joint(en.G, 4.5) + KD.joint(C, 3.5) + KD.joint(Bc, 3) +
-             '<path d="M111.2,21.2 A20,20 0 0 1 133.3,27.1" fill="none" stroke="var(--cable)" stroke-width="1.3"/>' + KD.arrow(P(130.7, 24), P(134.6, 28.6), 'var(--cable)', 1.3, 6);
+             KD.ground(en.G, { w: 16 }) + KD.mass(Bc, 7, '') + KD.link(Bc, C) + KD.link(en.G, C) + KD.spring(M, K, 6, 3) + KD.pin(M, 2) + KD.pin(K, 2) + KD.joint(en.G, 4.5) + KD.joint(C, 3.5) + KD.joint(Bc, 3) +
+             '<path d="M125.5,19.3 A22,22 0 0 1 139.7,36.2" fill="none" stroke="var(--cable)" stroke-width="1.3"/>' + KD.arrow(P(139, 32.3), P(140, 38.2), 'var(--cable)', 1.3, 6);
+    },
+    // a variable joint: a pin in a slot of the frame is a cam pair (it slides and turns) until it reaches the
+    // end of the slot, where it can only turn, a revolute pair (Yan and Kuo, J. Mech. Des. 2006, Fig. 2)
+    structural: function (s) {
+      var A = P(26, 66), B = P(112, 30), u = KD.unit(A, B), n = P(-u.y, u.x), w = 5, T = s % 9, k, q;
+      if (T < 3) { k = ease(T, 3); q = -0.5 + 0.7 * k; }                        // slides toward the end and turns a little
+      else if (T < 6) { k = 1; q = 0.2 + 0.75 * Math.sin(Math.PI * (T - 3) / 1.5); }   // at the end: turns only
+      else { k = 1 - ease(T - 6, 3); q = -0.5 + 0.7 * (1 - ease(T - 6, 3)); }
+      var p = P(A.x + 12 * u.x + (u.L - 12) * k * u.x, A.y + 12 * u.y + (u.L - 12) * k * u.y), dir = Math.atan2(u.y, u.x) + Math.PI / 2 + q;
+      var e = P(p.x + 36 * Math.cos(dir), p.y + 36 * Math.sin(dir)), cap = Math.atan2(u.y, u.x) * 180 / Math.PI;
+      var lo = function (d) { return P(d.x + n.x * w, d.y + n.y * w); }, hi = function (d) { return P(d.x - n.x * w, d.y - n.y * w); };
+      var out = KD.wall(hi(A), hi(B), -1) + KD.wall(lo(A), lo(B), 1) +
+                '<path d="M' + KD.pt(hi(B)) + ' A' + w + ',' + w + ' 0 0 1 ' + KD.pt(lo(B)) + '" fill="none" stroke="var(--fg)" stroke-width="1.2" transform="rotate(0)"/>';
+      out += KD.link(p, e) + KD.joint(p, w - 0.6) + KD.joint(e, 3);
+      return out + KD.note(P(8, 12), k > 0.99 ? 'revolute pair' : 'cam pair', { size: 9, fill: 'var(--fg-2)' });
     },
     // three legs of fixed link lengths carry the platform as it moves
     parallel: function (s) {

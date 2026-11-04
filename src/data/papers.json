@@ -275,7 +275,7 @@
     },
     {
       "key": "JMD2007",
-      "theme": "reconfigurable",
+      "theme": "structural",
       "rep": true,
       "title": "On the mobility and configuration singularity of mechanisms with variable topologies",
       "authors": "Kuo, C.-H. and Yan, H.-S.",
@@ -308,7 +308,7 @@
     },
     {
       "key": "TCSME2006",
-      "theme": "reconfigurable",
+      "theme": "structural",
       "title": "Representations and identifications of structural and motion state characteristics of mechanisms with variable topologies",
       "authors": "Yan, H.-S. and Kuo, C.-H.",
       "venue": "Transactions of the Canadian Society for Mechanical Engineering",
@@ -318,7 +318,7 @@
     },
     {
       "key": "JMD2006",
-      "theme": "reconfigurable",
+      "theme": "structural",
       "title": "Topological representations and characteristics of variable kinematic joints",
       "authors": "Yan, H.-S. and Kuo, C.-H.",
       "venue": "ASME Journal of Mechanical Design",
@@ -328,7 +328,7 @@
     },
     {
       "key": "BK02",
-      "theme": "reconfigurable",
+      "theme": "structural",
       "type": "book",
       "title": "Structural Characteristics of Mechanisms with Variable Topologies: Taking into Account the Configuration Singularity",
       "authors": "Kuo, C.-H.",
@@ -455,7 +455,7 @@
     },
     {
       "key": "JMD2008",
-      "theme": "theory",
+      "theme": "structural",
       "rep": true,
       "title": "Computational identification of link adjacency and joint incidence in kinematic chains and mechanisms",
       "authors": "Kuo, C.-H. and Shih, J.-C.",

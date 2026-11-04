@@ -226,4 +226,198 @@
       } else if (t === undefined) draw(q);
     });
   })();
+
+  // ---------------------------------------------------------------------------------------------
+  // Kuo, Dai and Dasgupta, Int. J. Med. Robot. Comput. Assist. Surg. 8 (2012) 127-145: an overview of
+  // kinematic design for minimally invasive surgical robots. (1) The eight RCM mechanism types of the
+  // paper's Fig. 11, each with its instrument swinging about the fixed RCM; the line below gives the type's
+  // entries in Table 4 and sample robots from Table 3. (2) Task-oriented decouplability: two revolutes in
+  // series (Type III, as in the double-parallelogram robot of Fig. 5, where Ptheta_x = f(RX) but
+  // Ptheta_y = f(RX, RY)) against a fully decoupled pair (Type V).
+  // ---------------------------------------------------------------------------------------------
+  (function () {
+    var svg = document.getElementById('rcm8');
+    if (!svg) return;
+    var g = svg.querySelector('#r8Body'), msg = document.getElementById('r8Msg'), autoIn = document.getElementById('r8Auto');
+    function Q(x, y) { return { x: x, y: y }; }
+    var INFO = [
+      ['Isocenter', '2R and 3R, and with the insertion also 2R1T and 3R1T', 'none of Types I to V', 'no', 'Naviot, UT-LAP; CLEM with flexible straps'],
+      ['Circular tracking arc', '2R and 3R', 'Type II; I and III with extra actuators', 'yes', 'Probot, EndoBot, FIPS Endoarm, ViKY'],
+      ['Parallelogram', '2R; 3R with an extra actuator', 'Type II; I and III with extra actuators', 'yes', 'da Vinci, LARS, ARTEMIS, Black Falcon'],
+      ['Synchronous belt', '2R; 3R with an extra actuator', 'Type II; I and III with extra actuators', 'yes', 'PAKY-RCM, AcuBot, Steady-Hand'],
+      ['Spherical linkage', '2R and 3R', 'open chain: Type II, and I and III with extra actuators', 'yes', 'RAVEN, MC2E'],
+      ['Gimbal', '2R and 3R', 'Type II; I and III with extra actuators', 'no', 'none in the paper’s table'],
+      ['Parallel wrist', '2R and 3R', 'Types II and IV; I, III and V with extra actuators', 'yes', 'MHU'],
+      ['Gear train', '2R and 3R', 'Type II; I and III with extra actuators', 'yes', 'CoBRASurge']
+    ];
+    var red = function (R) { return KD.disc(R, 4, 'var(--mass)') + KD.label({ x: R.x + 8, y: R.y + 15 }, 'RCM', { size: 10, fill: 'var(--red)' }); };
+    var tool = function (R, u, up, down) { return KD.link(Q(R.x + u.x * up, R.y + u.y * up), Q(R.x - u.x * down, R.y - u.y * down), 3.2); };
+    var axis = function (a, b) { return KD.line(a, b, 'stroke="var(--fg-2)" stroke-width="1" stroke-dasharray="8 3 2 3"'); };
+    var tilt = function (s) { var al = (12 + 28 * (0.5 - 0.5 * Math.cos(0.8 * s))) * Math.PI / 180; return Q(Math.sin(al), -Math.cos(al)); };
+    var tool3 = function (P, w, up, down) { return ISO.seg(P, ISO.mul(w, -down), ISO.mul(w, up), 'stroke="var(--fg)" stroke-width="3.2" stroke-linecap="round"'); };
+    var skin = function (P, h) { return ISO.poly(P, [[-h, -h, 0], [h, -h, 0], [h, h, 0], [-h, h, 0]], 'fill="var(--mag-rotor)" stroke="var(--fg-2)" stroke-width=".8" opacity=".35"'); };
+    var circ3 = function (P, c, e1, e2, rad, w) {
+      var d = '';
+      for (var i = 0; i <= 48; i++) { var t = 2 * Math.PI * i / 48; d += (i ? 'L' : 'M') + KD.pt(P(ISO.add(ISO.add(c, e1, rad * Math.cos(t)), e2, rad * Math.sin(t)))); }
+      return '<path d="' + d + 'Z" fill="none" stroke="var(--fg)" stroke-width="' + w + '"/>';
+    };
+    var arcS = function (P, u, v, rad, w) {   // a link drawn along the sphere of radius rad about the RCM, from direction u to v
+      var d = '';
+      for (var i = 0; i <= 16; i++) { var k = i / 16; d += (i ? 'L' : 'M') + KD.pt(P(ISO.mul(ISO.norm(ISO.add(ISO.mul(u, 1 - k), v, k)), rad))); }
+      return '<path d="' + d + '" fill="none" stroke="var(--fg)" stroke-width="' + (w || 3) + '" stroke-linecap="round"/>';
+    };
+    var note = function (p, s) { return KD.note(p, s, { size: 10, fill: 'var(--fg-2)' }); };
+
+    var draw = [
+      // isocenter: the joint sits at the point itself
+      function (s) {
+        var R = Q(205, 150), a = 0.55 * Math.sin(0.8 * s), u = Q(Math.sin(a), -Math.cos(a)), G = Q(70, 150);
+        return KD.ground(G, { w: 16 }) + KD.link(G, Q(R.x - 17, R.y), 2.8) + KD.joint(G, 4.5) +
+               '<circle cx="' + R.x + '" cy="' + R.y + '" r="17" fill="var(--card)" stroke="var(--fg)" stroke-width="1.8"/>' +
+               tool(R, u, 120, 55) + red(R) + note(Q(232, 214), 'the joint is at the point');
+      },
+      // circular tracking arc: a carriage runs on an arc centred at the RCM; the arc turns about the dash-dot axis
+      function (s) {
+        var R = Q(200, 190), Ra = 105, be = 0.55 * Math.sin(0.45 * s + 1), cb = Math.cos(be), ps = 0.7 * Math.sin(0.7 * s), d = '';
+        for (var i = 0; i <= 40; i++) { var ph = Math.PI * i / 40; d += (i ? 'L' : 'M') + KD.f(R.x + Ra * Math.cos(ph)) + ',' + KD.f(R.y - Ra * Math.sin(ph) * cb); }
+        var car = Q(R.x + Ra * Math.sin(ps), R.y - Ra * Math.cos(ps) * cb), tg = Math.atan2(Ra * Math.sin(ps) * cb, Ra * Math.cos(ps)) * 180 / Math.PI;
+        var G = Q(48, R.y), u = KD.unit(R, car);
+        return axis(Q(36, R.y), Q(326, R.y)) + KD.ground(G, { w: 14 }) + KD.link(G, Q(R.x - Ra, R.y), 2.6) + KD.joint(G, 4) +
+               '<path d="' + d + '" fill="none" stroke="var(--fg)" stroke-width="3.4"/>' + KD.joint(Q(R.x - Ra, R.y), 4) + KD.joint(Q(R.x + Ra, R.y), 4) +
+               tool(R, Q(u.x, u.y), u.L + 14, 45) +
+               '<rect x="-9" y="-5" width="18" height="10" fill="var(--card)" stroke="var(--fg)" stroke-width="1.4" transform="translate(' + KD.f(car.x) + ',' + KD.f(car.y) + ') rotate(' + KD.f(tg) + ')"/>' + red(R);
+      },
+      // double parallelogram: the instrument stays parallel to the first crank
+      function (s) {
+        var R = Q(252, 192), u = tilt(s), L = 105;
+        var at = function (p, k) { return Q(p.x + u.x * k, p.y + u.y * k); };
+        var P1 = Q(R.x - 150, R.y), Pm = Q(R.x - 75, R.y), TL = at(P1, L), TM = at(Pm, L), TR = at(R, L), ML = at(Pm, 0.55 * L), MR = at(R, 0.55 * L);
+        return axis(Q(36, R.y), Q(330, R.y)) + KD.ground(P1, { w: 14 }) + KD.ground(Pm, { w: 14 }) +
+               KD.link(P1, TL) + KD.link(Pm, TM) + KD.link(TL, TR) + KD.link(ML, MR) + tool(R, u, L + 16, 45) +
+               [P1, Pm, TL, TM, TR, ML, MR].map(function (p) { return KD.joint(p, 3.6); }).join('') + red(R);
+      },
+      // synchronous belts: the bar BC keeps its direction, and the pulley at C turns the instrument with the arm AB
+      function (s) {
+        var R = Q(252, 192), u = tilt(s), L = 100, r = 11, A = Q(R.x - 130, R.y), B = Q(A.x + u.x * L, A.y + u.y * L), C = Q(R.x + u.x * L, R.y + u.y * L);
+        var belt = function (p, q) { var v = KD.unit(p, q), n = Q(-v.y * r, v.x * r); return KD.line(Q(p.x + n.x, p.y + n.y), Q(q.x + n.x, q.y + n.y), 'stroke="var(--fg-2)" stroke-width="1.4"') + KD.line(Q(p.x - n.x, p.y - n.y), Q(q.x - n.x, q.y - n.y), 'stroke="var(--fg-2)" stroke-width="1.4"'); };
+        var pulley = function (p) { return '<circle cx="' + KD.f(p.x) + '" cy="' + KD.f(p.y) + '" r="' + r + '" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="1.4"/>'; };
+        return axis(Q(36, R.y), Q(330, R.y)) + KD.ground(A, { w: 24 }) + belt(A, B) + belt(B, C) + pulley(A) + pulley(B) + pulley(C) +
+               KD.link(A, B) + KD.link(B, C) + tool(R, u, L + 16, 45) + KD.joint(A, 3.6) + KD.joint(B, 3.6) + KD.joint(C, 3.6) + red(R) +
+               note(Q(A.x - 22, A.y + 34), 'fixed pulley');
+      },
+      // spherical linkage (open chain): curved links whose joint axes all pass through the RCM
+      function (s) {
+        var P = ISO.make(185, 160, 1), r = 100;
+        var a1 = ISO.norm([-0.7, 0.2, 0.68]), a20 = ISO.norm([0.05, 0.75, 0.66]), w0 = ISO.norm([0.12, 0.08, 1]);
+        var R1 = ISO.rotvec(ISO.mul(a1, 0.55 * Math.sin(0.6 * s))), R2 = ISO.rotvec(ISO.mul(a20, 0.5 * Math.sin(0.85 * s + 1)));
+        var a2 = ISO.apply(R1, a20), w = ISO.apply(R1, ISO.apply(R2, w0)), J1 = ISO.mul(a1, r), J2 = ISO.mul(a2, r), H = ISO.mul(w, r), o = [0, 0, 0];
+        var dd = 'stroke="var(--fg-2)" stroke-width="1" stroke-dasharray="8 3 2 3"';
+        return skin(P, 60) + ISO.seg(P, o, ISO.mul(a1, r + 22), dd) + ISO.seg(P, o, ISO.mul(a2, r + 22), dd) +
+               KD.ground(P(ISO.mul(a1, r + 10)), { w: 14, up: true }) + arcS(P, a1, a2, r) + arcS(P, a2, w, r) + tool3(P, w, r + 40, 45) +
+               KD.joint(P(J1), 4.5) + KD.joint(P(J2), 4.5) + KD.joint(P(H), 3.6) + red(P(o)) + note(Q(214, 238), 'joint axes meet at the point');
+      },
+      // gimbal: two rings on crossed axes through the RCM
+      function (s) {
+        var P = ISO.make(175, 150, 1.05), o = [0, 0, 0];
+        var Rx = ISO.rotvec([0.45 * Math.sin(0.6 * s), 0, 0]), y1 = ISO.apply(Rx, [0, 1, 0]), z1 = ISO.apply(Rx, [0, 0, 1]);
+        var Ry = ISO.rotvec(ISO.mul(y1, 0.45 * Math.sin(0.8 * s + 1.3))), x2 = ISO.apply(Ry, [1, 0, 0]), w = ISO.apply(Ry, z1);
+        var out = skin(P, 50) + circ3(P, o, [1, 0, 0], y1, 62, 3) + circ3(P, o, x2, y1, 46, 2.6);
+        [1, -1].forEach(function (k) {
+          out += ISO.seg(P, [62 * k, 0, 0], [84 * k, 0, 0], 'stroke="var(--fg)" stroke-width="2.6"') + KD.ground(P([84 * k, 0, 0]), { w: 14 }) + KD.joint(P([84 * k, 0, 0]), 4) +
+                 ISO.seg(P, ISO.mul(y1, 46 * k), ISO.mul(y1, 62 * k), 'stroke="var(--fg)" stroke-width="2.6"') + KD.joint(P(ISO.mul(y1, 62 * k)), 3.6);
+        });
+        return out + tool3(P, w, 125, 45) + red(P(o)) + note(Q(214, 238), 'the rings surround the point');
+      },
+      // parallel wrist (after the paper's sketch): the end-effector pyramid turns about its apex, the RCM, on
+      // three legs whose prismatic joints change length
+      function (s) {
+        var P = ISO.make(175, 62, 1), o = [0, 0, 0];
+        var Rm = ISO.rotvec([0.32 * Math.sin(0.7 * s), 0.28 * Math.sin(0.9 * s + 1), 0.3 * Math.sin(0.5 * s + 2)]);
+        var b = [0, 1, 2].map(function (i) { var t = Math.PI / 2 + 2 * Math.PI * i / 3; return [80 * Math.cos(t), 80 * Math.sin(t), -10]; });
+        var e = [0, 1, 2].map(function (i) { var t = Math.PI / 2 + 2 * Math.PI * i / 3 + Math.PI / 3; return ISO.apply(Rm, [45 * Math.cos(t), 45 * Math.sin(t), -110]); });
+        var ax = ISO.apply(Rm, [0, 0, -1]), out = ISO.poly(P, b, 'fill="var(--red)" fill-opacity=".14" stroke="var(--red)" stroke-width="1.2"');
+        out += b.map(function (p) { return ISO.seg(P, o, p, 'stroke="var(--red)" stroke-width="1.2"'); }).join('');
+        out += ISO.poly(P, e, 'fill="var(--accent)" fill-opacity=".14" stroke="var(--accent)" stroke-width="1.4"') + e.map(function (p) { return ISO.seg(P, o, p, 'stroke="var(--accent)" stroke-width="1.4"'); }).join('');
+        for (var i = 0; i < 3; i++) {
+          var m = ISO.add(b[i], ISO.add(e[(i + 1) % 3], b[i], -1), 0.5);
+          out += ISO.seg(P, b[i], m, 'stroke="var(--fg)" stroke-width="4" stroke-linecap="round"') + ISO.seg(P, b[i], e[(i + 1) % 3], 'stroke="var(--fg)" stroke-width="1.8"') +
+                 KD.joint(P(b[i]), 3.6) + KD.joint(P(e[(i + 1) % 3]), 3.6);
+        }
+        return out + ISO.seg(P, o, ISO.mul(ax, 112), 'stroke="var(--fg-2)" stroke-width="1" stroke-dasharray="4 3"') + tool3(P, ax, 165, -112) + red(P(o)) + note(Q(214, 238), 'apex fixed; legs change length');
+      },
+      // gear train: coaxial inputs drive, through bevel gears, an arm and an end-effector whose axes meet at the RCM
+      function (s) {
+        var P = ISO.make(190, 160, 1), o = [0, 0, 0], a = ISO.norm([-0.25, 1, 0.42]);
+        var n0 = ISO.norm(ISO.cross(a, [1, 0, 0])), R1 = ISO.rotvec(ISO.mul(a, 0.6 * Math.sin(0.6 * s)));
+        var J1 = ISO.mul(a, 95), J2 = ISO.add(J1, ISO.apply(R1, n0), 55), bdir = ISO.norm(J2), rad = Math.hypot(J2[0], J2[1], J2[2]);
+        var w0 = ISO.apply(R1, ISO.norm([0.1, -0.3, 1])), w = ISO.apply(ISO.rotvec(ISO.mul(bdir, 0.5 * Math.sin(0.8 * s + 1))), w0);
+        var out = skin(P, 55) + ISO.seg(P, o, ISO.mul(a, 150), 'stroke="var(--fg-2)" stroke-width="1" stroke-dasharray="8 3 2 3"') +
+                  ISO.seg(P, o, ISO.mul(bdir, rad + 18), 'stroke="var(--fg-2)" stroke-width="1" stroke-dasharray="8 3 2 3"');
+        out += ISO.seg(P, ISO.mul(a, 140), ISO.mul(a, 115), 'stroke="var(--ground)" stroke-width="11"') + ISO.seg(P, ISO.mul(a, 140), ISO.mul(a, 105), 'stroke="var(--link-fill)" stroke-width="7"') +
+               ISO.seg(P, ISO.mul(a, 140), J1, 'stroke="var(--fg)" stroke-width="2.6"');
+        out += ISO.seg(P, J1, J2, 'stroke="var(--fg)" stroke-width="3"') + arcS(P, bdir, w, rad) + tool3(P, w, rad + 40, 45) +
+               KD.joint(P(J1), 5) + KD.joint(P(J2), 5) + KD.joint(P(ISO.mul(w, rad)), 3.6) + red(P(o)) + note(Q(214, 238), 'three coaxial inputs');
+        return out;
+      }
+    ];
+
+    var k = 2, auto = true, t0 = null, last = -1;
+    var inputs = Array.prototype.slice.call(document.querySelectorAll('input[name=r8]'));
+    function show(i) {
+      k = i; inputs.forEach(function (r) { r.checked = +r.value === i; });
+      var d = INFO[i];
+      if (msg) msg.innerHTML = '<strong>' + d[0] + '.</strong> Rotations without extra actuators: ' + d[1] + '. Decoupling: ' + d[2] + '. Extracorporeal workspace: ' + d[3] + '. Robots: ' + d[4] + '.';
+    }
+    radios('r8', function (v) { auto = false; if (autoIn) autoIn.checked = false; show(+v); });
+    if (autoIn) autoIn.addEventListener('change', function () { auto = autoIn.checked; t0 = null; });
+    show(k);
+    loop(function (t) {
+      var s = t === undefined ? 0 : t / 1000;
+      if (auto && t !== undefined) { if (t0 === null) t0 = s - 6 * k; var j = Math.floor((s - t0) / 6) % 8; if (j !== last) { last = j; show(j); } }
+      g.innerHTML = draw[k](s);
+    });
+  })();
+
+  (function () {
+    var svg = document.getElementById('rcmc');
+    if (!svg) return;
+    var P = ISO.make(165, 178, 1), g = svg.querySelector('#cBody');
+    var rx = document.getElementById('cRX'), ry = document.getElementById('cRY'), autoIn = document.getElementById('cAuto'), msg = document.getElementById('cMsg');
+    var mode = 'III', RX = 0, RY = 20, auto = true, t0 = null, D = 180 / Math.PI;
+    function arc(plane, ang, r) { var d = ''; for (var i = 0; i <= 14; i++) { var t = ang * i / 14, p = plane === 'xz' ? [r * Math.sin(t), 0, r * Math.cos(t)] : [0, r * Math.sin(t), r * Math.cos(t)]; d += (i ? 'L' : 'M') + KD.pt(P(p)); } return '<path d="' + d + '" fill="none" stroke="var(--red)" stroke-width="1.4"/>'; }
+    function draw() {
+      var a = RX / D, b = RY / D, w = mode === 'III' ? [Math.sin(b), Math.sin(a) * Math.cos(b), Math.cos(a) * Math.cos(b)] : ISO.norm([Math.tan(b), Math.tan(a), 1]);
+      var thx = Math.atan2(w[1], w[2]), thy = Math.atan2(w[0], w[2]), o = [0, 0, 0], dd = 'stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="8 3 2 3"';
+      var out = ISO.poly(P, [[-75, -75, 0], [75, -75, 0], [75, 75, 0], [-75, 75, 0]], 'fill="var(--mag-rotor)" stroke="var(--fg)" stroke-width="1" opacity=".35"') + ISO.axes(P, 82);
+      if (mode === 'III') {
+        var a2 = [0, Math.cos(a), -Math.sin(a)];
+        out += ISO.seg(P, [-100, 0, 0], [100, 0, 0], dd) + ISO.seg(P, ISO.mul(a2, -100), ISO.mul(a2, 100), dd) +
+               KD.label({ x: P([-100, 0, 0]).x - 4, y: P([-100, 0, 0]).y - 6 }, 'R', { size: 11, sub: 'X', fill: 'var(--accent)' }) +
+               KD.label({ x: P(ISO.mul(a2, -100)).x - 18, y: P(ISO.mul(a2, -100)).y - 6 }, 'R', { size: 11, sub: 'Y', fill: 'var(--accent)' });
+      }
+      var W = ISO.mul(w, 100), pxz = [W[0], 0, W[2]], pyz = [0, W[1], W[2]];
+      out += ISO.seg(P, o, pxz, 'stroke="var(--fg)" stroke-width="1" stroke-dasharray="4 3"') + ISO.seg(P, o, pyz, 'stroke="var(--fg)" stroke-width="1" stroke-dasharray="4 3"') +
+             ISO.seg(P, W, pxz, 'stroke="var(--fg-2)" stroke-width=".8" stroke-dasharray="2 3"') + ISO.seg(P, W, pyz, 'stroke="var(--fg-2)" stroke-width=".8" stroke-dasharray="2 3"');
+      out += arc('yz', thx, 40) + arc('xz', thy, 40);
+      var lx = P([0, 46 * Math.sin(thx / 2), 46 * Math.cos(thx / 2)]), ly = P([46 * Math.sin(thy / 2), 0, 46 * Math.cos(thy / 2)]);
+      out += KD.label({ x: lx.x + 4, y: lx.y }, 'θ', { size: 11, sub: 'x', fill: 'var(--red)' }) + KD.label({ x: ly.x - 16, y: ly.y }, 'θ', { size: 11, sub: 'y', fill: 'var(--red)' });
+      out += ISO.seg(P, ISO.mul(w, -45), ISO.mul(w, 120), 'stroke="var(--fg)" stroke-width="3.5" stroke-linecap="round"') + KD.disc(P(o), 3.8, 'var(--mass)');
+      g.innerHTML = out;
+      var fx = (thx * D).toFixed(1), fy = (thy * D).toFixed(1);
+      if (msg) msg.textContent = mode === 'III'
+        ? 'RX = ' + RX + '°, RY = ' + RY + '°:  θx = ' + fx + '°, θy = ' + fy + '°. ' + (Math.abs(thy * D - RY) > 0.4 ? 'θy differs from RY because the second axis is carried by the first: the two tilts are coupled.' : 'With RX at zero the second axis is in its home position and θy equals RY.')
+        : 'RX = ' + RX + '°, RY = ' + RY + '°:  θx = ' + fx + '°, θy = ' + fy + '°. Each angle follows its own actuator only.';
+    }
+    radios('cmode', function (v) { mode = v; draw(); });
+    function fromUI() { RX = +rx.value; RY = +ry.value; draw(); }
+    [rx, ry].forEach(function (i) { if (i) i.addEventListener('input', function () { if (i === rx && autoIn) { autoIn.checked = false; auto = false; } fromUI(); }); });
+    if (autoIn) autoIn.addEventListener('change', function () { auto = autoIn.checked; t0 = null; });
+    fromUI();
+    loop(function (t) {
+      if (auto && t !== undefined) {
+        if (t0 === null) t0 = t;
+        RX = Math.round(38 * Math.sin((t - t0) / 1000 * 0.7)); RY = +ry.value; if (rx) rx.value = RX; draw();
+      }
+    });
+  })();
 })();

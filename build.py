@@ -104,7 +104,7 @@ def paper_item(p, rep, root=""):
 def papers_html(theme, rep_only, root):
     sel = [p for p in PAPERS if p["theme"] == theme and bool(p.get("rep")) == rep_only]
     if rep_only:
-        sel.sort(key=lambda p: -p["year"])
+        sel.sort(key=lambda p: (not p.get("lead"), -p["year"]))   # "lead": the paper that heads its theme
     else:
         sel.sort(key=lambda p: (p.get("type") is not None, -p["year"]))
     out = '<ul class="papers">\n' + "\n".join(paper_item(p, rep_only, root) for p in sel) + "\n</ul>"
@@ -116,7 +116,7 @@ def papers_html(theme, rep_only, root):
 def anims_html(theme, root):
     """Cards linking to the animation pages of a theme (papers with an `anim` field), newest first."""
     e = html.escape
-    sel = sorted([p for p in PAPERS if p["theme"] == theme and p.get("anim")], key=lambda p: -p["year"])
+    sel = sorted([p for p in PAPERS if p["theme"] == theme and p.get("anim")], key=lambda p: (not p.get("lead"), -p["year"]))
     cards = []
     for p in sel:
         blurb = e(p.get("blurb", ""))

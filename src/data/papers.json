@@ -411,6 +411,11 @@
     {
       "key": "IJMRCAS2012",
       "theme": "medical",
+      "rep": true,
+      "lead": true,
+      "anim": "papers/ijmrcas2012.html",
+      "short": "Eight ways to pivot about the incision",
+      "blurb": "The overview’s eight types of remote-centre-of-motion mechanism, and why two tilts driven in series are coupled.",
       "title": "Kinematic design considerations for minimally invasive surgical robots: an overview",
       "authors": "Kuo, C.-H., Dai, J. S. and Dasgupta, P.",
       "venue": "International Journal of Medical Robotics and Computer Assisted Surgery",

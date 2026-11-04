@@ -1,0 +1,61 @@
+title: Eight ways to pivot about the incision
+nav: research
+description: Animations of the overview of kinematic design for minimally invasive surgical robots (Kuo, Dai and Dasgupta, International Journal of Medical Robotics and Computer Assisted Surgery 2012): the eight types of remote-centre-of-motion mechanism, and coupled and decoupled tilts.
+
+    <p class="eyebrow"><a href="../research/index.html">Research</a> · <a href="../research/medical-mechanisms.html">Medical &amp; rehabilitation devices</a> · Animation</p>
+    <h1>Eight ways to pivot about <span class="hl">the incision</span></h1>
+    <p class="lede">A surgical instrument that passes through a small incision can only tilt two ways about it, spin, and slide in and out. This overview turns that constraint into design goals for the kinematics of a surgical robot, and sorts the mechanisms that build the pivot into their own structure, remote-centre-of-motion mechanisms, into eight types.</p>
+
+    <div class="anim-layout">
+      <figure class="fig">
+        <svg id="rcm8" viewBox="0 0 340 250" role="img" aria-label="A kinematic sketch of the selected type of remote-centre-of-motion mechanism. The instrument swings while the red point, the remote centre of motion, stays fixed.">
+          <g id="r8Body"></g>
+        </svg>
+        <div class="ctl radios" id="r8Types">
+          <label><input type="radio" name="r8" value="0">Isocenter</label>
+          <label><input type="radio" name="r8" value="1">Circular tracking arc</label>
+          <label><input type="radio" name="r8" value="2" checked>Parallelogram</label>
+          <label><input type="radio" name="r8" value="3">Synchronous belt</label>
+          <label><input type="radio" name="r8" value="4">Spherical linkage</label>
+          <label><input type="radio" name="r8" value="5">Gimbal</label>
+          <label><input type="radio" name="r8" value="6">Parallel wrist</label>
+          <label><input type="radio" name="r8" value="7">Gear train</label>
+        </div>
+        <div class="ctl"><label><input type="checkbox" id="r8Auto" checked> Go through the types</label></div>
+        <p class="muted small" id="r8Msg"></p>
+        <figcaption>Kinematic sketches after the paper's Fig. 11, redrawn. The red point is the remote centre of motion; the line under each sketch gives the paper's comparison of that type (its Table 4) and some of the robots built on it (its Table 3).</figcaption>
+      </figure>
+
+      <div>
+        <h2 class="h2-tight">What you are seeing</h2>
+        <p>A remote centre of motion is a fixed point about which a link of a mechanism rotates, located away from the mechanism itself, outside the space its other links sweep. Put that point at the incision and the instrument can only pivot about it, whatever the motors do: the constraint is held by the structure, not by the controller. Each sketch keeps its red point still while the instrument swings.</p>
+        <p>Six of the types place the point away from the hardware. The isocenter and the gimbal put a joint at the point itself; they keep the pivot, but the paper's comparison marks them as lacking the extracorporeal workspace the others offer. Only the parallel wrist can, in principle, drive all three rotations independently.</p>
+      </div>
+    </div>
+
+    <h2>Coupled and decoupled tilts</h2>
+    <figure class="fig">
+      <svg id="rcmc" viewBox="0 0 340 270" role="img" aria-label="An instrument through the incision point on a translucent body wall, with its shadows on the xz- and yz-planes and their angles. Two sliders turn the two actuated axes.">
+        <g id="cBody"></g>
+      </svg>
+      <div class="ctl radios">
+        <label><input type="radio" name="cmode" value="III" checked>Two revolutes in series (Type III)</label>
+        <label><input type="radio" name="cmode" value="V">Fully decoupled (Type V)</label>
+      </div>
+      <div class="ctl"><label for="cRX">R<sub>X</sub></label><input type="range" id="cRX" min="-40" max="40" step="1" value="0"><label for="cRY">R<sub>Y</sub></label><input type="range" id="cRY" min="-40" max="40" step="1" value="20"></div>
+      <div class="ctl"><label><input type="checkbox" id="cAuto" checked> Move R<sub>X</sub> only</label></div>
+      <p class="muted small" id="cMsg"></p>
+      <figcaption>The two tilts of the instrument are read as the angles of its shadows, θ<sub>x</sub> on the yz-plane and θ<sub>y</sub> on the xz-plane. With the second axis carried by the first, as in the double-parallelogram robot of the paper's Fig. 5, θ<sub>x</sub> follows R<sub>X</sub> alone but θ<sub>y</sub> depends on both actuators. Decoupled, each angle has its own actuator.</figcaption>
+    </figure>
+
+    <h2>The idea</h2>
+    <p>The overview starts from the motion an incision allows: two rotations about the entry point, a spin about the instrument's axis and a translation along it, four degrees of freedom, with every moving part of the robot kept outside the patient. From the surgical concerns of safety, accuracy, ergonomics and dexterity it derives eight design goals, six design requirements and four design preferences for the kinematics, and ties each to a mechanism design issue: pivoting motion, decoupled motion, workspace, isotropy, backdrivability and redundancy.</p>
+    <p>Decoupling gets a classification of its own. Writing the instrument's motion as the two tilts about the entry point, the spin and the insertion, five types follow from which of these each actuator controls alone: the translation only (Type I), some rotations (II), some rotations and the translation (III), all rotations (IV), and all four (V). Type III was the most common in the robots then in use: a double parallelogram, for instance, tilts the instrument about two axes in series, so its second tilt depends on its first actuator as well, and the spin and insertion are added by two more actuators carried on the output link.</p>
+
+    <h2>In the paper</h2>
+    <p>The eight types are compared for the rotations they give without extra actuators, the decoupling they allow, their working space outside the patient, isotropy and backdrivability, and 39 robots are listed with the kind of remote centre they use. Two problems are left open: a fully decoupled 4-DOF parallel mechanism with three rotations and one translation about a remote centre, and a fully isotropic one. A fully decoupled design was published by Kuo and Dai the same year (<a href="jmed2012.html">animation</a>).</p>
+    <p class="muted small">The sketches show each type's principle in the plane or in an isometric view; they are not drawings of particular robots.</p>
+
+    {{cite:IJMRCAS2012}}
+    <script src="../assets/anim/parallel.js" defer></script>
+    <script src="../assets/anim/medical.js" defer></script>

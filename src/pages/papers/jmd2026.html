@@ -33,7 +33,7 @@ description: Animation of the reconfigurable Halbach cylinder (Biggs, Kuo and Re
             <g font-size="10"><text x="264" y="38" fill="var(--red)" font-weight="700">net</text><text x="264" y="12" fill="var(--fg-2)">gravity</text><text x="264" y="66" fill="var(--spring)">magnet</text></g>
           </g>
         </svg>
-        <div class="ctl"><label for="hbLoad">Payload <em>M</em></label><input type="range" id="hbLoad" min="0.2" max="1" step="0.05" value="0.6"><output id="hbLoadOut">0.60</output><span class="muted small">of the full capacity</span></div>
+        <div class="ctl"><label for="hbLoad">Payload <em>m</em><sub>P</sub></label><input type="range" id="hbLoad" min="0.2" max="1" step="0.05" value="0.6"><output id="hbLoadOut">0.60</output><span class="muted small">of the full capacity</span></div>
         <div class="ctl radios">
           <label><input type="radio" name="hbmode" value="set" checked> Lever set for the load</label>
           <label><input type="radio" name="hbmode" value="full"> Lever at full field</label>
@@ -50,11 +50,11 @@ description: Animation of the reconfigurable Halbach cylinder (Biggs, Kuo and Re
         <p>Each outer magnet is embedded in a spur gear, and the eight gears mesh in a ring, so neighbouring gears turn opposite ways. Turning the lever on one gear therefore turns the magnets alternately by +ϕ and −ϕ. That particular motion keeps the field's direction and uniformity and scales its strength by cos ϕ: from full at ϕ = 0 to nothing at ϕ = 90°. The lever is the payload adjustment.</p>
 
         <h2>The idea</h2>
-        <p>A balancer tuned to one load is of limited use. Spring balancers are re-tuned by moving spring ends or changing stiffness, which needs extra mechanism and usually some work against the spring. Here the whole adjustment is one lever that turns a one-degree-of-freedom gear train. The paper's design condition is simply ϕ = cos<sup>−1</sup>(<em>MgL</em>/<em>nB</em><sub>max</sub>): any payload up to the capacity <em>nB</em><sub>max</sub>/<em>gL</em> has a lever angle that balances it. A pleasant consequence, found in the tests, is that re-setting costs almost no work when the arm is held horizontal: the torque on the lever changes sign through that position, so turning it from on to off and back is nearly energy-free there.</p>
+        <p>A balancer tuned to one load is of limited use. Spring balancers are re-tuned by moving spring ends or changing stiffness, which needs extra mechanism and usually some work against the spring. Here the whole adjustment is one lever that turns a one-degree-of-freedom gear train. The paper's design condition is simply ϕ = cos<sup>−1</sup>(<em>m</em><sub>P</sub><em>gL</em>/<em>nB</em><sub>max</sub>): any payload up to the capacity <em>nB</em><sub>max</sub>/<em>gL</em> has a lever angle that balances it. A pleasant consequence, found in the tests, is that re-setting costs almost no work when the arm is held horizontal: the torque on the lever remains approximately zero near that position, so turning it from on to off and back is nearly energy-free there.</p>
 
         <h2>In the paper</h2>
         <p>Finite-element simulation of the eight-magnet cylinder with a cubic rotor magnet gave a peak torque of 1.67 N m at full field, falling smoothly to almost nothing at ϕ = 90°; the built prototype measured 1.72 N m, with the measured curve a close sinusoid. Torques on the lever were measured too, and the work of a full re-set computed for each arm angle: up to 1.36 J to be supplied with the arm up, 1.64 J released with the arm down, and close to zero with the arm horizontal. The prototype and the torque map are pictured on the <a href="../research/magnetic-mechanisms.html">Magnetic mechanisms</a> page.</p>
-        <p class="muted small">The animation uses the paper's model: torque <em>nB</em><sub>max</sub> cos ϕ sin θ against <em>MgL</em> sin θ, with a small added ripple to stand for the discreteness of a real ring. Dimensions are illustrative; the lever and gear train are drawn schematically.</p>
+        <p class="muted small">The animation uses the paper's model: torque <em>nB</em><sub>max</sub> cos ϕ sin θ against <em>m</em><sub>P</sub><em>gL</em> sin θ, with a small added ripple to stand for the discreteness of a real ring. Dimensions are illustrative; the lever and gear train are drawn schematically.</p>
       </div>
     </div>
 

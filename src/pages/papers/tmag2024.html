@@ -24,7 +24,7 @@ description: Animation of the Monte Carlo method for the force between two perma
         </svg>
         <div class="ctl"><label for="mcZ">Height of magnet J, <em>z</em><sub>B</sub></label><input type="range" id="mcZ" min="80" max="160" step="5" value="100"><output id="mcZOut">100 mm</output></div>
         <div class="ctl"><button type="button" id="mcRestart" class="btn-small">Throw again</button><span class="muted small" id="mcMsg"></span></div>
-        <figcaption>The paper's Example 1: a truncated-cone magnet I and a triangular-prism magnet J, both magnetised upwards at 900 kA/m, with J sliding along the axis. The estimate is noisy with a few hundred samples and settles within a per cent or two by a few tens of thousands, as in the paper's accuracy study. Move J closer and the attraction grows steeply.</figcaption>
+        <figcaption>The paper's Example 1: a truncated-cone magnet I and a triangular-prism magnet J, both magnetised upwards at 900 kA/m, with J sliding along the axis. The estimate is noisy with a few hundred samples and steadies as the count grows. In the paper's accuracy study, 100 000 random samples put about half of the runs within 1 % of the finite-element force, and 500 000 put 90 % of them there. Move J closer and the attraction grows steeply.</figcaption>
       </figure>
 
       <div>

@@ -10,7 +10,7 @@ Everything after the blank line is the page body.
 Tokens inside a body:
     {{papers:gravity}}      representative papers of that theme (rep: true), as a list with a "soon" tag
     {{papers-all:gravity}}  the remaining papers of that theme
-    {{anims:gravity}}       cards linking to the theme's animation pages (papers with an "anim" path)
+    {{anims:gravity}}       cards linking to the theme's animation pages (no longer used on the theme pages)
     {{cite:MMT2023}}        one-line citation of one paper, for its animation page
     {{publications}}        the full publication list, from src/data/publications.json (made by tools/import_cv.py)
 Animation pages live in src/pages/papers/<key>.html and load their script from assets/anim/.
@@ -96,7 +96,10 @@ def paper_item(p, rep, root=""):
     if p.get("mini"):
         # a small animated figure beside the entry, drawn by assets/anim/mini.js; "mini" holds its one-line caption
         aria = e(p.get("mini_alt") or p["mini"])
-        return (f'<li class="has-mini"><svg class="mini" data-mini="{e(p["key"])}" viewBox="0 0 160 110" role="img" aria-label="{aria}"></svg>'
+        fig = f'<svg class="mini" data-mini="{e(p["key"])}" viewBox="0 0 160 110" role="img" aria-label="{aria}"></svg>'
+        if p.get("anim"):   # the figure of a representative paper also opens its animation page
+            fig = f'<a class="mini-link" href="{root}{e(p["anim"])}">{fig}</a>'
+        return (f'<li class="has-mini">{fig}'
                 f'<div>{body}<br><span class="mini-cap">{p["mini"]}</span></div></li>')
     return f'<li>{body}</li>'
 

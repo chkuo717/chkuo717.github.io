@@ -13,7 +13,9 @@
       "note": "Sole author. The home-page animation is drawn from this paper.",
       "anim": "papers/mmt2025b.html",
       "short": "Balancing any four-bar linkage with two springs",
-      "blurb": "A weight on the coupler is equivalent to one on the crank and one on the rocker; two zero-free-length springs carry it exactly. With a video of a tabletop prototype."
+      "blurb": "A weight on the coupler is equivalent to one on the crank and one on the rocker; two zero-free-length springs carry it exactly. With a video of a tabletop prototype.",
+      "mini": "A mass on the coupler is equivalent, for gravity, to equal masses on the crank and the rocker (dashed), each balanced by one zero-free-length spring; the total energy stays constant through the full turn. Two springs, or a single spring over strings and pulleys, balance the general four-bar linkage completely.",
+      "mini_alt": "A four-bar linkage turning with a mass m on its coupler; dashed copies of the mass ride on the crank and the rocker, each with a spring to the ground, and an energy column of gravity and spring energy stays the same height."
     },
     {
       "key": "MMT2023",
@@ -26,7 +28,9 @@
       "doi": "10.1016/j.mechmachtheory.2023.105229",
       "anim": "papers/mmt2023.html",
       "short": "Perfect balancing with a Cardan gear",
-      "blurb": "A gear turning inside one twice its size moves a point in a straight line, so an ordinary spring balances an arm exactly."
+      "blurb": "A gear turning inside one twice its size moves a point in a straight line, so an ordinary spring balances an arm exactly.",
+      "mini": "In an inverted Cardan gear, the point A of the inner gear slides along a diameter PQ of the ring gear, which turns by half the arm's angle. A plain compression spring laid along PQ then stores exactly the energy the arm's weight gives up; the spring on the other side stays at its free length.",
+      "mini_alt": "An arm on a small gear inside a ring gear twice its size; as the arm swings, a point on the small gear slides along a diameter of the ring and compresses a spring on one side."
     },
     {
       "key": "MMT2020",
@@ -39,7 +43,9 @@
       "doi": "10.1016/j.mechmachtheory.2020.104046",
       "anim": "papers/mmt2020.html",
       "short": "The gear-spring module",
-      "blurb": "Gear pair, rod and spring packed along a robot arm; three of them take most of the weight off a Delta robot’s motors."
+      "blurb": "Gear pair, rod and spring packed along a robot arm; three of them take most of the weight off a Delta robot’s motors.",
+      "mini": "A gear pair, a crank and a slider on each upper arm of a Delta robot drive a compression spring that offsets most of the arm's gravity torque. The module rides on the arm, so it leaves the robot's workspace unchanged.",
+      "mini_alt": "One upper arm of a Delta robot swinging; a gear rolling on a fixed gear at the base drives a rod and slider that compress a spring along the arm."
     },
     {
       "key": "JMR2017a",
@@ -52,7 +58,9 @@
       "doi": "10.1115/1.4035561",
       "anim": "papers/jmr2017a.html",
       "short": "A balancer that re-sets itself to the load",
-      "blurb": "Change the payload and the mechanism moves its own spring attachments until it is balanced again, unpowered."
+      "blurb": "Change the payload and the mechanism moves its own spring attachments until it is balanced again, unpowered.",
+      "mini": "When the payload is changed with the arm upright, a weighing mechanism on the platform moves both spring attachment points A and B by the same amount through two cables. The arm is then balanced again for the new payload, with no manual or powered adjustment.",
+      "mini_alt": "A parallelogram arm with a spring between a slider on a vertical rail and a slider on the arm; a heavier payload is placed when the arm is upright, both sliders move out, and the arm is balanced again."
     },
     {
       "key": "MMT2024",
@@ -146,7 +154,9 @@
       "doi": "10.1115/1.4069596",
       "anim": "papers/jmd2026.html",
       "short": "A Halbach cylinder that re-sets to the load",
-      "blurb": "Eight gear-mounted magnets balance a rotating payload; one lever turns them alternately and weakens the field to suit a lighter load. With a video of the prototype on test."
+      "blurb": "Eight gear-mounted magnets balance a rotating payload; one lever turns them alternately and weakens the field to suit a lighter load. With a video of the prototype on test.",
+      "mini": "A rotor magnet on the arm is balanced at every angle by the uniform field of an eight-magnet Halbach cylinder. One lever turns the geared array magnets, alternately by +ϕ and −ϕ, which scales the field by cos ϕ to suit a different payload.",
+      "mini_alt": "Eight square magnets on a ring, each in a gear, around a rotor magnet on an arm with a payload; the arm swings balanced, then a lever turns the ring magnets, the field weakens and a lighter payload is balanced."
     },
     {
       "key": "TMech2026",
@@ -159,7 +169,9 @@
       "doi": "10.1109/TMECH.2025.3629126",
       "anim": "papers/tmech2026.html",
       "short": "Floating a load on two magnets",
-      "blurb": "A 5 mm cube carrying 200 times its weight floats in a V-shaped trench cut into a larger magnet, through three times its own height."
+      "blurb": "A 5 mm cube carrying 200 times its weight floats in a V-shaped trench cut into a larger magnet, through three times its own height.",
+      "mini": "A small cube magnet floats in a V-shaped trench cut into a larger magnet. The trench profile, found by optimisation, keeps the lift close to the load over three times the mover's side.",
+      "mini_alt": "A cube magnet on a rod moving up and down inside a V-shaped trench in a larger magnet, with an upward lift arrow and a downward load arrow of nearly equal length."
     },
     {
       "key": "MMT2025a",
@@ -172,7 +184,9 @@
       "doi": "10.1016/j.mechmachtheory.2025.105990",
       "anim": "papers/mmt2025a.html",
       "short": "A magnet array for a long vertical stroke",
-      "blurb": "Four optimised columns of stator magnets lift a slider 20 times its magnet’s weight over 60 mm; the force curve is computed live."
+      "blurb": "Four optimised columns of stator magnets lift a slider 20 times its magnet’s weight over 60 mm; the force curve is computed live.",
+      "mini": "Columns of tilted cube magnets lift a cubic mover with a nearly constant force over a stroke six times its height; the force curve beside the stroke stays close to the load. The positions and tilts were found by optimisation rather than by trial and error.",
+      "mini_alt": "A cube magnet sliding along a vertical rod between two columns of tilted cube magnets, beside a curve of lift force against height that ripples around the load line."
     },
     {
       "key": "TMAG2024",
@@ -185,7 +199,9 @@
       "doi": "10.1109/TMAG.2024.3466273",
       "anim": "papers/tmag2024.html",
       "short": "The force between any two magnets, by random sampling",
-      "blurb": "Monte Carlo integration of the magnet-force integral: random points rain into two magnets of odd shapes and the estimate converges."
+      "blurb": "Monte Carlo integration of the magnet-force integral: random points rain into two magnets of odd shapes and the estimate converges.",
+      "mini": "Random points are thrown into boxes around two magnets of any shape; the pairs that fall inside both magnets add their dipole force, and the average converges to the force between the magnets.",
+      "mini_alt": "A truncated cone magnet and a triangular prism magnet in dashed boxes; random pairs of points appear, the pairs inside both magnets are joined in red, and a force estimate settles as the count grows."
     },
     {
       "key": "ALTR2026",
@@ -208,7 +224,9 @@
       "doi": "10.1115/1.4050151",
       "anim": "papers/jmr2021a.html",
       "short": "One motor, one angle: projective motion",
-      "blurb": "Describe an axis by the angles of its two shadows and each motor of a parallel manipulator can set one of them alone."
+      "blurb": "Describe an axis by the angles of its two shadows and each motor of a parallel manipulator can set one of them alone.",
+      "mini": "The base joint a of a six-degree-of-freedom leg alone sets the projective angle <sup>w</sup>θ<sub>xz</sub> of the axis w. With a locked, the leg's other joints move w out of the plane but leave its projection on the xz-plane unchanged. Legs built this way give parallel manipulators with fully decoupled projective motion.",
+      "mini_alt": "An axis w from the origin lying in a plane that turns about the y-axis with joint a; its projection on the xz-plane and the angle to z follow a, then stay fixed while w swings out of the plane."
     },
     {
       "key": "ROB2014",
@@ -221,7 +239,9 @@
       "doi": "10.1017/S0263574713001100",
       "anim": "papers/rob2014.html",
       "short": "A wrist whose three motors do not interfere",
-      "blurb": "Three planes hinged on the base axes each hold one point of a platform on a ball joint; one motor turns one plane."
+      "blurb": "Three planes hinged on the base axes each hold one point of a platform on a ball joint; one motor turns one plane.",
+      "mini": "Turning the base joint on the x-axis by α<sub>x</sub> changes the projective angle <sup>v</sup>θ<sub>yz</sub> of the platform by the same amount and leaves the other two unchanged; likewise for y and z. A single spherical joint carries the constraint, so the wrist matches the Agile Eye kinematically without being overconstrained.",
+      "mini_alt": "A triangular platform on a spherical joint at the origin with three legs, one on each axis; each base joint is driven in turn and only its own angle readout moves."
     },
     {
       "key": "MMT2013",
@@ -234,7 +254,9 @@
       "doi": "10.1016/j.mechmachtheory.2013.08.010",
       "anim": "papers/mmt2013.html",
       "short": "One leg decides the motion, the others drive it",
-      "blurb": "A serial constraint leg fixes what the platform can do; constraint-free legs carry the motors. Remove the leg and see why."
+      "blurb": "A serial constraint leg fixes what the platform can do; constraint-free legs carry the motors. Remove the leg and see why.",
+      "mini": "A single serial leg fixes the motion of the platform; legs of connectivity six, which add no constraint, are then added to carry the actuators. Built this way, every manipulator is non-overconstrained.",
+      "mini_alt": "A platform floating freely above a base, then held by a central leg so it can only tilt, then driven by two outer legs with actuated sliding joints."
     },
     {
       "key": "BC03",
@@ -258,7 +280,9 @@
       "doi": "10.1016/j.mechmachtheory.2015.08.006",
       "anim": "papers/mmt2017.html",
       "short": "A cube of eight cubes that folds into other shapes",
-      "blurb": "Eight hinged sub-cubes fold from cube to slab to cube: an 8R loop whose mobility appears when two hinges line up."
+      "blurb": "Eight hinged sub-cubes fold from cube to slab to cube: an 8R loop whose mobility appears when two hinges line up.",
+      "mini": "The cube of eight hinged sub-cubes is a single-loop 8R linkage whose mobility changes as its hinges line up. Turned about hinges a, g and then c, e, the cube A becomes the slab C; comparing joint orientations and joint distances shows that A and C are configurationally isomorphic.",
+      "mini_alt": "A cube of eight sub-cubes, one shaded, unfolding in two steps about red hinge lines into a flat slab of four by two, labelled A, B and C."
     },
     {
       "key": "JMR2014",
@@ -271,7 +295,9 @@
       "doi": "10.1115/1.4026336",
       "anim": "papers/jmr2014.html",
       "short": "One mechanism, three topologies",
-      "blurb": "The steel clamping and sawing mechanism closes a clamp, stiffens, then saws; its topology graph changes live."
+      "blurb": "The steel clamping and sawing mechanism closes a clamp, stiffens, then saws; its topology graph changes live.",
+      "mini": "Pulling the slider first closes the clamp, then locks the mechanism into a structure against the steel, then lifts the saw arm: three topologies, 1(2), 1(2,7) and 1(7), all read from one constraint matrix.",
+      "mini_alt": "The steel clamping and sawing mechanism: a pulled slider closes the clamp on the steel bar, holds still, then lifts the saw arm, with the topology named at the top."
     },
     {
       "key": "JMD2007",
@@ -284,7 +310,9 @@
       "doi": "10.1115/1.2717230",
       "anim": "papers/jmd2007.html",
       "short": "Counting freedoms when the topology keeps changing",
-      "blurb": "A push-button lock through four stages, with the mobility that screw theory gets right and the planar formula gets wrong."
+      "blurb": "A push-button lock through four stages, with the mobility that screw theory gets right and the planar formula gets wrong.",
+      "mini": "In the push-button stopper lock the frame, slider, button and stopper change their joints from stage to stage: locking, unlockable, unlocking and password changeable. Counted with screw systems the mobility is 1, 2, 1, 2, where the Grübler criterion does not give it.",
+      "mini_alt": "A section of the push-button lock: a hatched stopper at the crossing of a slider and a button inside a frame; the button is pressed, the slider moves with the stopper, the button moves to a new position, and the mobility is shown for each stage."
     },
     {
       "key": "MS2017",
@@ -349,7 +377,9 @@
       "note": "<a href=\"https://patents.google.com/patent/US9592415B2/en\">US Patent 9,592,415 B2, Auxiliary Device for Muscle Strength Training</a>.",
       "anim": "papers/jmr2017b.html",
       "short": "A leg support that balances hip or knee",
-      "blurb": "Seven links, two springs, two modes: lock one joint, swing the other, and the leg’s weight is carried at every angle."
+      "blurb": "Seven links, two springs, two modes: lock one joint, swing the other, and the leg’s weight is carried at every angle.",
+      "mini": "One linkage, two configurations: with the thigh held, the knee moves and spring k<sub>2</sub> balances the leg; with the calf translating, the hip moves and k<sub>1</sub> balances it. In each configuration the other spring keeps its length.",
+      "mini_alt": "A seven-link leg-support linkage beside a wall: first the calf swings about the knee A while one spring stretches, then the thigh turns about the hip B while the other spring stretches."
     },
     {
       "key": "JMR2016",
@@ -363,7 +393,9 @@
       "note": "<a href=\"https://patents.google.com/patent/US9232981B2/en\">US Patent 9,232,981 B2, Surgical Holder</a>.",
       "anim": "papers/jmr2016.html",
       "short": "A laparoscope holder that places, then aims",
-      "blurb": "A double parallelogram carries the pivot point to the incision; a parallel wrist aims the scope about it; springs balance both."
+      "blurb": "A double parallelogram carries the pivot point to the incision; a parallel wrist aims the scope about it; springs balance both.",
+      "mini": "A double parallelogram arm carries the remote centre of motion (red) while its end link stays upright; with the centre at the incision, the wrist turns and inserts the laparoscope about it. Springs k<sub>1</sub> and k<sub>2</sub> balance the two parallelogram loops.",
+      "mini_alt": "A double parallelogram arm on a wall moving a red remote-centre point, then holding it on a curved skin line while a laparoscope pivots about it and slides in and out."
     },
     {
       "key": "JMED2012",
@@ -376,7 +408,9 @@
       "doi": "10.1115/1.4006541",
       "anim": "papers/jmed2012.html",
       "short": "Four motions about one point, one motor each",
-      "blurb": "Two tilts, spin and insertion of a surgical tool about the incision, each on its own actuator."
+      "blurb": "Two tilts, spin and insertion of a surgical tool about the incision, each on its own actuator.",
+      "mini": "Each leg's base angle equals the tool's projected tilt about the incision point O, so the two tilts, the spin and the insertion are each driven by their own actuator.",
+      "mini_alt": "Side view: a base crank and a surgical tool through the incision point O turning by the same angle, then the tool spinning, then sliding in and out."
     },
     {
       "key": "BIR2025",
@@ -456,7 +490,9 @@
       "url": "https://www.geogebra.org/m/zyjgc9w5",
       "anim": "papers/bk04.html",
       "short": "Where a moving body turns about",
-      "blurb": "Set a second position of a body and watch the two bisectors find the relative pole; the body swings about it."
+      "blurb": "Set a second position of a body and watch the two bisectors find the relative pole; the body swings about it.",
+      "mini": "Two positions of a body: the perpendicular bisectors of A<sub>1</sub>A<sub>2</sub> and B<sub>1</sub>B<sub>2</sub> meet at the relative pole P<sub>12</sub>, and the body turns about it. Fixed pivots taken anywhere on the same bisectors give a four-bar linkage that makes the same move.",
+      "mini_alt": "Two positions of a body with the perpendicular bisectors of A1A2 and B1B2 meeting at the pole P12; the body turns about the pole, then a four-bar linkage with fixed pivots on the bisectors carries it between the same two positions."
     },
     {
       "key": "JMD2008",
@@ -469,7 +505,9 @@
       "doi": "10.1115/1.2936931",
       "anim": "papers/jmd2008.html",
       "short": "Which links are the same link?",
-      "blurb": "Watt and Stephenson chains with their equivalent links and joints highlighted class by class; fix a link and watch the classes split."
+      "blurb": "Watt and Stephenson chains with their equivalent links and joints highlighted class by class; fix a link and watch the classes split.",
+      "mini": "The graph of Watt's chain, links as vertices and joints as edges. Links and joints with the same adjacency are sorted into classes by computation, shown by colour; fixing link 1 splits the classes.",
+      "mini_alt": "The hexagonal graph of Watt's chain with a chord, its vertices and edges coloured by class; when vertex 1 is marked as fixed, the colours split into more classes."
     },
     {
       "key": "BK01",

@@ -213,6 +213,41 @@
         KD.wall(P(80, 74), P(146, 74), 1) + KD.ground(O, { w: 12 }) + '<circle cx="' + O.x + '" cy="' + O.y + '" r="' + r + '" fill="none" stroke="var(--fg)" stroke-width="1" stroke-dasharray="2 2"/>' +
         KD.link(O, A, 2.6) + KD.link(A, B, 2.4) + KD.slider(B, 18, 7, 0) + KD.joint(O, 3) + KD.joint(A, 2.6) + KD.joint(B, 2.6) + txt(P(154, 14), 'a teaching model', 8, 'var(--fg)', 'end');
     },
+    // Kuo, Linkage Synthesis and Force Analysis by Using Relative Poles (GeoGebra e-book, 2024): the pole P12 of two
+    // positions of a body, where the perpendicular bisectors of A1A2 and B1B2 meet; then its first use, two-position
+    // synthesis: fixed pivots A0 and B0 taken anywhere on the bisectors give a four-bar that carries the body from 1 to 2.
+    BK04: function (s) {
+      var Pp = P(108, 82), A1 = P(36, 76), B1 = P(74, 58), al = 80 * Math.PI / 180;
+      function rot(p, a) { var c = Math.cos(a), n = Math.sin(a), x = p.x - Pp.x, y = p.y - Pp.y; return P(Pp.x + x * c - y * n, Pp.y + x * n + y * c); }
+      function on(p, q, t) { return P(Pp.x + t * ((p.x + q.x) / 2 - Pp.x), Pp.y + t * ((p.y + q.y) / 2 - Pp.y)); }   // a point on the bisector of pq
+      function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+      var A2 = rot(A1, al), B2 = rot(B1, al), A0 = on(A1, A2, 1.6), B0 = on(B1, B2, 0.6), T = s % 13, A, B, out = '';
+      function bis(p, q, full) {                       // chord, arc about P12, dashed bisector, right-angle mark
+        var m = P((p.x + q.x) / 2, (p.y + q.y) / 2), u = KD.unit(p, q), v = KD.unit(m, Pp), r = dist(Pp, p), k = 3.2;
+        var far = P(Pp.x - v.x * (r + 5), Pp.y - v.y * (r + 5));
+        return KD.dashed(p, q) + KD.dashed(far, Pp) +
+          (full ? '<path d="M' + KD.pt(p) + ' A' + f(r) + ',' + f(r) + ' 0 0 1 ' + KD.pt(q) + '" fill="none" stroke="var(--fg-2)" stroke-width="1" stroke-dasharray="1.5 2.5"/>' : '') +
+          '<polyline points="' + KD.pt(P(m.x + u.x * k, m.y + u.y * k)) + ' ' + KD.pt(P(m.x + (u.x + v.x) * k, m.y + (u.y + v.y) * k)) + ' ' + KD.pt(P(m.x + v.x * k, m.y + v.y * k)) + '" fill="none" stroke="var(--fg)" stroke-width=".8"/>';
+      }
+      if (T < 6) {                                   // the pole: the body turns about P12 from position 1 to 2 and back
+        var a = al * smooth((T < 3 ? T - 0.5 : 5.5 - T) / 2);
+        A = rot(A1, a); B = rot(B1, a);
+        out += bis(A1, A2, true) + bis(B1, B2, true);
+      } else {                                       // two-position synthesis: a four-bar A0 A B B0 does the same move
+        var lA = dist(A0, A1), lB = dist(B0, B1), lAB = dist(A1, B1), a1 = Math.atan2(A1.y - A0.y, A1.x - A0.x), a2 = Math.atan2(A2.y - A0.y, A2.x - A0.x);
+        var da = a2 - a1; while (da > 0) da -= 2 * Math.PI;      // the crank turns back, the way that keeps the branch
+        var ca = a1 + da * smooth((T < 9.5 ? T - 6.5 : 12.5 - T) / 2.5);
+        A = P(A0.x + lA * Math.cos(ca), A0.y + lA * Math.sin(ca));
+        var d = dist(A, B0), x = (d * d + lAB * lAB - lB * lB) / (2 * d), h = Math.sqrt(Math.max(0, lAB * lAB - x * x)), e = KD.unit(A, B0);
+        B = P(A.x + e.x * x + e.y * h, A.y + e.y * x - e.x * h);          // the branch through B1 and B2
+        out += bis(A1, A2, false) + bis(B1, B2, false) + KD.link(A0, A, 1.6) + KD.link(B0, B, 1.6) + KD.ground(A0, { w: 9, up: true }) + KD.ground(B0, { w: 9 }) +
+          KD.joint(A0, 2.4) + KD.joint(B0, 2.4) + KD.label(P(A0.x + 7, A0.y + 4), 'A', { size: 9, sub: '0' }) + KD.label(P(B0.x + 7, B0.y - 1), 'B', { size: 9, sub: '0' });
+      }
+      out += '<g opacity=".4">' + KD.link(A1, B1) + KD.link(A2, B2) + KD.joint(A1, 2.6) + KD.joint(B1, 2.6) + KD.joint(A2, 2.6) + KD.joint(B2, 2.6) + '</g>' +
+        KD.link(A, B) + KD.joint(A, 3) + KD.joint(B, 3) + KD.label(P(A1.x - 12, A1.y + 12), 'A', { size: 9, sub: '1' }) + KD.label(P(A2.x - 14, A2.y + 2), 'A', { size: 9, sub: '2' }) +
+        KD.disc(Pp, 3, 'var(--mass)') + KD.label(P(Pp.x + 6, Pp.y + 4), 'P', { size: 10, sub: '12' });
+      return out + txt(P(154, 106), T < 6 ? 'the relative pole' : 'two-position synthesis', 8, 'var(--fg)', 'end');
+    },
 
     // ---- more gravity balancing ------------------------------------------------------------
     // Kuo, Nguyen, Robertson, Chou and Herder, JMR 2021: one spring balances both modes of a
@@ -544,8 +579,479 @@
       out += KD.label(P(C.x + 7, C.y - R - 14), 'q', { size: 8 }) + txt(P(C.x + 12, C.y - R - 12), 'l', 5.5, 'var(--fg)');
       return out + txt(P(6, 12), u < 0.35 ? 'rollers near the fixed end: stiff' : u > 0.65 ? 'rollers near the free end: soft' : 'rollers moving', 8, 'var(--fg)') +
         txt(P(6, 106), 'same twist qₗ, torque τₗ ∝ 1/xᵣ³', 7, 'var(--fg-2)');
+    },
+
+    // ==== representative work: one figure per paper, from the paper's own construction =============
+    // ---- gravity balancing ------------------------------------------------------------------
+    // Kuo, MMT 2025: by the Walker-Oldham construction (Eq. 5, Fig. 2), the coupler mass m at P is, for gravity, the
+    // same as m at A, carried rigidly by the crank, plus m at B, carried by the rocker, plus a fixed m on the ground.
+    // Each moving copy gets one zero-free-length spring (kA, kB), and the total energy stays constant.
+    MMT2025b: function (s) {
+      var r1 = 200, r2 = 70, r3 = 190, r4 = 150, r5 = 150, al = 35 * Math.PI / 180, q = r5 / r3;
+      var cA = [1 - q * Math.cos(al), -q * Math.sin(al)], cB = [q * Math.cos(al), q * Math.sin(al)];
+      var rA = Math.hypot(cA[0], cA[1]) * r2, dA = Math.atan2(cA[1], cA[0]), rB = Math.hypot(cB[0], cB[1]) * r4, dB = Math.atan2(cB[1], cB[0]);
+      var hA = 55, lA = 60, hB = 60, lB = 70, kA = rA / (hA * lA), kB = rB / (hB * lB);
+      var HA = [hA * Math.cos(Math.PI / 2 - dA), hA * Math.sin(Math.PI / 2 - dA)], HB = [r1 + hB * Math.cos(Math.PI / 2 - dB), hB * Math.sin(Math.PI / 2 - dB)];
+      function solve(t2) {                       // y-up frame, O at the origin, Q at (r1, 0); the branch with N above
+        var M = [r2 * Math.cos(t2), r2 * Math.sin(t2)], dx = r1 - M[0], dy = -M[1], d = Math.hypot(dx, dy);
+        var a = (r3 * r3 - r4 * r4 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, r3 * r3 - a * a));
+        var N = [M[0] + a * dx / d - h * dy / d, M[1] + a * dy / d + h * dx / d], t3 = Math.atan2(N[1] - M[1], N[0] - M[0]), t4 = Math.atan2(N[1], N[0] - r1);
+        var Pc = [M[0] + r5 * Math.cos(t3 + al), M[1] + r5 * Math.sin(t3 + al)];
+        var LA = [lA * Math.cos(t2), lA * Math.sin(t2)], LB = [r1 + lB * Math.cos(t4), lB * Math.sin(t4)];
+        var Ug = Pc[1], Us = 0.5 * kA * (Math.pow(HA[0] - LA[0], 2) + Math.pow(HA[1] - LA[1], 2)) + 0.5 * kB * (Math.pow(HB[0] - LB[0], 2) + Math.pow(HB[1] - LB[1], 2));
+        return { M: M, N: N, P: Pc, A: [rA * Math.cos(t2 + dA), rA * Math.sin(t2 + dA)], B: [r1 + rB * Math.cos(t4 + dB), rB * Math.sin(t4 + dB)], LA: LA, LB: LB, Ug: Ug, Us: Us };
+      }
+      var SC = 0.31, X0 = 30, Y0 = 82;
+      function S(p) { return P(X0 + SC * p[0], Y0 - SC * p[1]); }
+      var c = solve(-s * 0.7), O = S([0, 0]), Q = S([r1, 0]), M = S(c.M), N = S(c.N), Pm = S(c.P), A = S(c.A), B = S(c.B);
+      var out = KD.spring(S(HA), S(c.LA), 7, 2.6) + KD.spring(S(HB), S(c.LB), 7, 2.6) +
+        KD.ground(S(HA), { w: 8, plain: true }) + KD.pin(S(HA), 1.8) + KD.ground(S(HB), { w: 8, plain: true }) + KD.pin(S(HB), 1.8);
+      out += '<polygon points="' + KD.pt(M) + ' ' + KD.pt(N) + ' ' + KD.pt(Pm) + '" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="1.4" stroke-linejoin="round"/>' +
+        KD.link(O, M, 2.4) + KD.link(Q, N, 2.4) + KD.ground(O, { w: 10 }) + KD.ground(Q, { w: 10 }) + KD.joint(O, 2.6) + KD.joint(Q, 2.6) + KD.joint(M, 2.4) + KD.joint(N, 2.4) + KD.pin(S(c.LA), 1.8) + KD.pin(S(c.LB), 1.8);
+      out += '<path d="M' + KD.pt(A) + 'L' + KD.pt(Pm) + 'L' + KD.pt(B) + '" fill="none" stroke="var(--mass)" stroke-width=".8" stroke-dasharray="2 2"/>';   // m and its two moving copies, as in Fig. 2
+      out += '<circle cx="' + f(A.x) + '" cy="' + f(A.y) + '" r="3.6" fill="none" stroke="var(--mass)" stroke-width="1.1" stroke-dasharray="1.6 1.4"/>' +
+        '<circle cx="' + f(B.x) + '" cy="' + f(B.y) + '" r="3.6" fill="none" stroke="var(--mass)" stroke-width="1.1" stroke-dasharray="1.6 1.4"/>' + KD.disc(Pm, 4.2, 'var(--mass)');
+      out += KD.label(P(Pm.x + 6, Pm.y - 3), 'm', { size: 9 }) + txt(P(A.x - 5, A.y - 5), 'A', 7, 'var(--fg-2)', 'end') + txt(P(B.x + 5, B.y - 5), 'B', 7, 'var(--fg-2)');
+      // energy: gravity (red) + springs (blue) = a constant column
+      var lo = 1e9, hi = -1e9;
+      for (var i = 0; i < 24; i++) { var e = solve(i * Math.PI / 12); lo = Math.min(lo, e.Ug); hi = Math.max(hi, e.Ug); }
+      var tot = c.Ug + c.Us, hg = 34 * (c.Ug - lo) / (hi - lo) + 4, hs = 42 - hg;
+      out += bar(143, 96, hg, 8, 'var(--mass)') + bar(143, 96 - hg, hs, 8, 'var(--spring)') + '<line x1="140" y1="54" x2="154" y2="54" stroke="var(--fg)" stroke-width="1"/>' +
+        txt(P(147, 104), 'energy', 6.5, 'var(--fg-2)', 'middle');
+      return out;
+    },
+    // Kuo and Wu, MMT 2023: the inverted Cardan gear of Fig. 4. Gear 1 (radius r, pivot OB) carries the arm; the ring gear
+    // 2 (radius 2r, pivot OA, r below OB) turns by th/2, and the point A of gear 1 that starts at OA slides along the
+    // ring's diameter PQ by 2r sin(th/2). A plain compression spring along PQ, free at th = 0, then stores k r^2 (1 - cos th),
+    // the energy the arm gives up when k = mp g L / r^2. The spring on the other side stays at its free length.
+    MMT2023: function (s) {
+      var r = 16, L = 33, OB = P(54, 55), OA = P(54, 71), th = 1.75 * Math.sin(s * 0.55), h = th / 2;
+      var A = P(OB.x + r * Math.sin(th), OB.y + r * Math.cos(th)), m = P(OB.x - L * Math.sin(th), OB.y - L * Math.cos(th));
+      var u = P(Math.cos(h), Math.sin(h)), Pe = P(OA.x - 2 * r * u.x, OA.y - 2 * r * u.y), Qe = P(OA.x + 2 * r * u.x, OA.y + 2 * r * u.y);
+      var sd = 2 * r * Math.sin(h);                                    // A's travel from OA along PQ (towards Q when > 0)
+      var out = '<circle cx="' + f(OA.x) + '" cy="' + f(OA.y) + '" r="' + f(2 * r + 2.2) + '" fill="none" stroke="var(--fg)" stroke-width="1.2"/>' +
+        '<circle cx="' + f(OA.x) + '" cy="' + f(OA.y) + '" r="' + f(2 * r) + '" fill="none" stroke="var(--fg)" stroke-width=".7" stroke-dasharray="1.2 1.6"/>';
+      out += '<circle cx="' + f(OB.x) + '" cy="' + f(OB.y) + '" r="' + r + '" fill="var(--link-fill)" fill-opacity=".45" stroke="var(--fg)" stroke-width=".9"/>' + KD.thin(Pe, Qe);
+      var nearQ = sd >= 0, endS = nearQ ? Qe : Pe, endF = nearQ ? Pe : Qe;
+      out += KD.spring(endS, A, 7, 3.2) + KD.spring(endF, OA, 7, 3.2);    // the loaded spring and the idle one at free length
+      out += '<line x1="' + f(OB.x) + '" y1="' + f(OB.y) + '" x2="' + f(OA.x) + '" y2="' + f(OA.y) + '" stroke="var(--ground)" stroke-width="4" stroke-linecap="round"/>' +   // link 0, fixed
+        KD.link(OB, m, 2.4) + KD.link(OB, A, 1.6) +
+        KD.joint(OB, 2.4) + KD.joint(OA, 2.2) + KD.disc(A, 2.6, 'var(--red)') + KD.disc(m, 5, 'var(--mass)');
+      out += txt(P(Pe.x - 3, Pe.y + 3), 'P', 7.5, 'var(--fg-2)', 'end') + txt(P(Qe.x + 3, Qe.y + 3), 'Q', 7.5, 'var(--fg-2)') +
+        KD.label(P(m.x + (th < 0 ? 7 : -17), m.y - 2), 'm', { size: 9, sub: 'p' }) + KD.label(P(A.x + u.y * 9 - 3, A.y - u.x * 9 + 3), 'A', { size: 8 });
+      return out + txt(P(154, 100), 'A slides along PQ,', 7.5, 'var(--fg)', 'end') + txt(P(154, 108), 'which turns by θ/2', 7.5, 'var(--fg-2)', 'end');
+    },
+    // Nguyen, Lin and Kuo, MMT 2020: the gear-spring module of Fig. 3 on one upper arm of a Delta robot. Gear 1 is fixed
+    // to the base at D; gear 2 (twice its size) rolls on it as the arm turns, so its crank pin A turns at half the arm's
+    // rate relative to the arm. Through the rod AB it drives the slider B along the arm against a compression spring k,
+    // which is free with the arm upright. One module sits on each of the three arms; nothing is added to the workspace.
+    MMT2020: function (s) {
+      var D = P(80, 88), r1 = 6, r2 = 12, ra = 9, r3 = 22, seat = 58, Lm = 68, ph = 1.05 * Math.sin(s * 0.6);
+      var e = P(Math.sin(ph), -Math.cos(ph)), n = P(-e.y, e.x);            // along the arm, and across it
+      function W(x, y) { return P(D.x + e.x * x + n.x * y, D.y + e.y * x + n.y * y); }
+      var Hx = r1 + r2, g = Math.PI + ph / 2;                              // pin angle relative to the arm (rolling, ratio 2)
+      var ax = Hx + ra * Math.cos(g), ay = ra * Math.sin(g), bx = ax + Math.sqrt(r3 * r3 - ay * ay);
+      var H = W(Hx, 0), A = W(ax, ay), B = W(bx, 0), S0 = W(seat, 0), Tp = W(Lm, 0);
+      var out = '<circle cx="' + f(D.x) + '" cy="' + f(D.y) + '" r="' + r1 + '" fill="var(--ground)" fill-opacity=".5" stroke="var(--fg)" stroke-width="1"/>' +
+        KD.ground(D, { w: 12 }) + KD.link(D, Tp, 4.2) + '<line x1="' + f(D.x) + '" y1="' + f(D.y) + '" x2="' + f(Tp.x) + '" y2="' + f(Tp.y) + '" stroke="var(--card)" stroke-width="2"/>';
+      out += '<circle cx="' + f(H.x) + '" cy="' + f(H.y) + '" r="' + r2 + '" fill="var(--link-fill)" fill-opacity=".7" stroke="var(--fg)" stroke-width="1"/>';
+      out += KD.spring(B, S0, 7, 4) + KD.link(W(seat, -4.5), W(seat, 4.5), 2) + KD.link(H, A, 1.4) + KD.link(A, B, 1.8) +
+        '<rect x="-3.5" y="-3" width="7" height="6" fill="var(--card)" stroke="var(--fg)" stroke-width="1.1" transform="translate(' + f(B.x) + ',' + f(B.y) + ') rotate(' + f(ph * 180 / Math.PI - 90) + ')"/>' +
+        KD.joint(D, 2.4) + KD.joint(H, 1.8) + KD.joint(A, 1.8) + KD.disc(Tp, 5, 'var(--mass)');
+      out += KD.label(P(D.x + 10, D.y + 1), 'D', { size: 8 }) +
+        KD.label(P(W(seat - 6, 9).x - 3, W(seat - 6, 9).y + 3), 'k', { size: 9 });
+      return out + txt(P(6, 107), 'one arm of a Delta robot', 7, 'var(--fg)') + txt(P(154, 107), 'gears 1 : 2', 7, 'var(--fg-2)', 'end');
+    },
+    // Chu and Kuo, JMR 2017: the self-regulated balancer of Fig. 3. A parallelogram arm keeps the payload platform level;
+    // a zero-free-length spring k joins slider A on the vertical rail above O and slider B on link 2, and balances when
+    // k sA sB = g L (masses). With the arm upright A and B coincide, so the weighing mechanism on the platform can move both
+    // by the same amount, through two cables, at no cost in energy: a heavier payload is re-balanced without adjustment.
+    JMR2017a: function (s) {
+      var T = s % 16, O = P(34, 96), O2 = P(60, 96), Lk = 52, sa, mp, th;
+      if (T < 6) { th = 0.85 * Math.sin(T / 6 * 2 * Math.PI); sa = 22; mp = 0; }
+      else if (T < 8) { th = 0; var u = smooth((T - 6.6) / 1); sa = 22 + 12 * u; mp = smooth((T - 6) / 0.6); }
+      else if (T < 14) { th = 0.85 * Math.sin((T - 8) / 6 * 2 * Math.PI); sa = 34; mp = 1; }
+      else { th = 0; var w = smooth((T - 14.2) / 1.2); sa = 34 - 12 * w; mp = 1 - smooth((T - 14) / 0.5); }
+      var e = P(Math.sin(th), -Math.cos(th)), T1 = P(O.x + e.x * Lk, O.y + e.y * Lk), T2 = P(O2.x + e.x * Lk, O2.y + e.y * Lk);
+      var A = P(O.x, O.y - sa), B = P(O.x + e.x * sa, O.y + e.y * sa);
+      var out = KD.wall(P(O.x, 12), P(O.x, O.y - 6), -1) + KD.link(O, T1, 2.4) + KD.link(O2, T2, 2.4) +
+        KD.link(T1, P(T2.x + 26, T2.y), 2.6) + KD.ground(O, { w: 11 }) + KD.ground(O2, { w: 11 });
+      out += '<rect x="' + f(T2.x - 2) + '" y="' + f(T2.y - 9) + '" width="22" height="7" fill="var(--card)" stroke="var(--fg)" stroke-width=".9"/>';
+      var bw = 8 + 6 * mp, bh = 5 + 6 * mp;                             // the payload block: light, then heavy
+      out += '<rect x="' + f(T2.x + 9 - bw / 2) + '" y="' + f(T2.y - 9 - bh) + '" width="' + f(bw) + '" height="' + f(bh) + '" fill="var(--mass)" stroke="var(--fg)" stroke-width=".9"/>';
+      out += KD.spring(A, B, 6, 4) + '<rect x="' + f(A.x - 3) + '" y="' + f(A.y - 2.5) + '" width="6" height="5" fill="var(--card)" stroke="var(--fg)" stroke-width="1"/>' +
+        KD.joint(O, 2.6) + KD.joint(O2, 2.6) + KD.joint(T1, 2.4) + KD.joint(T2, 2.4) + KD.disc(B, 2.4, 'var(--card)');
+      out += KD.label(P(A.x - 13, A.y + 3), 'A', { size: 8 }) + KD.label(P(B.x + 5, B.y + 8), 'B', { size: 8 }) +
+        KD.label(P(T2.x + 18 + 3 * mp, T2.y - 13 - 6 * mp), 'm', { size: 9, sub: 'p' }) + txt(P(T2.x + 21, T2.y + 8), 'regulator', 6, 'var(--fg-2)');
+      var msg = T < 6 ? 'light payload: balanced' : T < 8 ? 'heavier payload: A and B move out' : T < 14 ? 'balanced again, no adjustment' : 'payload off: A and B return';
+      return out + txt(P(154, 10), msg, 7.5, 'var(--fg)', 'end');
+    },
+
+    // ---- magnetic ----------------------------------------------------------------------------
+    // Biggs, Kuo and Ren, JMD 2026: Fig. 3. Eight square magnets on a ring, each set in a spur gear, are magnetised at twice
+    // their angle round the ring, so the bore field is uniform; the rotor magnet on the arm then gives a torque
+    // n B cos(phi) sin(theta), the form of the payload torque, and the arm is balanced at every angle. One lever turns the
+    // gears, so alternate magnets turn by +phi and -phi and the field falls as cos(phi): set with the arm horizontal, where
+    // it costs almost no energy, the device suits a lighter payload.
+    JMD2026: function (s) {
+      var C = P(50, 56), R = 29, gr = R * Math.sin(Math.PI / 8), T = s % 18, ph, al;
+      if (T < 5) { al = 1.45 * Math.sin(T / 5 * Math.PI * 2); ph = 0; }
+      else if (T < 9) { al = Math.PI / 2; ph = 1.0 * smooth((T - 5.5) / 3); }
+      else if (T < 14) { al = Math.PI / 2 - 1.2 * Math.sin((T - 9) / 5 * Math.PI); ph = 1.0; }
+      else { al = Math.PI / 2; ph = 1.0 * (1 - smooth((T - 14.5) / 3)); }
+      var out = '';
+      for (var i = 0; i < 8; i++) {
+        var d = i * Math.PI / 4, c = P(C.x + R * Math.cos(d), C.y - R * Math.sin(d));            // y-up angle d round the ring
+        var m = 2 * d - Math.PI / 2 + (i % 2 ? -ph : ph);                                          // magnetisation, y-up angle
+        out += '<circle cx="' + f(c.x) + '" cy="' + f(c.y) + '" r="' + f(gr) + '" fill="none" stroke="var(--fg-2)" stroke-width=".7" stroke-dasharray="1.6 1.6"/>' +
+          KD.magnet(c, 9, 9, 90 - m * 180 / Math.PI, 'var(--mag-stator)');
+      }
+      var lv = P(C.x + R * Math.cos(3 * Math.PI / 4), C.y - R * Math.sin(3 * Math.PI / 4)), la = 3 * Math.PI / 4 + 0.6 + ph;
+      out += KD.link(lv, P(lv.x + 15 * Math.cos(la), lv.y - 15 * Math.sin(la)), 1.8) + KD.pin(P(lv.x + 15 * Math.cos(la), lv.y - 15 * Math.sin(la)), 1.8);
+      var Bs = Math.cos(ph);                                                                        // bore field lines, shrinking as cos(phi)
+      for (var j = -1; j <= 1; j += 2) out += KD.arrow(P(C.x + j * 12, C.y + 9 * Bs), P(C.x + j * 12, C.y - 9 * Bs), 'var(--mag-arrow)', .9, 3.5 * Math.max(.3, Bs));
+      var e = P(Math.sin(al), -Math.cos(al)), Tp = P(C.x + e.x * 42, C.y + e.y * 42);
+      out += KD.link(C, Tp, 2) + KD.magnet(C, 9, 9, al * 180 / Math.PI, 'var(--mag-rotor)', 'var(--mag-arrow-2)') + KD.disc(Tp, 3 + 3 * Bs, 'var(--mass)');
+      out += KD.label(P(Tp.x + 6, Tp.y - 5), 'm', { size: 8.5, sub: 'P' }) + KD.label(P(lv.x - 14, lv.y - 10), 'ϕ', { size: 9 });
+      var msg = T < 5 ? 'balanced at every angle' : T < 9 ? 'lever turns: field × cos ϕ' : T < 14 ? 'lighter payload, balanced' : 'reset';
+      return out + txt(P(154, 107), msg, 7.5, 'var(--fg)', 'end');
+    },
+    // Zeng, Li, Kuo and Sariyildiz, T-Mech 2026: Figs. 2 and 6. A 5 mm cube magnet on a rod floats in a V-shaped trench cut
+    // into a 30 mm stator magnet, both magnetised upward. The trench profile (a flat floor and straight sides, found by
+    // optimisation) keeps the lift f_s close to the load over 15 mm of travel, three times the mover's side.
+    TMech2026: function (s) {
+      var k = 2.3, X = 36, Yb = 100;                                                               // mm -> px; stator 30 x 30 from (X, Yb)
+      function Q(x, z) { return P(X + k * x, Yb - k * z); }
+      var tr = [Q(0, 30), Q(5.3, 30), Q(12.4, 5), Q(17.6, 5), Q(24.7, 30), Q(30, 30), Q(30, 0), Q(0, 0)];
+      var out = '<polygon points="' + tr.map(KD.pt).join(' ') + '" fill="var(--mag-stator)" stroke="var(--fg)" stroke-width="1.2" stroke-linejoin="round"/>' +
+        KD.arrow(Q(4, 8), Q(4, 20), 'var(--mag-arrow)', 1.6, 5) + KD.arrow(Q(26, 8), Q(26, 20), 'var(--mag-arrow)', 1.6, 5) + KD.wall(Q(-3, 0), Q(33, 0), 1);
+      var zm = 22.5 + 7.5 * Math.sin(s * 0.5), c = Q(15, zm + 2.5), fs = 2 + 0.1 * Math.sin(zm * 0.9) - 0.06 * Math.cos(zm * 0.4);
+      out += KD.link(Q(15, zm + 5), P(c.x, 4), 2) + KD.magnet(c, 5 * k, 5 * k, 0, 'var(--mag-rotor)', 'var(--mag-arrow-2)');
+      var ax = c.x + 14, L = 9;
+      out += KD.arrow(P(ax, c.y), P(ax, c.y - L * fs), 'var(--red)', 1.3, 4) + KD.arrow(P(ax + 8, c.y), P(ax + 8, c.y + L * 2), 'var(--fg)', 1.3, 4);
+      out += KD.label(P(ax - 11, c.y - L * fs + 4), 'f', { size: 8, sub: 's' }) + KD.label(P(ax + 11, c.y + L * 2 + 1), 'g', { size: 8, sub: 'm' });
+      out += '<line x1="' + f(X - 8) + '" y1="' + f(Yb) + '" x2="' + f(X - 8) + '" y2="' + f(Q(0, zm).y) + '" stroke="var(--fg-2)" stroke-width=".7"/>' +
+        '<line x1="' + f(X - 11) + '" y1="' + f(Q(0, zm).y) + '" x2="' + f(c.x - 6) + '" y2="' + f(Q(0, zm).y) + '" stroke="var(--fg-2)" stroke-width=".5" stroke-dasharray="1.5 1.5"/>' +
+        KD.label(P(X - 26, (Yb + Q(0, zm).y) / 2 + 3), 'z', { size: 8, sub: 'm' });
+      return out + txt(P(156, 60), 'lift ≈ load', 7.5, 'var(--fg)', 'end') + txt(P(156, 70), 'over 3 × the', 7, 'var(--fg-2)', 'end') + txt(P(156, 79), 'mover’s size', 7, 'var(--fg-2)', 'end');
+    },
+    // Zeng, Kuo and Sariyildiz, MMT 2025: Figs. 1(b) and 5. Four columns of five cube magnets (two seen here) face a cube on
+    // a vertical slider; their positions and small tilts come from a genetic algorithm run on the Monte Carlo force model.
+    // The lift f_s stays near the load g_m over a stroke six times the magnet's height, with a small ripple.
+    MMT2025a: function (s) {
+      var k = 1.15, Cx = 58, Cy = 56, tilt = [0.2, -0.1, 0.05, 0.12, -0.18];
+      function F(z) { return 1.5 + 0.13 * Math.sin(z / 30 * 4 * Math.PI) * (0.6 + 0.4 * Math.cos(z / 30 * Math.PI)); }
+      var out = '';
+      for (var i = 0; i < 5; i++) {
+        var y = Cy + (i - 2) * 15 * k;
+        out += KD.magnet(P(Cx - 22, y), 10 * k, 10 * k, 90 + tilt[i] * 57.3, 'var(--mag-stator)') + KD.magnet(P(Cx + 22, y), 10 * k, 10 * k, -90 - tilt[i] * 57.3, 'var(--mag-stator)');
+      }
+      out += KD.wall(P(Cx - 30, 16), P(Cx - 30, 96), -1) + KD.wall(P(Cx + 30, 16), P(Cx + 30, 96), 1);
+      var z = 30 * Math.sin(s * 0.5), c = P(Cx, Cy - z * k);
+      out += KD.link(P(Cx, 4), P(Cx, 106), 1) + KD.magnet(c, 10 * k, 10 * k, 0, 'var(--mag-rotor)', 'var(--mag-arrow-2)');
+      var X0 = 112, sc = 70, d = '';                                                              // f_s against z, drawn beside the stroke
+      for (var j = 0; j <= 40; j++) { var zz = -30 + 60 * j / 40; d += (j ? 'L' : 'M') + f(X0 + (F(zz) - 1.2) * sc) + ',' + f(Cy - zz * k); }
+      out += '<line x1="' + f(X0 + 0.3 * sc) + '" y1="' + f(Cy - 34 * k) + '" x2="' + f(X0 + 0.3 * sc) + '" y2="' + f(Cy + 34 * k) + '" stroke="var(--fg)" stroke-width=".9" stroke-dasharray="3 2"/>' +
+        '<path d="' + d + '" fill="none" stroke="var(--red)" stroke-width="1.3"/>' + KD.disc(P(X0 + (F(z) - 1.2) * sc, c.y), 2.4, 'var(--red)') +
+        '<line x1="' + f(Cx + 8) + '" y1="' + f(c.y) + '" x2="' + f(X0 + (F(z) - 1.2) * sc - 3) + '" y2="' + f(c.y) + '" stroke="var(--fg-2)" stroke-width=".5" stroke-dasharray="1.5 1.5"/>';
+      return out + KD.label(P(X0 + 0.3 * sc - 10, Cy + 36 * k + 8), 'g', { size: 8, sub: 'm' }) + KD.label(P(X0 + 0.3 * sc + 8, Cy - 34 * k + 2), 'f', { size: 8, sub: 's', fill: 'var(--red)' });
+    },
+    // Zeng, Kuo and Sariyildiz, T-Mag 2024: Figs. 1 and 3. The force between two magnets of any shape is one six-fold
+    // integral, evaluated by Monte Carlo: random points in a box round each magnet, pairs that fall inside both magnets
+    // contribute, and the mean times the box volumes converges to the force (here a truncated cone I and a triangular prism J).
+    TMAG2024: function (s) {
+      var Cx = 52, out = '';
+      var I = { y0: 100, y1: 78, rb: 13, rt: 6.5 }, J = { x0: 41, x1: 61, y0: 52, y1: 12, bx: 55, by: 6 };
+      function inI(x, y) { if (y > I.y0 || y < I.y1) return false; var w = I.rt + (I.rb - I.rt) * (y - I.y1) / (I.y0 - I.y1); return Math.abs(x - Cx) <= w; }
+      function inJ(x, y) { if (x < J.x0 || x > J.x1 || y > J.y0) return false; if (y >= J.y1) return true;
+        var t = (J.y1 - y) / (J.y1 - J.by), l = J.x0 + (J.bx - J.x0) * t, r = J.x1 + (J.bx - J.x1) * t; return y >= J.by && x >= l && x <= r; }
+      out += '<rect x="' + (Cx - I.rb - 2) + '" y="' + (I.y1 - 3) + '" width="' + (2 * I.rb + 4) + '" height="' + (I.y0 - I.y1 + 5) + '" fill="none" stroke="var(--fg-2)" stroke-width=".7" stroke-dasharray="2.5 2"/>' +
+        '<rect x="' + (J.x0 - 3) + '" y="' + (J.by - 2) + '" width="' + (J.x1 - J.x0 + 6) + '" height="' + (J.y0 - J.by + 4) + '" fill="none" stroke="var(--fg-2)" stroke-width=".7" stroke-dasharray="2.5 2"/>';
+      out += '<path d="M' + (Cx - I.rb) + ',' + I.y0 + ' L' + (Cx - I.rt) + ',' + I.y1 + ' L' + (Cx + I.rt) + ',' + I.y1 + ' L' + (Cx + I.rb) + ',' + I.y0 + ' Z" fill="var(--mag-stator)" fill-opacity=".8" stroke="var(--fg)" stroke-width="1.1"/>' +
+        '<ellipse cx="' + Cx + '" cy="' + I.y1 + '" rx="' + I.rt + '" ry="1.6" fill="var(--mag-stator)" stroke="var(--fg)" stroke-width=".8"/>' +
+        '<path d="M' + J.x0 + ',' + J.y0 + ' L' + J.x0 + ',' + J.y1 + ' L' + J.bx + ',' + J.by + ' L' + J.x1 + ',' + J.y1 + ' L' + J.x1 + ',' + J.y0 + ' Z" fill="var(--mag-rotor)" fill-opacity=".8" stroke="var(--fg)" stroke-width="1.1"/>' +
+        '<path d="M' + J.x0 + ',' + J.y1 + ' L' + J.x1 + ',' + J.y1 + '" stroke="var(--fg)" stroke-width=".8"/>' +
+        KD.arrow(P(Cx, 96), P(Cx, 84), 'var(--mag-arrow)', 1.3, 4) + KD.arrow(P(Cx, 44), P(Cx, 24), 'var(--mag-arrow-2)', 1.3, 4);
+      var fr = Math.floor(s * 5), seed = fr * 7919 + 13;
+      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      for (var i = 0; i < 9; i++) {
+        var a = P(Cx - I.rb - 2 + rnd() * (2 * I.rb + 4), I.y1 - 3 + rnd() * (I.y0 - I.y1 + 5)), b = P(J.x0 - 3 + rnd() * (J.x1 - J.x0 + 6), J.by - 2 + rnd() * (J.y0 - J.by + 4));
+        var ok = inI(a.x, a.y) && inJ(b.x, b.y);
+        out += ok ? '<line x1="' + f(a.x) + '" y1="' + f(a.y) + '" x2="' + f(b.x) + '" y2="' + f(b.y) + '" stroke="var(--red)" stroke-width=".5" stroke-opacity=".6"/>' : '';
+        out += '<circle cx="' + f(a.x) + '" cy="' + f(a.y) + '" r="1.3" fill="' + (ok ? 'var(--red)' : 'var(--fg-2)') + '" fill-opacity="' + (ok ? 1 : .35) + '"/>' +
+          '<circle cx="' + f(b.x) + '" cy="' + f(b.y) + '" r="1.3" fill="' + (ok ? 'var(--red)' : 'var(--fg-2)') + '" fill-opacity="' + (ok ? 1 : .35) + '"/>';
+      }
+      var t = s % 12, n = Math.round(Math.pow(10, 3 + 2.3 * t / 12) / 100) * 100, est = 1 + 0.45 * Math.sin(n * 0.0137 + 1) / Math.sqrt(n / 1000);
+      out += KD.arrow(P(84, 22), P(84, 22 + 22 * est), 'var(--red)', 1.4, 4.5) + KD.label(P(88, 34), 'f', { size: 9, sub: 'IJ' }) +
+        '<line x1="80" y1="44" x2="88" y2="44" stroke="var(--fg)" stroke-width=".8" stroke-dasharray="2 1.5"/>';
+      out += KD.label(P(Cx + 16, 98), 'I', { size: 9 }) + KD.label(P(J.x1 + 5, 50), 'J', { size: 9 });
+      return out + txt(P(154, 70), 'random pairs', 7.5, 'var(--fg)', 'end') + txt(P(154, 80), 'n = ' + n.toLocaleString('en'), 7.5, 'var(--fg-2)', 'end') + txt(P(154, 90), 'estimate settles', 7.5, 'var(--fg-2)', 'end');
+    },
+
+    // ---- parallel ----------------------------------------------------------------------------
+    // Kuo and Dai, JMR 2021: Fig. 5. The base joint a of a six-DOF leg, on the y-axis, is a dominating joint: it alone sets
+    // the projective angle of the axis w on the xz-plane, since w always lies in the plane that a turns about y. With a
+    // locked, the leg's other joints (b) move w out of that plane, but its projection on the xz-plane does not change.
+    JMR2021a: function (s) {
+      var Q = iso(66, 70, 44), T = s % 12, ta, tb = 0;
+      if (T < 5) ta = 0.45 * Math.sin(T * 2 * Math.PI / 5);
+      else if (T < 6) ta = 0.4 * smooth(T - 5);
+      else if (T < 11) { ta = 0.4; tb = 0.55 * Math.sin((T - 6) * 2 * Math.PI / 5); }
+      else ta = 0.4 * (1 - smooth(T - 11));
+      var d = [Math.sin(ta), 0, Math.cos(ta)], w = v3n([Math.tan(ta), Math.tan(tb), 1]), out = isoAxes(Q, 1.15);
+      out += '<polygon points="' + [[0, -0.45, 0], [0, 0.45, 0], v3a([0, 0.45, 0], d, 1.1), v3a([0, -0.45, 0], d, 1.1)].map(function (p) { return KD.pt(Q(p)); }).join(' ') + '" fill="var(--link-fill)" fill-opacity=".55" stroke="var(--fg-2)" stroke-width=".6"/>';
+      var wt = v3a([0, 0, 0], w, 1.05), pr = [wt[0], 0, wt[2]], arc = '';
+      for (var i = 0; i <= 12; i++) { var t = ta * i / 12; arc += (i ? 'L' : 'M') + KD.pt(Q([0.42 * Math.sin(t), 0, 0.42 * Math.cos(t)])); }
+      out += '<line x1="' + f(Q([0, 0, 0]).x) + '" y1="' + f(Q([0, 0, 0]).y) + '" x2="' + f(Q(pr).x) + '" y2="' + f(Q(pr).y) + '" stroke="var(--fg)" stroke-width="1" stroke-dasharray="5 2 1 2"/>' +
+        '<line x1="' + f(Q(wt).x) + '" y1="' + f(Q(wt).y) + '" x2="' + f(Q(pr).x) + '" y2="' + f(Q(pr).y) + '" stroke="var(--fg-2)" stroke-width=".6" stroke-dasharray="1.5 1.5"/>' +
+        '<path d="' + arc + '" fill="none" stroke="var(--red)" stroke-width="1.1"/>' + KD.link(Q([0, 0, 0]), Q(wt), 2.6) + KD.joint(Q([0, 0, 0]), 2.6);
+      var ja = Q([0, 0.85, 0]);
+      out += KD.disc(ja, 3.4, 'var(--red)') + KD.label(P(ja.x + 5, ja.y + 9), 'a', { size: 9 }) + KD.label(P(Q(wt).x + 4, Q(wt).y - 2), 'w', { size: 9 }) +
+        KD.label(P(Q([0.5, 0, 0.5]).x - 22, Q([0.5, 0, 0.5]).y + 2), 'ʷθ', { size: 9, sub: 'xz', fill: 'var(--red)' });
+      return out + txt(P(156, 12), T < 6 ? 'joint a turns:' : 'a locked, b turns:', 7.5, 'var(--fg)', 'end') + txt(P(156, 22), T < 6 ? 'ʷθxz follows a' : 'ʷθxz stays', 7.5, 'var(--fg-2)', 'end');
+    },
+    // Kuo, Dai and Legnani, Robotica 2014: Fig. 2. A platform on one spherical joint at O and three R-U-PPP legs, one on
+    // each axis. The leg on the x-axis holds the platform's v-axis, so its input alpha_x is the projective angle of v on the
+    // yz-plane, and likewise for y (w) and z (u): each motor sets one angle and leaves the other two, without the
+    // overconstraint of the Agile Eye.
+    ROB2014: function (s) {
+      var Q = iso(56, 72, 33), T = s % 12, k = Math.floor(T / 4), al = 0.5 * Math.sin(Math.PI * (T % 4) / 2);
+      var ax = [[1, 0, 0], [0, 1, 0], [0, 0, 1]][k], R = rotAxis(ax, al);
+      var u = mat3(R, [0.8, 0, 0]), v = mat3(R, [0, 0.8, 0]), w = mat3(R, [0, 0, 0.8]), out = isoAxes(Q, 1.25);
+      out += '<polygon points="' + [u, v, w].map(function (p) { return KD.pt(Q(p)); }).join(' ') + '" fill="var(--link-fill)" fill-opacity=".8" stroke="var(--fg)" stroke-width="1.2" stroke-linejoin="round"/>';
+      [[[1.45, 0, 0], v], [[0, 1.45, 0], w], [[0, 0, 1.45], u]].forEach(function (lg, i) {
+        var b = Q(lg[0]), e = Q(lg[1]), m = P((b.x + e.x) / 2, (b.y + e.y) / 2);
+        out += KD.thin(b, e) + '<rect x="' + f(m.x - 2.5) + '" y="' + f(m.y - 2.5) + '" width="5" height="5" fill="var(--card)" stroke="var(--fg)" stroke-width=".8"/>' +
+          KD.disc(b, 3, i === k ? 'var(--red)' : 'var(--card)') + KD.pin(e, 1.6);
+      });
+      out += KD.joint(Q([0, 0, 0]), 2.8);
+      var names = [['α', 'x', 'ᵛθ', 'yz'], ['α', 'y', 'ʷθ', 'zx'], ['α', 'z', 'ᵘθ', 'xy']];
+      for (var j = 0; j < 3; j++) {
+        var y = 26 + j * 22, on = j === k, val = on ? al : 0;
+        out += KD.label(P(112, y), names[j][0], { size: 8.5, sub: names[j][1], fill: on ? 'var(--red)' : 'var(--fg-2)' }) + txt(P(124, y), '=', 7.5, 'var(--fg-2)') +
+          KD.label(P(130, y), names[j][2], { size: 8.5, sub: names[j][3], fill: on ? 'var(--red)' : 'var(--fg-2)' }) +
+          '<line x1="112" y1="' + (y + 6) + '" x2="154" y2="' + (y + 6) + '" stroke="var(--line)"/>' + bar(132 + 20 * Math.min(0, val), y + 8, 3, Math.max(1, 20 * Math.abs(val)), on ? 'var(--red)' : 'var(--fg-2)');
+      }
+      return out + txt(P(154, 106), 'one motor, one angle', 7.5, 'var(--fg)', 'end');
+    },
+    // Kuo and Dai, MMT 2013: Fig. 1 on the example of Fig. 4(b). Between base and platform, a single serial leg (here a post
+    // with a universal joint at the centre) defines the platform's motion; legs of connectivity six (UPS) add no constraint
+    // and carry the actuators. Synthesising the manipulator becomes synthesising one serial chain.
+    MMT2013: function (s) {
+      var T = s % 14, C = P(70, 48), out = '<ellipse cx="70" cy="96" rx="46" ry="8" fill="var(--ground)" fill-opacity=".45" stroke="var(--fg)" stroke-width="1.1"/>', c = C, be;
+      if (T < 3.5) { c = P(C.x + 7 * Math.sin(T * 1.7), C.y - 5 + 6 * Math.sin(T * 2.3)); be = 0.3 * Math.sin(T * 1.3); }
+      else be = 0.32 * Math.sin((T - 3.5) * 1.1);
+      if (T >= 3.5) out += KD.link(P(70, 96), C, 3.2) + KD.joint(P(70, 96), 2.6);
+      var e = P(Math.cos(be), Math.sin(be));
+      if (T >= 7.5) [-1, 1].forEach(function (sg) {
+        var b = P(70 + sg * 36, 96), pp = P(C.x + sg * 30 * e.x, C.y + sg * 30 * e.y), u = KD.unit(b, pp);
+        out += KD.body(b, P(b.x + u.x * 24, b.y + u.y * 24), 2.6, 'var(--card)') + KD.link(P(b.x + u.x * 14, b.y + u.y * 14), pp, 1.6) +
+          KD.disc(P(b.x + u.x * 12, b.y + u.y * 12), 2.4, 'var(--red)') + KD.joint(b, 2.6) + KD.joint(pp, 2.4);
+      });
+      out += '<ellipse cx="' + f(c.x) + '" cy="' + f(c.y) + '" rx="34" ry="6" transform="rotate(' + f(be * 180 / Math.PI) + ' ' + f(c.x) + ' ' + f(c.y) + ')" fill="var(--link-fill)" fill-opacity=".85" stroke="var(--fg)" stroke-width="1.2"/>';
+      if (T >= 3.5) out += KD.joint(C, 3) + '<path d="M' + f(C.x - 2) + ',' + f(C.y) + 'h4M' + f(C.x) + ',' + f(C.y - 2) + 'v4" stroke="var(--fg)" stroke-width=".8"/>';
+      var msg = T < 3.5 ? 'no legs: the platform is free' : T < 7.5 ? 'one serial leg fixes the motion' : 'six-DOF legs add motors, no constraint';
+      return out + (T >= 3.5 && T < 7.5 ? txt(P(76, 78), 'constraint leg', 7, 'var(--fg-2)') : '') + (T >= 7.5 ? txt(P(4, 108), 'centre: constraint leg', 6.5, 'var(--fg-2)') + txt(P(156, 108), 'outer: auxiliary legs', 6.5, 'var(--fg-2)', 'end') : '') + txt(P(154, 12), msg, 7.5, 'var(--fg)', 'end');
+    },
+
+    // ---- reconfigurable ------------------------------------------------------------------------
+    // Kuo and Su, MMT 2017: Fig. 4(a)-(c). The cube of eight hinged sub-cubes is a single-loop 8R linkage. From the cube A,
+    // the top-right pair of sub-cubes turns over about the coaxial hinges a-g (configuration B), then the top-left pair
+    // about c-e, giving the slab C. Comparing joint orientations and joint distances shows that A and C, which look
+    // nothing alike, are configurationally isomorphic.
+    MMT2017: function (s) {
+      var k = 22, T = s % 16, a1, a2, h = null;
+      function Q(p) { return P(54 + k * (p[0] - 0.42 * p[2]), 84 - k * (p[1] - 0.3 * p[2])); }
+      if (T < 2) { a1 = 0; a2 = 0; } else if (T < 5) { a1 = Math.PI * smooth((T - 2) / 3); a2 = 0; h = 1; } else if (T < 6.5) { a1 = Math.PI; a2 = 0; }
+      else if (T < 9.5) { a1 = Math.PI; a2 = Math.PI * smooth((T - 6.5) / 3); h = 2; } else if (T < 12) { a1 = Math.PI; a2 = Math.PI; }
+      else if (T < 14) { a1 = Math.PI; a2 = Math.PI * (1 - smooth((T - 12) / 2)); h = 2; } else { a1 = Math.PI * (1 - smooth((T - 14) / 2)); a2 = 0; h = 1; }
+      function mv(p, c) {                                           // the two folding pairs: top-right about x=2,y=1; top-left about x=0,y=1
+        if (c[1] === 1 && c[0] === 1) { var x = p[0] - 2, y = p[1] - 1, ca = Math.cos(a1), sa = Math.sin(a1); return [2 + x * ca + y * sa, 1 - x * sa + y * ca, p[2]]; }
+        if (c[1] === 1 && c[0] === 0) { var x2 = p[0], y2 = p[1] - 1, cb = Math.cos(a2), sb = Math.sin(a2); return [x2 * cb - y2 * sb, 1 + x2 * sb + y2 * cb, p[2]]; }
+        return p;
+      }
+      var faces = [], idx = [[0, 1, 3, 2], [4, 5, 7, 6], [0, 1, 5, 4], [2, 3, 7, 6], [0, 2, 6, 4], [1, 3, 7, 5]];
+      [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0], [0, 0, 1], [1, 0, 1], [0, 1, 1], [1, 1, 1]].forEach(function (c) {
+        var v = []; for (var i = 0; i < 8; i++) v.push(mv([c[0] + (i & 1), c[1] + ((i >> 1) & 1), c[2] + ((i >> 2) & 1)], c));
+        idx.forEach(function (q) { var pts = q.map(function (i) { return v[i]; }), d = 0; pts.forEach(function (p) { d += p[2] + 0.42 * p[0] + 0.3 * p[1]; }); faces.push({ pts: pts, d: d, blue: c[0] === 1 && c[1] === 0 && c[2] === 1 }); });
+      });
+      faces.sort(function (p, q) { return p.d - q.d; });
+      var out = '';
+      faces.forEach(function (fc) { out += '<polygon points="' + fc.pts.map(function (p) { return KD.pt(Q(p)); }).join(' ') + '" fill="' + (fc.blue ? 'var(--mag-stator)' : 'var(--card)') + '" stroke="var(--fg)" stroke-width=".9" stroke-linejoin="round"/>'; });
+      if (h) { var hx = h === 1 ? 2 : 0; out += '<line x1="' + f(Q([hx, 1, -0.4]).x) + '" y1="' + f(Q([hx, 1, -0.4]).y) + '" x2="' + f(Q([hx, 1, 2.4]).x) + '" y2="' + f(Q([hx, 1, 2.4]).y) + '" stroke="var(--red)" stroke-width="1.2" stroke-dasharray="5 2 1 2"/>'; }
+      var name = T < 2 || T >= 14 && a1 < 0.05 ? 'A' : T < 6.5 || T >= 14 ? 'A → B' : T < 9.5 ? 'B → C' : T < 12 ? 'C' : 'C → B';
+      return out + KD.note(P(8, 16), name, { size: 11, fill: 'var(--fg)' }) + (T >= 9.5 && T < 12 ? txt(P(154, 16), 'A ≅ C: configurationally isomorphic', 7, 'var(--red)', 'end') : '') +
+        (h ? txt(P(154, 106), h === 1 ? 'turning about hinges a, g' : 'turning about hinges c, e', 7.5, 'var(--fg-2)', 'end') : '');
+    },
+    // Kuo and Chang, JMR 2014: Figs. 1-2, the steel clamping and sawing mechanism (seven links, eight joints). Pulling the
+    // slider 5 first closes the clamp 7 with the saw arm 2 held down by the payload, topology 1(2); the clamp meets the steel
+    // and the linkage becomes a structure, 1(2,7); more force lifts arm 2 and the saw moves, 1(7). One constraint matrix
+    // holds all three topologies. (Geometry as on the paper's page; the sequence is the paper's.)
+    JMR2014: (function () {
+      var O2 = { x: 270, y: 190 }, O7 = { x: 70, y: 190 }, r2 = 50, r7 = 50, l3 = 60, l6 = 60, a = 50, xs = 170, frames = null;
+      function J34(y, p) { return { x: xs + a * Math.cos(p), y: y + a * Math.sin(p) }; }
+      function J46(y, p) { return { x: xs - a * Math.cos(p), y: y - a * Math.sin(p) }; }
+      function J23(p) { return { x: O2.x + r2 * Math.cos(p), y: O2.y + r2 * Math.sin(p) }; }
+      function J67(p) { return { x: O7.x + r7 * Math.cos(p), y: O7.y + r7 * Math.sin(p) }; }
+      function dist(A, B) { return Math.hypot(A.x - B.x, A.y - B.y); }
+      function cont(fn, prev, span) {
+        var lo = prev - span, hi = prev + span, n = 60, x0 = lo, f0 = fn(lo), best = null;
+        for (var i = 1; i <= n; i++) { var x1 = lo + (hi - lo) * i / n, f1 = fn(x1); if (f0 === 0 || f0 * f1 < 0) { best = [x0, x1]; if (Math.abs((x0 + x1) / 2 - prev) < span / 2) break; } x0 = x1; f0 = f1; }
+        if (!best) return prev;
+        x0 = best[0]; var x2 = best[1];
+        for (var k = 0; k < 40; k++) { var m = (x0 + x2) / 2; if (fn(x0) * fn(m) <= 0) x2 = m; else x0 = m; }
+        return (x0 + x2) / 2;
+      }
+      function build() {                                            // the forward stroke, stepped once and stored
+        var y = 130, p4 = 0, p2 = Math.PI, p7 = 0, st = 'b', hold = 0, out = [];
+        for (var n = 0; n < 4000 && st !== 'e'; n++) {
+          if (st === 'b') { y += 0.6; p4 = cont(function (p) { return dist(J34(y, p), J23(p2)) - l3; }, p4, 0.4); p7 = cont(function (p) { return dist(J46(y, p4), J67(p)) - l6; }, p7, 0.4); if (p7 >= 0.62) { p7 = 0.62; st = 'c'; } }
+          else if (st === 'c') { hold++; if (hold > 40) st = 'd'; }
+          else { y += 0.6; p4 = cont(function (p) { return dist(J46(y, p), J67(p7)) - l6; }, p4, 0.4); p2 = cont(function (p) { return dist(J34(y, p4), J23(p)) - l3; }, p2, 0.4); if (p2 >= Math.PI + 0.38) st = 'e'; }
+          out.push([y, p4, p2, p7, st]);
+        }
+        return out;
+      }
+      return function (s) {
+        if (!frames) frames = build();
+        var N = frames.length, fps = 30, T = s % (N / fps + 1.5 + N / fps / 3 + 0.5), i;
+        if (T < N / fps) i = Math.floor(T * fps); else if (T < N / fps + 1.5) i = N - 1; else i = Math.max(0, N - 1 - Math.floor((T - N / fps - 1.5) * fps * 3));
+        var fr = frames[Math.min(N - 1, i)], y = fr[0], p4 = fr[1], p2 = fr[2], p7 = fr[3], st = fr[4];
+        var A = { x: xs, y: y }, B = J34(y, p4), C = J46(y, p4), D = J23(p2), E = J67(p7);
+        var tip2 = { x: O2.x + 95 * Math.cos(p2), y: O2.y + 95 * Math.sin(p2) }, tip7 = { x: O7.x + 95 * Math.cos(p7), y: O7.y + 95 * Math.sin(p7) };
+        var g = KD.wall({ x: 30, y: 250 }, { x: 310, y: 250 }, 1) + '<rect x="110" y="224" width="120" height="16" fill="var(--pin)" stroke="var(--fg)" stroke-width="1.6"/>' +
+          KD.wall({ x: xs + 10, y: 60 }, { x: xs + 10, y: 150 }, -1) + KD.slider(A, 12, 9, 0) + KD.arrow({ x: xs, y: 30 }, { x: xs, y: 58 }, 'var(--red)', 2.4, 10) +
+          KD.link(C, B, 4) + KD.link(B, D, 3) + KD.link(C, E, 3) + KD.ground(O2, { w: 18 }) + KD.ground(O7, { w: 18 }) +
+          KD.body(O2, tip2, 5) + KD.body(O7, tip7, 5) + KD.joint(O2, 5) + KD.joint(O7, 5) + KD.joint(A, 5) + KD.joint(B, 4.5) + KD.joint(C, 4.5) + KD.joint(D, 4.5) + KD.joint(E, 4.5) +
+          KD.disc(tip2, 6, 'var(--mass)') + KD.disc(tip7, 6, 'var(--cw)') + KD.note({ x: tip2.x, y: tip2.y + 24 }, 'saw', { size: 15, anchor: 'middle' }) + KD.note({ x: tip7.x, y: tip7.y + 24 }, 'clamp', { size: 15, anchor: 'middle' });
+        var top = st === 'b' ? '1(2): clamping' : st === 'c' ? '1(2,7): a structure' : '1(7): sawing';
+        return '<g transform="translate(-12,-16) scale(.5)">' + g + '</g>' + txt(P(156, 12), top, 8, 'var(--fg)', 'end') + txt(P(156, 22), st === 'c' ? 'mobility 0' : 'mobility 1', 7, 'var(--fg-2)', 'end');
+      };
+    })(),
+
+    // ---- structural synthesis ----------------------------------------------------------------
+    // Kuo and Yan, JMD 2007: Fig. 1, the one-step push-button stopper lock in section. Frame, slider (x), button (z) and the
+    // stopper in a groove of the button, all prismatic: (a) locking, (b) unlockable with the button pressed, (c) unlocking as
+    // the slider carries the stopper away, (d) password changeable, the button punched to a new position. Writing each
+    // stage's joints as screws gives mobility 1, 2, 1, 2 (Table 1), where the Gruebler count does not.
+    JMD2007: function (s) {
+      var T = s % 16, st, bz = 0, sx = 0, sz = -4;                  // button z offset, slider x offset, stopper z offset
+      if (T < 3) st = 0;
+      else if (T < 5) { st = 1; var u = smooth((T - 3) / 1.2); bz = 6 * u; sz = -4 + 4 * u; }
+      else if (T < 8) { st = 2; bz = 6; sz = 0; sx = -7 * smooth((T - 5) / 1.5); }
+      else if (T < 11) { st = 3; bz = 6 - 14 * smooth((T - 8) / 1.5); sz = 0; sx = -7; }
+      else { st = 3; var w = smooth((T - 11) / 4); bz = -8 + 8 * w; sx = -7 * (1 - w); sz = -4 * w; }
+      var cx = 56, cy = 56, out = '';
+      out += '<rect x="' + (cx - 32) + '" y="' + (cy - 32) + '" width="64" height="64" fill="var(--ground)" stroke="var(--fg)" stroke-width="1.2"/>' +
+        '<rect x="' + (cx - 14) + '" y="' + (cy - 13) + '" width="28" height="26" fill="var(--card)" stroke="var(--fg)" stroke-width="1"/>' +
+        '<rect x="' + (cx - 9) + '" y="' + (cy - 17) + '" width="18" height="34" fill="var(--card)" stroke="var(--fg)" stroke-width="1"/>' +
+        '<rect x="' + (cx - 13) + '" y="' + (cy - 12.2) + '" width="26" height="24.4" fill="var(--card)"/>' +
+        '<rect x="' + (cx - 8.2) + '" y="' + (cy - 16.2) + '" width="16.4" height="32.4" fill="var(--card)"/>';
+      out += '<rect x="' + f(cx - 52 + sx) + '" y="' + (cy - 6) + '" width="104" height="12" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
+      out += '<rect x="' + (cx - 4) + '" y="' + f(cy - 44 + bz) + '" width="8" height="88" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
+      if (st >= 2) out += '<rect x="' + (cx - 7) + '" y="' + f(cy - 7 + bz - 6) + '" width="14" height="14" fill="none" stroke="var(--fg)" stroke-width=".8" stroke-dasharray="1.5 1.5"/>';
+      var px = cx - 7 + sx, py = cy - 7 + sz, hat = '';
+      for (var i = -2; i <= 3; i++) hat += '<line x1="' + f(px + i * 4) + '" y1="' + f(py + 14) + '" x2="' + f(px + i * 4 + 14) + '" y2="' + f(py) + '"/>';
+      out += '<clipPath id="jmd07c"><rect x="' + f(px) + '" y="' + f(py) + '" width="14" height="14"/></clipPath><rect x="' + f(px) + '" y="' + f(py) + '" width="14" height="14" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>' +
+        '<g clip-path="url(#jmd07c)" stroke="var(--fg)" stroke-width=".8">' + hat + '</g>';
+      var names = ['(a) locking', '(b) unlockable', '(c) unlocking', '(d) password changeable'], mob = [1, 2, 1, 2][st];
+      out += txt(P(cx - 50, 104), 'slider', 6.5, 'var(--fg-2)') + txt(P(cx + 8, 16), 'button', 6.5, 'var(--fg-2)');
+      return out + txt(P(156, 46), names[st], 7.5, 'var(--fg)', 'end') + KD.note(P(156, 62), 'm = ' + mob, { size: 10, fill: 'var(--red)', anchor: 'end' }) + txt(P(156, 74), 'by screw systems', 6.5, 'var(--fg-2)', 'end');
+    },
+    // Kuo and Shih, JMD 2008: Figs. 3(c) and 5(b). The graph of Watt's chain (links as vertices, joints as edges). Vertex
+    // strings from the crossover matrices sort the links with the same adjacency into classes, {1, 4} and {2, 3, 5, 6};
+    // fixing link 1 (a root) splits them into {1}, {4}, {2, 6}, {3, 5}. The same on the line graph sorts the joints.
+    JMD2008: function (s) {
+      var root = (s % 10) >= 5, pos = { 1: P(60, 96), 2: P(34, 80), 3: P(34, 40), 4: P(60, 22), 5: P(86, 40), 6: P(86, 80) };
+      var E = { a: [1, 2], d: [2, 3], e: [3, 4], f: [4, 5], g: [5, 6], c: [6, 1], b: [1, 4] };
+      var C1 = 'var(--red)', C2 = 'var(--spring)', C3 = '#B8860B', C4 = 'var(--fg-2)';
+      var vc = root ? { 1: 'var(--ground)', 4: C1, 2: C2, 6: C2, 3: C3, 5: C3 } : { 1: C1, 4: C1, 2: C2, 3: C2, 5: C2, 6: C2 };
+      var ec = root ? { a: C2, c: C2, e: C1, f: C1, b: C4, d: C3, g: C3 } : { a: C2, c: C2, e: C2, f: C2, b: C4, d: C3, g: C3 };
+      var out = '';
+      Object.keys(E).forEach(function (k) {
+        var p = pos[E[k][0]], q = pos[E[k][1]], m = P((p.x + q.x) / 2, (p.y + q.y) / 2), off = k === 'b' ? P(5, 0) : P((m.x - 60) * 0.18, (m.y - 59) * 0.18);
+        out += '<line x1="' + f(p.x) + '" y1="' + f(p.y) + '" x2="' + f(q.x) + '" y2="' + f(q.y) + '" stroke="' + ec[k] + '" stroke-width="2.2"/>' + KD.note(P(m.x + off.x + (k === 'b' ? 0 : 0), m.y + off.y + 3), k, { size: 8, fill: ec[k], anchor: 'middle' });
+      });
+      Object.keys(pos).forEach(function (k) {
+        var p = pos[k];
+        if (root && k === '1') out += '<circle cx="' + f(p.x) + '" cy="' + f(p.y) + '" r="9" fill="none" stroke="var(--fg)" stroke-width="1"/>';
+        out += '<circle cx="' + f(p.x) + '" cy="' + f(p.y) + '" r="6.2" fill="' + vc[k] + '" stroke="var(--fg)" stroke-width="1"/>' + KD.note(P(p.x, p.y + 3), k, { size: 8, fill: '#fff', anchor: 'middle' });
+      });
+      return out + txt(P(156, 14), root ? 'link 1 fixed:' : 'Watt’s chain:', 7.5, 'var(--fg)', 'end') + txt(P(156, 24), root ? 'four link classes' : 'two link classes', 7.5, 'var(--fg-2)', 'end') +
+        txt(P(156, 96), root ? '{1} {4} {2,6} {3,5}' : '{1,4} {2,3,5,6}', 7, 'var(--fg-2)', 'end');
+    },
+
+    // ---- medical -------------------------------------------------------------------------------
+    // Tseng et al., JMR 2017: Figs. 1-2. One linkage, two configurations. Knee only: the thigh link 3 is held, the
+    // parallelogram 4-5-6 turns about the knee A and the calf swings; k2, between the vertical link 9 and link 6, does the
+    // balancing while k1 keeps its length. Hip only: link 3 turns about the hip B, the calf translates, k1 balances and k2
+    // keeps its length.
+    JMR2017b: function (s) {
+      var T = s % 14, ph = 0, ps = 0, mode;
+      if (T < 5.5) { mode = 0; ph = 0.85 * Math.sin(Math.PI * T / 5.5); } else if (T < 6.5) mode = 1; else if (T < 12.5) { mode = 2; ps = 0.6 * Math.sin(Math.PI * (T - 6.5) / 6); } else mode = 1;
+      var B = P(130, 54), d3 = P(-Math.cos(ps), -Math.sin(ps)), J = P(B.x + 36 * d3.x, B.y + 36 * d3.y), A = P(B.x + 70 * d3.x, B.y + 70 * d3.y);
+      var c = P(-Math.sin(ph), Math.cos(ph)), L4 = 30;                // links 4 and 6 hang from A and J, parallel
+      var A4 = P(A.x + L4 * c.x, A.y + L4 * c.y), J6 = P(J.x + L4 * c.x, J.y + L4 * c.y), foot = P(A.x + 54 * c.x, A.y + 54 * c.y);
+      var nine = P(J.x, J.y - 11), k2e = P(J.x + 22 * c.x, J.y + 22 * c.y), k1a = P(B.x + 18 * d3.x, B.y + 18 * d3.y), Wb = P(140, 24), G = P(112, 100);
+      var out = KD.wall(P(140, 10), P(140, 70), 1) + KD.wall(P(92, 104), P(132, 104), 1) + '<rect x="104" y="96" width="16" height="8" fill="var(--card)" stroke="var(--fg)" stroke-width="1"/>';
+      out += KD.link(B, A, 2.6) + KD.link(A, foot, 2.6) + KD.link(J, J6, 1.6) + KD.link(A4, J6, 1.6) + KD.link(P(J.x + 16 * c.x, J.y + 16 * c.y), G, 1.4) + KD.link(J, nine, 1.4);
+      out += KD.spring(nine, k2e, 6, 3.2) + KD.spring(k1a, Wb, 6, 3.2) + KD.pin(Wb, 1.8) + KD.joint(B, 3) + KD.joint(A, 2.6) + KD.joint(J, 2.4) + KD.joint(A4, 2) + KD.joint(J6, 2) + KD.joint(G, 2) + KD.pin(nine, 1.6);
+      out += KD.label(P(A.x - 9, A.y - 3), 'A', { size: 8.5 }) + KD.label(P(B.x - 3, B.y + 12), 'B', { size: 8.5 }) +
+        KD.label(P((k1a.x + Wb.x) / 2 - 4, (k1a.y + Wb.y) / 2 - 9), 'k', { size: 8.5, sub: '1', fill: mode === 2 ? 'var(--red)' : 'var(--fg)' }) +
+        KD.label(P((nine.x + k2e.x) / 2 - 15, (nine.y + k2e.y) / 2 + 3), 'k', { size: 8.5, sub: '2', fill: mode === 0 ? 'var(--red)' : 'var(--fg)' });
+      return out + txt(P(6, 12), mode === 0 ? 'knee only: k₂ balances' : mode === 2 ? 'hip only: k₁ balances' : 'switching', 7.5, 'var(--fg)');
+    },
+    // Kuo and Lai, JMR 2016: Figs. 2 and 5. A double parallelogram places the remote centre of motion (red) anywhere in
+    // the plane while the end link keeps its orientation; with the RCM at the incision, the wrist turns and inserts the
+    // laparoscope about it. Zero-free-length springs k1, k2 balance the two parallelogram loops.
+    JMR2016: function (s) {
+      var T = s % 13, t2 = 0, t3 = 0, be = 0, ins = 0, ph2 = T >= 6.5;
+      if (!ph2) { t2 = 0.3 * Math.sin(T * 2 * Math.PI / 6.5); t3 = -0.35 * Math.sin(T * 2 * Math.PI / 6.5 + 0.9) + 0.35 * Math.sin(0.9); }
+      else { be = 0.35 * Math.sin((T - 6.5) * 2 * Math.PI / 6.5); ins = 6 * Math.sin((T - 6.5) * 4 * Math.PI / 6.5); }
+      var W1 = P(12, 40), W2 = P(12, 58), L = 40, u2 = P(Math.cos(t2), -Math.sin(t2)), u3 = P(Math.cos(t3), -Math.sin(t3));
+      var P1 = P(W1.x + L * u2.x, W1.y + L * u2.y), P2 = P(W2.x + L * u2.x, W2.y + L * u2.y), E1 = P(P1.x + L * u3.x, P1.y + L * u3.y), E2 = P(P2.x + L * u3.x, P2.y + L * u3.y);
+      var Wr = P(E2.x, E2.y + 12), R = P(E2.x + 16, E2.y + 40), sd = P(Math.sin(be), Math.cos(be)), top = P(R.x - sd.x * (34 - ins), R.y - sd.y * (34 - ins));
+      var out = KD.wall(P(8, 30), P(8, 68), -1) + KD.link(W1, P1, 2.2) + KD.link(W2, P2, 2.2) + KD.link(P(P1.x, P1.y - 6), P(P2.x, P2.y + 4), 2.6) +
+        KD.link(P1, E1, 2.2) + KD.link(P2, E2, 2.2) + KD.link(E1, Wr, 2.6);
+      out += KD.spring(P((W1.x + P1.x) / 2, (W1.y + P1.y) / 2), P(P2.x, P2.y + 4), 6, 3) + KD.spring(P((P1.x + E1.x) / 2, (P1.y + E1.y) / 2), P(E2.x, E2.y + 6), 6, 3);
+      out += '<rect x="' + f(Wr.x - 5) + '" y="' + f(Wr.y - 3) + '" width="10" height="7" fill="var(--card)" stroke="var(--fg)" stroke-width="1"/>' + KD.link(Wr, top, 1) + KD.link(top, P(R.x + sd.x * (18 + ins), R.y + sd.y * (18 + ins)), 2.2);
+      if (ph2) out += '<path d="M' + f(R.x - 30) + ',' + f(R.y + 4) + ' Q' + f(R.x) + ',' + f(R.y - 3) + ' ' + f(R.x + 30) + ',' + f(R.y + 4) + '" fill="none" stroke="var(--fg-2)" stroke-width="1.2"/>';
+      out += [W1, W2, P1, P2, E1, E2].map(function (p) { return KD.joint(p, 2.2); }).join('') + KD.disc(R, 2.6, 'var(--red)') +
+        KD.label(P(R.x + 6, R.y - 4), 'RCM', { size: 7.5, fill: 'var(--red)' }) + KD.label(P((W1.x + P1.x) / 2 - 2, (W1.y + P1.y) / 2 - 6), 'k', { size: 8, sub: '1' }) + KD.label(P((P1.x + E1.x) / 2, (P1.y + E1.y) / 2 - 6), 'k', { size: 8, sub: '2' });
+      return out + txt(P(4, 98), ph2 ? 'RCM at the incision:' : 'the arm moves the RCM;', 7.5, 'var(--fg)') + txt(P(4, 107), ph2 ? 'the wrist turns, inserts' : 'end link stays upright', 7.5, 'var(--fg-2)');
+    },
+    // Kuo and Dai, JMED 2012: Figs. 4(a) and 6(b), side view. The base crank of each auxiliary leg turns about an axis
+    // through the base, and its angle always equals the projected tilt of the tool through the remote centre O
+    // (theta_x = the tool's angle on the yz-plane). So the two tilts, the spin and the insertion each have their own actuator.
+    JMED2012: function (s) {
+      var T = s % 15, th = 0, sp = 0, ins = 0, st;
+      if (T < 6) { st = 0; th = 0.4 * Math.sin(T * 2 * Math.PI / 6); } else if (T < 10.5) { st = 1; th = 0; sp = (T - 6) / 4.5 * 2 * Math.PI; } else { st = 2; ins = 8 * Math.sin((T - 10.5) * 2 * Math.PI / 4.5); }
+      var O = P(100, 64), A1 = P(40, 98), d = P(Math.sin(th), -Math.cos(th)), cr = P(A1.x + 30 * d.x, A1.y + 30 * d.y);
+      var out = '<path d="M60,64 Q100,58 150,64" fill="none" stroke="var(--fg-2)" stroke-width="1.3"/>' + KD.ground(A1, { w: 12 }) +
+        '<line x1="' + f(A1.x - 8 * d.x) + '" y1="' + f(A1.y - 8 * d.y) + '" x2="' + f(A1.x + 70 * d.x) + '" y2="' + f(A1.y + 70 * d.y) + '" stroke="var(--fg-2)" stroke-width=".7" stroke-dasharray="4 2 1 2"/>' +
+        KD.link(A1, cr, 2.6) + KD.joint(A1, 2.6) + KD.joint(cr, 2.2);
+      var tt = P(O.x - d.x * (46 - ins), O.y - d.y * (46 - ins)), tb = P(O.x + d.x * (16 + ins), O.y + d.y * (16 + ins));
+      out += KD.link(tt, tb, 2.4) + '<polygon points="' + KD.pt(tt) + ' ' + f(tt.x + 9 * Math.cos(sp)) + ',' + f(tt.y + 2) + ' ' + KD.pt(P(tt.x, tt.y + 6)) + '" fill="var(--red)" fill-opacity=".8"/>' + KD.disc(O, 2.6, 'var(--red)');
+      function arc(c, r) { var p = ''; for (var i = 0; i <= 10; i++) { var a = th * i / 10; p += (i ? 'L' : 'M') + f(c.x + r * Math.sin(a)) + ',' + f(c.y - r * Math.cos(a)); } return '<line x1="' + f(c.x) + '" y1="' + f(c.y) + '" x2="' + f(c.x) + '" y2="' + f(c.y - r - 4) + '" stroke="var(--fg-2)" stroke-width=".6"/><path d="' + p + '" fill="none" stroke="var(--red)" stroke-width="1"/>'; }
+      if (st === 0) out += arc(A1, 18) + arc(P(O.x, O.y - 0), 26) + KD.label(P(A1.x + 10, A1.y - 22), 'θ', { size: 8.5, sub: 'x', fill: 'var(--red)' });
+      out += KD.label(P(O.x + 6, O.y + 10), 'O', { size: 8.5 }) + KD.label(P(tt.x + 5, tt.y + 2), 'w', { size: 8.5 });
+      var msg = ['crank angle = tool tilt', 'spin: its own actuator', 'insertion: its own actuator'][st];
+      return out + txt(P(6, 12), msg, 7.5, 'var(--fg)');
     }
   };
+  // small 3-D helpers for the spatial figures above: isometric view with x to the lower left, y to the lower right, z up
+  function iso(ox, oy, k) { return function (p) { return P(ox + k * 0.866 * (p[1] - p[0]), oy + k * 0.5 * (p[0] + p[1]) - k * p[2]); }; }
+  function isoAxes(Q, L) {
+    var o = Q([0, 0, 0]);
+    return [[L, 0, 0, 'x', -9, 8], [0, L, 0, 'y', 4, 8], [0, 0, L, 'z', -9, 0]].map(function (a) {
+      var e = Q([a[0], a[1], a[2]]); return KD.arrow(o, e, 'var(--fg-2)', .8, 4.5) + KD.label(P(e.x + a[4], e.y + a[5]), a[3], { size: 8, fill: 'var(--fg-2)' });
+    }).join('');
+  }
+  function v3a(a, b, k) { return [a[0] + k * b[0], a[1] + k * b[1], a[2] + k * b[2]]; }
+  function v3n(a) { var n = Math.hypot(a[0], a[1], a[2]); return [a[0] / n, a[1] / n, a[2] / n]; }
+  function rotAxis(k, t) { var c = Math.cos(t), s = Math.sin(t), C = 1 - c, x = k[0], y = k[1], z = k[2];
+    return [c + x * x * C, x * y * C - z * s, x * z * C + y * s, y * x * C + z * s, c + y * y * C, y * z * C - x * s, z * x * C - y * s, z * y * C + x * s, c + z * z * C]; }
+  function mat3(R, v) { return [R[0] * v[0] + R[1] * v[1] + R[2] * v[2], R[3] * v[0] + R[4] * v[1] + R[5] * v[2], R[6] * v[0] + R[7] * v[1] + R[8] * v[2]]; }
   window.KD_MINI = MINI;
 
   var figs = Array.prototype.map.call(document.querySelectorAll('svg.mini[data-mini]'), function (svg) { return { svg: svg, fn: MINI[svg.getAttribute('data-mini')], on: false }; }).filter(function (x) { return x.fn; });

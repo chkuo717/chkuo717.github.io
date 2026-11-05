@@ -245,6 +245,8 @@ dl.facts dd { max-width: var(--measure); }
 .card.side p { align-self: start; }
 /* Small animated figures beside non-representative papers (assets/anim/mini.js) */
 .papers li.has-mini { display: grid; grid-template-columns: 12rem 1fr; gap: 1.1rem; align-items: start; }
+.papers .mini-link { display: block; }
+.papers .mini-link:hover svg.mini { border-color: var(--accent); }
 .papers svg.mini { width: 100%; height: auto; display: block; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
 .papers .mini-cap { display: inline-block; margin-top: .35rem; color: var(--fg-2); font-size: .86rem; }
 @media (max-width: 34rem) { .papers li.has-mini { grid-template-columns: 1fr; } .papers svg.mini { max-width: 15rem; } }

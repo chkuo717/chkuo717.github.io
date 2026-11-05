@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap">
-  <link rel="stylesheet" href="../assets/style.css?v=f65bc194">
+  <link rel="stylesheet" href="../assets/style.css?v=360cf935">
 </head>
 <body class="research">
   <a class="skip" href="#main">Skip to content</a>
@@ -51,26 +51,20 @@
       <figure class="pfig"><img src="../assets/img/rob2014-planes.png" alt="The projective-angle description used for the non-overconstrained Agile Eye: the orientation of the end-effector is read off as three planes, one per axis." loading="lazy"><figcaption>The projective-angle description used for the non-overconstrained Agile Eye: the orientation of the end-effector is read off as three planes, one per axis.<span class="src"><a href="https://doi.org/10.1017/S0263574713001100">Kuo, Dai and Legnani, <em>Robotica</em> 32 (2014) 889–905</a>, Fig. 7. © Cambridge University Press.</span></figcaption></figure>
     </div>
 
-    <h2>Animations</h2>
-    <p>One animated page per representative paper, drawn in the style of the papers’ own figures.</p>
-    <div class="grid cols-2">
-<a class="card anim-card" href="../papers/jmr2021a.html"><span class="tag">Animation · 2021</span><h3>One motor, one angle: projective motion</h3><p>Describe an axis by the angles of its two shadows and each motor of a parallel manipulator can set one of them alone.</p></a>
-<a class="card anim-card" href="../papers/rob2014.html"><span class="tag">Animation · 2014</span><h3>A wrist whose three motors do not interfere</h3><p>Three planes hinged on the base axes each hold one point of a platform on a ball joint; one motor turns one plane.</p></a>
-<a class="card anim-card" href="../papers/mmt2013.html"><span class="tag">Animation · 2013</span><h3>One leg decides the motion, the others drive it</h3><p>A serial constraint leg fixes what the platform can do; constraint-free legs carry the motors. Remove the leg and see why.</p></a>
-</div>
-
-    <h2>Representative papers</h2>
+    <h2>Representative work</h2>
+    <p>Each paper below has its own page with a working animation of its mechanism. They are drawn in the style of the papers’ own figures.</p>
     <ul class="papers">
-<li><strong><a href="https://doi.org/10.1115/1.4050151">Structure synthesis of a class of parallel manipulators with fully decoupled projective motion</a>.</strong> <a class="anim" href="../papers/jmr2021a.html">animation</a><br><span class="venue">Kuo, C.-H. and Dai, J. S., <em>ASME Journal of Mechanisms and Robotics</em>, 2021. <a href="https://doi.org/10.1115/1.4050151">doi</a></span></li>
-<li><strong><a href="https://doi.org/10.1017/S0263574713001100">A non-overconstrained variant of the Agile Eye with a special decoupled kinematics</a>.</strong> <a class="anim" href="../papers/rob2014.html">animation</a><br><span class="venue">Kuo, C.-H., Dai, J. S. and Legnani, G., <em>Robotica</em>, 2014. <a href="https://doi.org/10.1017/S0263574713001100">doi</a></span></li>
-<li><strong><a href="https://doi.org/10.1016/j.mechmachtheory.2013.08.010">Task-oriented structure synthesis of a class of parallel manipulators using motion constraint generator</a>.</strong> <a class="anim" href="../papers/mmt2013.html">animation</a><br><span class="venue">Kuo, C.-H. and Dai, J. S., <em>Mechanism and Machine Theory</em>, 2013. <a href="https://doi.org/10.1016/j.mechmachtheory.2013.08.010">doi</a></span></li>
+<li class="has-mini"><a class="mini-link" href="../papers/jmr2021a.html"><svg class="mini" data-mini="JMR2021a" viewBox="0 0 160 110" role="img" aria-label="An axis w from the origin lying in a plane that turns about the y-axis with joint a; its projection on the xz-plane and the angle to z follow a, then stay fixed while w swings out of the plane."></svg></a><div><strong><a href="https://doi.org/10.1115/1.4050151">Structure synthesis of a class of parallel manipulators with fully decoupled projective motion</a>.</strong> <a class="anim" href="../papers/jmr2021a.html">animation</a><br><span class="venue">Kuo, C.-H. and Dai, J. S., <em>ASME Journal of Mechanisms and Robotics</em>, 2021. <a href="https://doi.org/10.1115/1.4050151">doi</a></span><br><span class="mini-cap">The base joint a of a six-degree-of-freedom leg alone sets the projective angle <sup>w</sup>θ<sub>xz</sub> of the axis w. With a locked, the leg's other joints move w out of the plane but leave its projection on the xz-plane unchanged. Legs built this way give parallel manipulators with fully decoupled projective motion.</span></div></li>
+<li class="has-mini"><a class="mini-link" href="../papers/rob2014.html"><svg class="mini" data-mini="ROB2014" viewBox="0 0 160 110" role="img" aria-label="A triangular platform on a spherical joint at the origin with three legs, one on each axis; each base joint is driven in turn and only its own angle readout moves."></svg></a><div><strong><a href="https://doi.org/10.1017/S0263574713001100">A non-overconstrained variant of the Agile Eye with a special decoupled kinematics</a>.</strong> <a class="anim" href="../papers/rob2014.html">animation</a><br><span class="venue">Kuo, C.-H., Dai, J. S. and Legnani, G., <em>Robotica</em>, 2014. <a href="https://doi.org/10.1017/S0263574713001100">doi</a></span><br><span class="mini-cap">Turning the base joint on the x-axis by α<sub>x</sub> changes the projective angle <sup>v</sup>θ<sub>yz</sub> of the platform by the same amount and leaves the other two unchanged; likewise for y and z. A single spherical joint carries the constraint, so the wrist matches the Agile Eye kinematically without being overconstrained.</span></div></li>
+<li class="has-mini"><a class="mini-link" href="../papers/mmt2013.html"><svg class="mini" data-mini="MMT2013" viewBox="0 0 160 110" role="img" aria-label="A platform floating freely above a base, then held by a central leg so it can only tilt, then driven by two outer legs with actuated sliding joints."></svg></a><div><strong><a href="https://doi.org/10.1016/j.mechmachtheory.2013.08.010">Task-oriented structure synthesis of a class of parallel manipulators using motion constraint generator</a>.</strong> <a class="anim" href="../papers/mmt2013.html">animation</a><br><span class="venue">Kuo, C.-H. and Dai, J. S., <em>Mechanism and Machine Theory</em>, 2013. <a href="https://doi.org/10.1016/j.mechmachtheory.2013.08.010">doi</a></span><br><span class="mini-cap">A single serial leg fixes the motion of the platform; legs of connectivity six, which add no constraint, are then added to carry the actuators. Built this way, every manipulator is non-overconstrained.</span></div></li>
 </ul>
+<script src="../assets/anim/mini.js?v=42c9e44d" defer></script>
 
     <h2>Also under this theme</h2>
     <ul class="papers">
 <li class="has-mini"><svg class="mini" data-mini="BC03" viewBox="0 0 160 110" role="img" aria-label="Three extensible SPS legs and a central PS leg carry the platform: a four-degree-of-freedom parallel manipulator with partially decoupled motion."></svg><div><span class="kind">Book chapter</span> <strong><a href="https://books.google.com/books?vid=ISBN9781621004035">A partially-decoupled 4-DOF general 3SPS/PS parallel manipulator</a>.</strong><br><span class="venue">Kuo, C.-H. and Dai, J. S., <em>In: Legnani, G. and Fassi, I. (eds), Robotics: State of the Art and Future Trends, Nova Science</em>, 2011. <a href="https://books.google.com/books?vid=ISBN9781621004035">link</a></span><br><span class="mini-cap">Three extensible SPS legs and a central PS leg carry the platform: a four-degree-of-freedom parallel manipulator with partially decoupled motion.</span></div></li>
 </ul>
-<script src="../assets/anim/mini.js?v=24b4a507" defer></script>
+<script src="../assets/anim/mini.js?v=42c9e44d" defer></script>
 
     <p class="credit">Figures on this page are the author's own drawings and photographs as published in the papers cited, reproduced here under the publishers' author reuse rights. Copyright remains with the respective publishers.</p>
   </main>

@@ -13,6 +13,7 @@ Tokens inside a body:
     {{anims:gravity}}       cards linking to the theme's animation pages (no longer used on the theme pages)
     {{cite:MMT2023}}        one-line citation of one paper, for its animation page
     {{publications}}        the full publication list, from src/data/publications.json (made by tools/import_cv.py)
+    {{cv}}                  the CV sections, from src/data/cv.html (made by tools/import_cv_full.py)
 Animation pages live in src/pages/papers/<key>.html and load their script from assets/anim/.
 Data comes from src/data/papers.json. Pages under src/pages/_drafts/ are not built.
 
@@ -154,7 +155,18 @@ def publications_html(root):
     return "\n".join(out)
 
 
+def cv_html(root):
+    """The CV page body: section jump links, then the CV sections."""
+    cv = open(os.path.join(ROOT, "src", "data", "cv.html"), encoding="utf-8").read()
+    secs = re.findall(r'<h2 id="([\w-]+)">(.+?)</h2>', cv)
+    short = lambda t: re.sub(r" \(.*\)$", "", t)                 # "Grants (2019-)" -> "Grants"
+    jump = " ".join(f'<a href="#{i}">{short(t)}</a>' for i, t in secs)
+    return (f'<nav class="pub-jump cv-jump" aria-label="Sections">{jump}</nav>\n<div class="cv">{cv}'
+            f'</div>')
+
+
 def expand_tokens(body, root):
+    body = body.replace("{{cv}}", cv_html(root))
     body = body.replace("{{publications}}", publications_html(root))
     body = re.sub(r"\{\{papers:(\w+)\}\}", lambda m: papers_html(m.group(1), True, root), body)
     body = re.sub(r"\{\{papers-all:(\w+)\}\}", lambda m: papers_html(m.group(1), False, root), body)

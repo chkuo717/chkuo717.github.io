@@ -267,3 +267,16 @@ ol.pubs .anim, .anim-mark { font-size: .72rem; font-weight: 700; letter-spacing:
 a.profile { display: inline-block; padding: .3rem .85rem; border: 1px solid var(--fg); border-radius: var(--radius); background: var(--card); color: var(--fg); text-decoration: none; font-size: .9rem; font-weight: 500; }
 a.profile:hover { background: var(--bg-2); }
 @media (max-width: 34rem) { ol.pubs { padding-left: 1.9rem; } }
+
+/* CV page */
+.cv ul { padding-left: 1.2rem; max-width: var(--measure); }
+.cv li { margin: .35rem 0; line-height: 1.5; }
+.cv li strong { font-weight: 600; }
+.cv .cv-note { display: block; margin-top: .25rem; color: var(--fg-2); font-size: .9rem; }
+.cv h3 { font-size: 1.1rem; }
+.cv h4 { font-size: 1rem; margin: 1.2em 0 .3em; color: var(--fg-2); }
+.cv-table { overflow-x: auto; margin: .6rem 0 1rem; }
+.cv-table table { border-collapse: collapse; font-size: .92rem; min-width: 32rem; }
+.cv-table th, .cv-table td { text-align: left; padding: .35rem .9rem .35rem 0; border-top: 1px solid var(--line); vertical-align: top; }
+.cv-table th { color: var(--fg-2); font-weight: 600; border-top: 0; }
+.cv h2, .cv h3[id] { scroll-margin-top: 4.5rem; }

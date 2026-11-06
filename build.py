@@ -13,8 +13,6 @@ Tokens inside a body:
     {{anims:gravity}}       cards linking to the theme's animation pages (no longer used on the theme pages)
     {{cite:MMT2023}}        one-line citation of one paper, for its animation page
     {{publications}}        the full publication list, from src/data/publications.json (made by tools/import_cv.py)
-    {{cv}}                  the CV sections, from src/data/cv.html (made by tools/import_cv_full.py), with the
-                            publication list after them, one heading level down
 Animation pages live in src/pages/papers/<key>.html and load their script from assets/anim/.
 Data comes from src/data/papers.json. Pages under src/pages/_drafts/ are not built.
 
@@ -141,13 +139,13 @@ def cite_html(key):
             f'<em>{e(p["venue"])}</em>, {p["year"]}.{doi}</p>')
 
 
-def publications_html(root, h=2):
+def publications_html(root):
     """The full list, one section per kind, newest first as in the CV; links to an animation page where one exists."""
     anim = {p["key"].lower(): p["anim"] for p in PAPERS if p.get("anim")}
     counts = " ".join(f'<a href="#{s["id"]}">{s["label"]} <span class="count">{len(s["items"])}</span></a>' for s in PUBS)
     out = [f'<nav class="pub-jump" aria-label="Sections">{counts}</nav>']
     for s in PUBS:
-        out.append(f'<h{h} id="{s["id"]}">{s["label"]}</h{h}>\n<ol class="pubs" reversed>')
+        out.append(f'<h2 id="{s["id"]}">{s["label"]}</h2>\n<ol class="pubs" reversed>')
         for it in sorted(s["items"], key=lambda it: -(it["year"] or 0)):   # stable: CV order within a year
             a = anim.get(it["key"].lower())
             tag = f' <a class="anim" href="{root}{html.escape(a)}">animation</a>' if a else ""
@@ -156,18 +154,7 @@ def publications_html(root, h=2):
     return "\n".join(out)
 
 
-def cv_html(root):
-    """The CV page body: section jump links, the CV sections, then the publication list."""
-    cv = open(os.path.join(ROOT, "src", "data", "cv.html"), encoding="utf-8").read()
-    secs = re.findall(r'<h2 id="([\w-]+)">(.+?)</h2>', cv) + [("publications", "Publications")]
-    short = lambda t: re.sub(r" \(.*\)$", "", t)                 # "Grants (2019-)" -> "Grants"
-    jump = " ".join(f'<a href="#{i}">{short(t)}</a>' for i, t in secs)
-    return (f'<nav class="pub-jump cv-jump" aria-label="Sections">{jump}</nav>\n<div class="cv">{cv}'
-            f'<h2 id="publications">Publications</h2>\n{publications_html(root, 3)}</div>')
-
-
 def expand_tokens(body, root):
-    body = body.replace("{{cv}}", cv_html(root))
     body = body.replace("{{publications}}", publications_html(root))
     body = re.sub(r"\{\{papers:(\w+)\}\}", lambda m: papers_html(m.group(1), True, root), body)
     body = re.sub(r"\{\{papers-all:(\w+)\}\}", lambda m: papers_html(m.group(1), False, root), body)

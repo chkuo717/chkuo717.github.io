@@ -171,6 +171,8 @@ def main(base):
     for name in FILES:
         md = open(os.path.join(cvdir, name + ".md"), encoding="utf-8").read()
         md = re.sub(r"\A---\n.*?\n---\n", "", md, flags=re.S)                    # frontmatter
+        if name == "02 Leadership":                                              # repeats the section from 06
+            md = re.sub(r"^## Conference Organization\n.*?(?=^#)", "", md, flags=re.S | re.M)
         if name == "06 Professional Activities":                                 # conference organization only, one level up
             md = md.replace("# Professional Activities\n", "").replace("## Conference Organization", "# Conference Organization")
         parts.append(convert(md, reg))

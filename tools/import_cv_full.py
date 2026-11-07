@@ -39,6 +39,11 @@ SKIP_ITEMS = ("**Initiator and lead**",                      # alliance still in
 KEEP_PARAS = {"HDR Completions"}                              # elsewhere free paragraphs are blurbs
 GRANTS = ["ncp2025", "uowsurrey2025", "aegis2022", "theomurphy2022", "eis2020", "umove2019", "jsps2023"]
 KEEP_NOTES = ("Conferred to",)                                # other indented notes are blurbs or evidence
+TOPICS = {"Zac Barry": "gravity compensation for rehabilitation",             # current students: a broad topic,
+          "Muhammad Adeel Iqbal Nguyen": "soft actuators",                     # never the thesis title (2026-11-07)
+          "Duc Dung Nguyen": "gravity compensation for adaptive building façades",
+          "Shuojie Li": "continuum robots",
+          "Adem Benten": "gravity compensation for robotic arms"}
 CURRENT = re.compile(r"–current\)|–present\)|\(\d{4}–\)")     # a student still enrolled
 
 
@@ -198,6 +203,8 @@ def supervision(md):
     phd = section(md, "Ph.D. @ UOW")
     current = re.sub(r"^- (?!.*(?:–current\)|–present\))).*\n(?:  .*\n)*", "", phd, flags=re.M)
     current = re.sub(r"^(- \*\*[^*]+\*\* \()", r"\1PhD, ", current, flags=re.M)              # degree type
+    current = re.sub(r"^(- \*\*([^*]+)\*\* \([^)]*\)), \*[^*]+\*",                           # broad topic for the title
+                     lambda m: f"{m.group(1)}, {TOPICS[m.group(2)].capitalize()}", current, flags=re.M)
     md = md.replace(phd, current.replace("## Ph.D. @ UOW", "## Current HDR Students"))
     note = (f"In addition, {len(years)} master's students completed their degrees under my principal supervision at "
             f"Taiwan Tech ({min(years)}–{max(years)}).")

@@ -36,7 +36,7 @@ SKIP_HEADINGS = {"Research Profile", "Institutional Governance", "Research Impac
                  "Grant Review", "Fellowship Review", "Thesis Review", "Other Visiting Appointments"}
 SKIP_ITEMS = ("**Initiator and lead**",                      # alliance still in the approval pathway
               "**NCP Project Leader**", "**Section Leader**", "**Principal Researcher**")   # minor service
-KEEP_PARAS = {"HDR Completions (Last 5 Years)"}               # elsewhere free paragraphs are blurbs
+KEEP_PARAS = {"HDR Completions"}                              # elsewhere free paragraphs are blurbs
 GRANTS = ["ncp2025", "uowsurrey2025", "aegis2022", "theomurphy2022", "eis2020", "umove2019", "jsps2023"]
 KEEP_NOTES = ("Conferred to",)                                # other indented notes are blurbs or evidence
 CURRENT = re.compile(r"–current\)|–present\)|\(\d{4}–\)")     # a student still enrolled
@@ -200,6 +200,7 @@ def supervision(md):
     md = md.replace(phd, current.replace("## Ph.D. @ UOW", "## Current HDR Students"))
     note = (f"In addition, {len(years)} master's students completed their degrees under my principal supervision at "
             f"Taiwan Tech ({min(years)}–{max(years)}).")
+    md = md.replace("## HDR Completions (Last 5 Years)", "## HDR Completions")
     return re.sub(r"^Note: .*$", note, md, count=1, flags=re.M)
 
 

@@ -36,9 +36,8 @@ SKIP_HEADINGS = {"Research Profile", "Institutional Governance", "Research Impac
                  "Grant Review", "Fellowship Review", "Thesis Review", "Other Visiting Appointments"}
 SKIP_ITEMS = ("**Initiator and lead**",                      # alliance still in the approval pathway
               "**NCP Project Leader**", "**Section Leader**", "**Principal Researcher**")   # minor service
-KEEP_PARAS = {"HDR Completions"}                              # elsewhere free paragraphs are blurbs
+KEEP_PARAS = {"Education", "HDR Completions"}                 # elsewhere free paragraphs are blurbs
 GRANTS = ["ncp2025", "uowsurrey2025", "aegis2022", "theomurphy2022", "eis2020", "umove2019", "jsps2023"]
-NO_HEAD = {"Education"}                                       # one row: the column names add nothing
 KEEP_NOTES = ("Conferred to",)                               # other indented notes are blurbs or evidence
 TOPICS = {"Zac Barry": "gravity compensation for rehabilitation",             # current students: a broad topic,
           "Muhammad Adeel Iqbal Nguyen": "soft actuators",                     # never the thesis title (2026-11-07)
@@ -140,10 +139,7 @@ def convert(md, reg):
             cells = [[c.strip() for c in r.strip().strip("|").split("|")] for r in rows if not re.match(r"^\|[\s:|-]+\|$", r.strip())]
             head = "".join(f"<th>{inline(c)}</th>" for c in cells[0])
             body = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in cells[1:])
-            if state["head"] in NO_HEAD:
-                out.append(f'<div class="cv-table no-head"><table><tbody>{body}</tbody></table></div>')
-            else:
-                out.append(f'<div class="cv-table"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>')
+            out.append(f'<div class="cv-table"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>')
             continue
         if s.startswith("- "):
             flush_li()
@@ -192,6 +188,14 @@ def completions(md):
     return head + sep + rest.partition("\n\n|")[0] + "\n\n" + table + blank + tail
 
 
+def education(md):
+    """Education as one sentence: the PhD only, with the year conferred."""
+    table = re.search(r"(?<=## Education\n\n)(?:\|.*\n)+", md).group(0)
+    inst, country, field, year = re.search(r"^\| *([^|]+?) *\| *([^|]+?) *\| *([^|]+?) *\| *Ph\.D\. *\|[^|]*?(\d{4}) *\|$",
+                                           table, flags=re.M).groups()
+    return md.replace(table, f"PhD in {field}, {inst}, {country}, {year}.\n")
+
+
 def section(md, heading):
     """The text of one '## heading' section, up to the next heading."""
     m = re.search(r"^## " + re.escape(heading) + r"\n.*?(?=^#|\Z)", md, flags=re.S | re.M)
@@ -223,9 +227,8 @@ def main(base):
     for name in FILES:
         md = open(os.path.join(cvdir, name + ".md"), encoding="utf-8").read()
         md = re.sub(r"\A---\n.*?\n---\n", "", md, flags=re.S)                    # frontmatter
-        if name == "01 Profile":                                                 # education: the PhD only
-            md = re.sub(r"^\|.*\| (?:MSc|BEng) .*\n", "", md, flags=re.M)
-            md = re.sub(r"(\| Ph\.D\. +\| )\w{3} \d{4}–\w{3} (\d{4})", r"\1\2", md)              # the year conferred only
+        if name == "01 Profile":
+            md = education(md)
             md = re.sub(r" \((?:e?merged) with other engineering schools[^)]*\)", "", md)    # the 2026 school merger note
         if name == "02 Leadership":                                              # repeats the section from 06
             md = re.sub(r"^## Conference Organization\n.*?(?=^#)", "", md, flags=re.S | re.M)

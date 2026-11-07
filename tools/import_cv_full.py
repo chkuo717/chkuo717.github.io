@@ -225,6 +225,7 @@ def main(base):
         md = re.sub(r"\A---\n.*?\n---\n", "", md, flags=re.S)                    # frontmatter
         if name == "01 Profile":                                                 # education: the PhD only
             md = re.sub(r"^\|.*\| (?:MSc|BEng) .*\n", "", md, flags=re.M)
+            md = re.sub(r"(\| Ph\.D\. +\| )\w{3} \d{4}–\w{3} (\d{4})", r"\1\2", md)              # the year conferred only
             md = re.sub(r" \((?:e?merged) with other engineering schools[^)]*\)", "", md)    # the 2026 school merger note
         if name == "02 Leadership":                                              # repeats the section from 06
             md = re.sub(r"^## Conference Organization\n.*?(?=^#)", "", md, flags=re.S | re.M)

@@ -31,7 +31,7 @@ OUT = os.path.join(ROOT, "src", "data", "cv.html")
 
 FILES = ["01 Profile", "02 Leadership", "03 Awards", "04 Service", "06 Professional Activities",
          "08 Grants", "09 Supervision"]
-SKIP_HEADINGS = {"Research Profile", "Research Impact", "Teaching Award Nominations (Colleagues)",
+SKIP_HEADINGS = {"Research Profile", "Institutional Governance", "Research Impact", "Teaching Award Nominations (Colleagues)",
                  "Grant Review", "Fellowship Review", "Thesis Review", "Other Visiting Appointments"}
 SKIP_ITEMS = ("**Initiator and lead**",                      # alliance still in the approval pathway
               "**NCP Project Leader**", "**Section Leader**", "**Principal Researcher**")   # minor service

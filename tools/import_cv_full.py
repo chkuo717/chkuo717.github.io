@@ -143,7 +143,7 @@ def convert(md, reg):
                 continue
             state["drop_item"] = False
             item = re.sub(r"\s*Awarded papers?[^:]*:\s*$", "", s[2:])
-            if CURRENT.search(item) and "supervision" in item.lower() and re.match(r"\*\*[^*]+\*\* \(\d{4}–", item):
+            if CURRENT.search(item) and "supervision" in item.lower() and re.match(r"\*\*[^*]+\*\* \((?:\w+, )?\d{4}–", item):
                 item = re.sub(r", \*[^*]+\*", "", item, count=1)                 # current student: no thesis title
             if not state["list"]:
                 out.append("<ul>")
@@ -197,6 +197,7 @@ def supervision(md):
         md = md.replace(section(md, h), "")
     phd = section(md, "Ph.D. @ UOW")
     current = re.sub(r"^- (?!.*(?:–current\)|–present\))).*\n(?:  .*\n)*", "", phd, flags=re.M)
+    current = re.sub(r"^(- \*\*[^*]+\*\* \()", r"\1PhD, ", current, flags=re.M)              # degree type
     md = md.replace(phd, current.replace("## Ph.D. @ UOW", "## Current HDR Students"))
     note = (f"In addition, {len(years)} master's students completed their degrees under my principal supervision at "
             f"Taiwan Tech ({min(years)}–{max(years)}).")
@@ -211,6 +212,8 @@ def main(base):
     for name in FILES:
         md = open(os.path.join(cvdir, name + ".md"), encoding="utf-8").read()
         md = re.sub(r"\A---\n.*?\n---\n", "", md, flags=re.S)                    # frontmatter
+        if name == "01 Profile":                                                 # education: the PhD only
+            md = re.sub(r"^\|.*\| (?:MSc|BEng) .*\n", "", md, flags=re.M)
         if name == "02 Leadership":                                              # repeats the section from 06
             md = re.sub(r"^## Conference Organization\n.*?(?=^#)", "", md, flags=re.S | re.M)
         if name == "06 Professional Activities":                                 # conference organization only, one level up

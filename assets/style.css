@@ -279,4 +279,5 @@ a.profile:hover { background: var(--bg-2); }
 .cv-table table { border-collapse: collapse; font-size: .92rem; min-width: 32rem; }
 .cv-table th, .cv-table td { text-align: left; padding: .35rem .9rem .35rem 0; border-top: 1px solid var(--line); vertical-align: top; }
 .cv-table th { color: var(--fg-2); font-weight: 600; border-top: 0; }
+.cv-table.no-head td { border-top: 0; }
 .cv h2, .cv h3[id] { scroll-margin-top: 4.5rem; }

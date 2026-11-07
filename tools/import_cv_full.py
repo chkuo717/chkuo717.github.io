@@ -38,7 +38,8 @@ SKIP_ITEMS = ("**Initiator and lead**",                      # alliance still in
               "**NCP Project Leader**", "**Section Leader**", "**Principal Researcher**")   # minor service
 KEEP_PARAS = {"HDR Completions"}                              # elsewhere free paragraphs are blurbs
 GRANTS = ["ncp2025", "uowsurrey2025", "aegis2022", "theomurphy2022", "eis2020", "umove2019", "jsps2023"]
-KEEP_NOTES = ("Conferred to",)                                # other indented notes are blurbs or evidence
+NO_HEAD = {"Education"}                                       # one row: the column names add nothing
+KEEP_NOTES = ("Conferred to",)                               # other indented notes are blurbs or evidence
 TOPICS = {"Zac Barry": "gravity compensation for rehabilitation",             # current students: a broad topic,
           "Muhammad Adeel Iqbal Nguyen": "soft actuators",                     # never the thesis title (2026-11-07)
           "Duc Dung Nguyen": "gravity compensation for adaptive building façades",
@@ -139,7 +140,10 @@ def convert(md, reg):
             cells = [[c.strip() for c in r.strip().strip("|").split("|")] for r in rows if not re.match(r"^\|[\s:|-]+\|$", r.strip())]
             head = "".join(f"<th>{inline(c)}</th>" for c in cells[0])
             body = "".join("<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in cells[1:])
-            out.append(f'<div class="cv-table"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>')
+            if state["head"] in NO_HEAD:
+                out.append(f'<div class="cv-table no-head"><table><tbody>{body}</tbody></table></div>')
+            else:
+                out.append(f'<div class="cv-table"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>')
             continue
         if s.startswith("- "):
             flush_li()

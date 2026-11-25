@@ -33,14 +33,17 @@ OUT = os.path.join(ROOT, "src", "data", "cv.html")
 FILES = ["01 Profile", "02 Leadership", "03 Awards", "04 Service", "06 Professional Activities",
          "08 Grants", "09 Supervision"]
 SKIP_HEADINGS = {"Research Profile", "Institutional Governance", "Research Impact", "Teaching Award Nominations (Colleagues)",
-                 "Grant Review", "Fellowship Review", "Thesis Review", "Other Visiting Appointments"}
+                 "Grant Review", "Fellowship Review", "Thesis Review", "Other Visiting Appointments",
+                 # added to the CV on 2026-11-25 for job applications; held back from the page until the author decides
+                 # (the Taiwan Tech grants are transclusions this script does not resolve; the student list has items to confirm)
+                 "Taiwan Tech (2011–2018)", "Thesis and Project Students with Publications"}
 SKIP_ITEMS = ("**Initiator and lead**",                      # alliance still in the approval pathway
               "**NCP Project Leader**", "**Section Leader**", "**Principal Researcher**")   # minor service
 KEEP_PARAS = {"Education", "HDR Completions"}                 # elsewhere free paragraphs are blurbs
 GRANTS = ["ncp2025", "uowsurrey2025", "aegis2022", "theomurphy2022", "eis2020", "umove2019", "jsps2023"]
 KEEP_NOTES = ("Conferred to",)                               # other indented notes are blurbs or evidence
 TOPICS = {"Zac Barry": "gravity compensation for rehabilitation",             # current students: a broad topic,
-          "Muhammad Adeel Iqbal Nguyen": "soft actuators",                     # never the thesis title (2026-11-07)
+          "Muhammad Adeel Iqbal": "soft actuators",                            # never the thesis title (2026-11-07)
           "Duc Dung Nguyen": "gravity compensation for adaptive building façades",
           "Shuojie Li": "continuum robots",
           "Adem Benten": "gravity compensation for robotic arms"}
@@ -235,6 +238,8 @@ def main(base):
             md = re.sub(r"^## Conference Organization\n.*?(?=^#)", "", md, flags=re.S | re.M)
         if name == "06 Professional Activities":                                 # conference organization only, one level up
             md = md.replace("# Professional Activities\n", "").replace("## Conference Organization", "# Conference Organization")
+        if name == "08 Grants":                                                  # the Taiwan Tech years are held back (SKIP_HEADINGS)
+            md = md.replace("# Grants (2011-)\n", "# Grants (2019-)\n")
         if name == "09 Supervision":
             md = supervision(md)
         parts.append(convert(md, reg))

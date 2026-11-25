@@ -51,6 +51,7 @@ def strip_obsidian(s):
     s = re.sub(r"<!--.*?-->", "", s)
     s = re.sub(r"\s*\^[\w-]+\s*$", "", s)                                        # block id
     s = re.sub(r"\s*\(\[\[[^\]]*\]\]\)", "", s)                                  # "(supervision details)" links
+    s = re.sub(r";\s*see \[\[[^\]]*\]\]", "", s)                               # "; see [[02 Leadership#...|Leadership]]" (no such section on the page)
     s = re.sub(r"\.?\s*(Publications|\*\*Award:\*\*):? .*$", ".", s)             # cross-links to publications
     s = re.sub(r"\s*Thesis embargo[^.]*\.[^.]*\.?", "", s)
     s = re.sub(r"\[\[[^\]|]*\|([^\]]*)\]\]", r"\1", s)

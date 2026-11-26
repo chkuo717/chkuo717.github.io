@@ -51,7 +51,7 @@ CURRENT = re.compile(r"–current\)|–present\)|\(\d{4}–\)")     # a student 
 
 
 def strip_obsidian(s):
-    s = re.sub(r"<!--.*?-->", "", s)
+    s = re.sub(r"\s*<!--.*?-->", "", s)
     s = re.sub(r"\s*\^[\w-]+\s*$", "", s)                                        # block id
     s = re.sub(r"\s*\(\[\[[^\]]*\]\]\)", "", s)                                  # "(supervision details)" links
     s = re.sub(r";\s*see \[\[[^\]]*\]\]", "", s)                               # "; see [[02 Leadership#...|Leadership]]" (no such section on the page)

@@ -33,6 +33,7 @@ ME = "Kuo, C.-H."
 
 
 def clean(text, key):
+    text = re.sub(r"\s*<!--.*?-->", "", text)                                  # dated correction notes
     text = re.sub(r"\s*\^\S+\s*$", "", text)                                   # block id
     text = re.sub(r"\s*\[(?:JIF|Not JCR)[^\]]*\]", "", text)                    # metrics, citation counts
     if key == "BC01":

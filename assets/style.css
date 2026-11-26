@@ -177,6 +177,8 @@ dl.facts dd { margin: 0; }
 /* UOW highlight: a bar equal to the leading, behind the words */
 .hl { background: linear-gradient(transparent 58%, var(--red) 58%, var(--red) 82%, transparent 82%); padding: 0 .08em; }
 h1 .hl { background: none; box-shadow: inset 0 -.38em 0 0 var(--red); }
+/* a key term in running text: bold, with a thin red underline (not blue, so it is not read as a link) */
+.term { font-weight: 700; text-decoration: underline; text-decoration-color: var(--red); text-decoration-thickness: .12em; text-underline-offset: .2em; text-decoration-skip-ink: none; }
 
 /* Paper and talk lists */
 .papers .kind { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-right: .3rem; }

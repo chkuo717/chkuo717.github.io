@@ -152,82 +152,104 @@
 })();
 
 
-// Home: a gravity-balanced monitor arm (parallelogram four-bar with the screen on the bracket).
-// The simplest case of Kuo, Mech. Mach. Theory 214 (2025) 106140: in a parallelogram the bracket only
-// translates, so the screen's centre P = M + const and its weight acts as a mass on the lower arm at radius r2.
-// One zero-free-length spring from H = (0, h) on the post to L = l (cos th, sin th) on the lower arm gives
-//   U_s = k (h^2 + l^2)/2 - k h l sin th,   U_g = m g r2 sin th + const,
-// so the total is constant for every th when k h l = m g r2. Arms are taken as light.
+// Home: a gravity-balanced lift-up cabinet door on a general (non-parallelogram) four-bar linkage.
+// Kuo, Mech. Mach. Theory 214 (2025) 106140, coupler-mass case. The door is the coupler; its weight m acts at
+// its centre P. In a frame at the crank pivot O,  P = cA r2 e^{i th2} + cB r4 e^{i th4} + const,  with
+// c = (r5/r3) e^{i alpha}, cA = 1 - c, cB = c  (r5, alpha: P relative to M, measured from M->N).
+// So m at P is m at radius rA = r2|cA| on the crank (offset dA = arg cA) plus m at rB = r4|cB| on the rocker.
+// Each is balanced by a zero-free-length spring from a ground point H (distance h from the pivot, direction
+// pi/2 + phi) to a link point L (distance l, direction th + d + phi) with k h l = m g r, for any phi.
+// Layout found by a two-position search: closed door vertical, open door level above the cabinet, the door
+// never entering the cabinet on the way. Units are arbitrary; links are taken as light.
 (function () {
   var svg = document.getElementById('arm');
   if (!svg || !window.KD) return;
-  var r1 = 60, r2 = 170, h = 40, l = 70, m = 1, g = 1, k = m * g * r2 / (h * l);
-  var off = { x: 34, y: 30 }, scrH = 120;          // screen centre relative to M; screen height
-  var amp = 32 * Math.PI / 180;                     // arm swings between -32 and +32 degrees
-  var OX = 92, OY = 150, SC = 0.75;
+  var D = 160, sM = 0.6, sN = 0.8, tt = 10;              // door length; M, N on the door (fractions), set 10 inside
+  var B1 = { x: 8, y: -60 };                              // closed door: bottom edge, door vertical
+  var O = { x: -27, y: 94 }, Q = { x: -6, y: 86 };        // ground pivots near the top front of the side panel
+  function onDoor(B, ang, s, t) { return { x: B.x + s * Math.cos(ang) + t * Math.cos(ang + Math.PI / 2), y: B.y + s * Math.sin(ang) + t * Math.sin(ang + Math.PI / 2) }; }
+  var M1 = onDoor(B1, Math.PI / 2, sM * D, tt), N1 = onDoor(B1, Math.PI / 2, sN * D, tt);
+  var r2 = Math.hypot(M1.x - O.x, M1.y - O.y), r4 = Math.hypot(N1.x - Q.x, N1.y - Q.y), r3 = (sN - sM) * D;
+  var Pu = -(sM - 0.5) * D, Pv = -tt;                     // door centre relative to M, in the door's (u, v) frame
+  var r5 = Math.hypot(Pu, Pv), alpha = Math.atan2(Pv, Pu);
+  var cr = r5 / r3 * Math.cos(alpha), ci = r5 / r3 * Math.sin(alpha);
+  var rA = r2 * Math.hypot(1 - cr, -ci), dA = Math.atan2(-ci, 1 - cr), rB = r4 * Math.hypot(cr, ci), dB = alpha;
+  var m = 1, g = 1;
+  var phiA = 235 * Math.PI / 180, hA = 12, lA = 26;      // crank spring: anchor below-right of O, on a lever pointing down-left
+  var phiB = -dB, hB = 20, lB = 14;                       // rocker spring: anchor below-left of Q, on the rocker itself
+  var kA = m * g * rA / (hA * lA), kB = m * g * rB / (hB * lB);
+  var HA = { x: O.x + hA * Math.cos(Math.PI / 2 + phiA), y: O.y + hA * Math.sin(Math.PI / 2 + phiA) };
+  var HB = { x: Q.x + hB * Math.cos(Math.PI / 2 + phiB), y: Q.y + hB * Math.sin(Math.PI / 2 + phiB) };
+  var th0 = Math.atan2(M1.y - O.y, M1.x - O.x), span = 72 * Math.PI / 180;
+  function circ(M, sg) {
+    var dx = Q.x - M.x, dy = Q.y - M.y, d = Math.hypot(dx, dy), a = (r3 * r3 - r4 * r4 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, r3 * r3 - a * a));
+    var mx = M.x + a * dx / d, my = M.y + a * dy / d;
+    return { x: mx - sg * h * dy / d, y: my + sg * h * dx / d };
+  }
+  var sg = Math.hypot(circ(M1, 1).x - N1.x, circ(M1, 1).y - N1.y) < 1e-6 ? 1 : -1;
+  function solve(th2) {
+    var M = { x: O.x + r2 * Math.cos(th2), y: O.y + r2 * Math.sin(th2) }, N = circ(M, sg);
+    var th4 = Math.atan2(N.y - Q.y, N.x - Q.x), ang = Math.atan2(N.y - M.y, N.x - M.x);
+    var P = { x: M.x + Pu * Math.cos(ang) - Pv * Math.sin(ang), y: M.y + Pu * Math.sin(ang) + Pv * Math.cos(ang) };
+    var B = onDoor(M, ang, -sM * D, -tt), T = onDoor(B, ang, D, 0), K = onDoor(B, ang, 14, -6);
+    var LA = { x: O.x + lA * Math.cos(th2 + dA + phiA), y: O.y + lA * Math.sin(th2 + dA + phiA) };
+    var LB = { x: Q.x + lB * Math.cos(th4 + dB + phiB), y: Q.y + lB * Math.sin(th4 + dB + phiB) };
+    var Ug = m * g * P.y;
+    var Us = 0.5 * kA * ((HA.x - LA.x) * (HA.x - LA.x) + (HA.y - LA.y) * (HA.y - LA.y)) + 0.5 * kB * ((HB.x - LB.x) * (HB.x - LB.x) + (HB.y - LB.y) * (HB.y - LB.y));
+    return { M: M, N: N, P: P, B: B, T: T, K: K, LA: LA, LB: LB, Ug: Ug, Us: Us };
+  }
+  var OX = 110, OY = 170, SC = 1.05;
   function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
   function f(v) { return v.toFixed(1); }
   var $ = function (id) { return svg.querySelector('#' + id); };
-  var O = { x: 0, y: 0 }, Q = { x: 0, y: r1 }, H = { x: 0, y: h };
-  function solve(th) {
-    var M = { x: r2 * Math.cos(th), y: r2 * Math.sin(th) };
-    var N = { x: M.x, y: M.y + r1 };
-    var P = { x: M.x + off.x, y: M.y + off.y };
-    var L = { x: l * Math.cos(th), y: l * Math.sin(th) };
-    var Ug = m * g * P.y, Us = 0.5 * k * ((H.x - L.x) * (H.x - L.x) + (H.y - L.y) * (H.y - L.y));
-    return { M: M, N: N, P: P, L: L, Ug: Ug, Us: Us };
-  }
-  // static: wall, post, pivots, spring anchor
-  var o = S(O), q = S(Q), hh = S(H);
+  // static: wall, cabinet (side panel, top, bottom, shelf), pivots and spring anchors
+  var c0 = S({ x: -80, y: 100 }), c1 = S({ x: 0, y: -60 });
   $('armStatic').innerHTML =
-    KD.wall(S({ x: -14, y: 100 }), S({ x: -14, y: -40 }), 1) +
-    KD.body(S({ x: -14, y: 84 }), S({ x: 0, y: 84 }), 2.5, 'var(--ground)') +
-    KD.body(S({ x: -14, y: -24 }), S({ x: 0, y: -24 }), 2.5, 'var(--ground)') +
-    KD.body(S({ x: 0, y: -24 }), S({ x: 0, y: 84 }), 3.5, 'var(--ground)');
-  var springOn = true;
+    '<rect x="' + f(c0.x) + '" y="' + f(c0.y) + '" width="' + f(c1.x - c0.x) + '" height="' + f(c1.y - c0.y) + '" fill="var(--link-fill)" opacity=".45" stroke="none"/>' +
+    KD.wall(S({ x: -84, y: 112 }), S({ x: -84, y: -72 }), 1) +
+    KD.body(S({ x: -80, y: 100 }), S({ x: 0, y: 100 }), 2.2, 'var(--ground)') +
+    KD.body(S({ x: -80, y: -60 }), S({ x: 0, y: -60 }), 2.2, 'var(--ground)') +
+    KD.body(S({ x: -80, y: 100 }), S({ x: -80, y: -60 }), 2.2, 'var(--ground)') +
+    KD.body(S({ x: -80, y: 30 }), S({ x: -2, y: 30 }), 1.2, 'var(--ground)');
+  var springsOn = true, o = S(O), q = S(Q), ha = S(HA), hb = S(HB);
   function draw(s) {
-    var M = S(s.M), N = S(s.N), P = S(s.P), L = S(s.L);
-    var mid = S({ x: s.M.x, y: s.M.y + off.y }), back = S({ x: s.P.x - 7, y: s.P.y });
-    var hs = SC * scrH / 2;
-    $('armSpringG').innerHTML = springOn ? KD.spring(hh, L, 9, 3.5) + KD.pin(hh) + KD.pin(L) : '';
+    var M = S(s.M), N = S(s.N), P = S(s.P), B = S(s.B), T = S(s.T), K = S(s.K), LA = S(s.LA), LB = S(s.LB);
+    $('armSpringG').innerHTML = springsOn ?
+      KD.spring(ha, LA, 9, 3.2) + KD.spring(hb, LB, 7, 3) + KD.pin(ha) + KD.pin(hb) + KD.pin(LA) + KD.pin(LB) : '';
     $('armMoving').innerHTML =
-      KD.link(o, M, 2.6) + KD.link(q, N, 2.6) + KD.link(M, N, 2.6) +
-      KD.link(mid, back, 2.2) +
-      '<rect x="' + f(back.x - 2) + '" y="' + f(P.y - 22) + '" width="7" height="44" rx="2" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="1.4"/>' +
-      '<rect x="' + f(back.x + 5) + '" y="' + f(P.y - hs) + '" width="6" height="' + f(2 * hs) + '" rx="1.5" fill="var(--fg)" stroke="var(--fg)" stroke-width="1"/>' +
-      KD.joint(o) + KD.joint(q) + KD.joint(M) + KD.joint(N);
+      KD.link(o, LA, 2) + KD.link(o, M, 2.4) + KD.link(q, N, 2.4) +
+      KD.body(B, T, 3.2, 'var(--card)') +
+      '<circle cx="' + f(K.x) + '" cy="' + f(K.y) + '" r="2.6" fill="var(--fg)"/>' +
+      KD.joint(o) + KD.joint(q) + KD.joint(M, 3.8) + KD.joint(N, 3.8) + KD.com(P, 5);
   }
-  // energy chart over the swing
+  // energy chart over the opening
   var W = 260, Hc = 70, n = 121, curve = [];
-  for (var i = 0; i < n; i++) curve.push(solve(-amp + 2 * amp * i / (n - 1)));
+  for (var i = 0; i < n; i++) curve.push(solve(th0 + span * i / (n - 1)));
   var lo = Infinity, hi = -Infinity;
-  curve.forEach(function (c) { lo = Math.min(lo, c.Ug, c.Us); hi = Math.max(hi, c.Ug, c.Us, c.Ug + c.Us); });
+  curve.forEach(function (c) { lo = Math.min(lo, c.Ug, c.Us); hi = Math.max(hi, c.Ug, c.Us); });
+  var tot = curve[0].Ug + curve[0].Us; hi = Math.max(hi, tot); lo = Math.min(lo, tot - 1.6 * (hi - lo)); hi += 0.45 * (hi - lo);
   var pad = (hi - lo) * 0.06; lo -= pad; hi += pad;
   function Y(u) { return Hc - (u - lo) / (hi - lo) * Hc; }
   function path(fn) { return curve.map(function (c, i) { return (i ? 'L' : 'M') + f(W * i / (n - 1)) + ',' + f(Y(fn(c))); }).join(''); }
-  var Ug = path(function (c) { return c.Ug; }), Us = path(function (c) { return c.Us; }), Ut = path(function (c) { return c.Ug + c.Us; });
-  $('aUg').setAttribute('d', Ug);
-  function chart() {
-    $('aUs').setAttribute('d', springOn ? Us : '');
-    $('aUt').setAttribute('d', springOn ? Ut : Ug);
-  }
+  var pUg = path(function (c) { return c.Ug; }), pUs = path(function (c) { return c.Us; }), pUt = path(function (c) { return c.Ug + c.Us; });
+  $('aUg').setAttribute('d', pUg);
+  function chart() { $('aUs').setAttribute('d', springsOn ? pUs : ''); $('aUt').setAttribute('d', springsOn ? pUt : pUg); }
   chart();
   var box = document.getElementById('armSpringOn'), msg = document.getElementById('armMsg');
   if (box) box.addEventListener('change', function () {
-    springOn = box.checked; chart();
-    if (msg) msg.textContent = springOn ? 'Balanced: the screen stays at any height.' : 'Not balanced: the weight pulls it down.';
+    springsOn = box.checked; chart();
+    if (msg) msg.textContent = springsOn ? 'Balanced: the door stays at any opening.' : 'Not balanced: the door falls shut.';
   });
   var t0 = null, period = 9000;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function tick(t) {
-    var ph = t0 === null ? 0.25 : ((t - t0) % period) / period;
-    var th = amp * Math.sin(2 * Math.PI * ph);
-    draw(solve(th));
-    var x = W * (th + amp) / (2 * amp);
-    $('aCursor').setAttribute('x1', f(x)); $('aCursor').setAttribute('x2', f(x));
+    var ph = t0 === null ? 0.5 : ((t - t0) % period) / period;
+    var u = (1 - Math.cos(2 * Math.PI * ph)) / 2;
+    draw(solve(th0 + span * u));
+    $('aCursor').setAttribute('x1', f(W * u)); $('aCursor').setAttribute('x2', f(W * u));
   }
   tick();
-  if (!reduce) requestAnimationFrame(function loop(t) { if (t0 === null) t0 = t - 0.25 * period; tick(t); requestAnimationFrame(loop); });
+  if (!reduce) requestAnimationFrame(function loop(t) { if (t0 === null) t0 = t - 0.3 * period; tick(t); requestAnimationFrame(loop); });
 })();
 
 

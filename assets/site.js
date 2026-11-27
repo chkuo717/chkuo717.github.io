@@ -196,7 +196,7 @@
     var LB = { x: Q.x + lB * Math.cos(th4 + dB + phiB), y: Q.y + lB * Math.sin(th4 + dB + phiB) };
     var Ug = m * g * P.y;
     var Us = 0.5 * kA * ((HA.x - LA.x) * (HA.x - LA.x) + (HA.y - LA.y) * (HA.y - LA.y)) + 0.5 * kB * ((HB.x - LB.x) * (HB.x - LB.x) + (HB.y - LB.y) * (HB.y - LB.y));
-    return { M: M, N: N, P: P, B: B, T: T, FM: FM, FN: FN, LA: LA, LB: LB, Ug: Ug, Us: Us };
+    return { M: M, N: N, P: P, B: B, T: T, FM: FM, FN: FN, ang: ang, LA: LA, LB: LB, Ug: Ug, Us: Us };
   }
   var OX = 160, OY = 160, SC = 0.95;
   function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
@@ -216,16 +216,34 @@
     poly([{ x: -96, y: 38 }, { x: -70, y: 9 }, { x: X0 + 4, y: 9 }, { x: X0 + 4, y: 41 }], 'var(--card)') +
     '<circle cx="' + f(w0.x) + '" cy="' + f(w0.y) + '" r="' + f(23 * SC) + '" fill="var(--fg)"/>' +
     '<circle cx="' + f(w0.x) + '" cy="' + f(w0.y) + '" r="' + f(11 * SC) + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
+  // one rigid link with two arms from pivot c: each arm stops short of the joint and the two are joined by an
+  // arc around it on the side between the arms (his sketch, 2026-11-27), so they read as one piece
+  function bentLink(c, p1, p2, rj, w) {
+    var a1 = Math.atan2(p1.y - c.y, p1.x - c.x), a2 = Math.atan2(p2.y - c.y, p2.x - c.x);
+    var d = a2 - a1; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
+    var s1 = { x: c.x + rj * Math.cos(a1), y: c.y + rj * Math.sin(a1) }, s2 = { x: c.x + rj * Math.cos(a2), y: c.y + rj * Math.sin(a2) };
+    return '<path d="M' + f(p1.x) + ',' + f(p1.y) + ' L' + f(s1.x) + ',' + f(s1.y) + ' A' + f(rj) + ',' + f(rj) + ' 0 0 ' + (d > 0 ? 1 : 0) + ' ' + f(s2.x) + ',' + f(s2.y) +
+           ' L' + f(p2.x) + ',' + f(p2.y) + '" fill="none" stroke="var(--fg)" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+  // a hinge lug fixed to the door's inner face, carrying the moving joint
+  function lug(s, ang, J) {
+    var F = function (ds, dt) { return S(onDoorPt(s + ds, dt, ang)); };
+    var p = [F(-9, 5.1), F(9, 5.1), { x: J.x + 3.6 * Math.cos(-ang), y: J.y + 3.6 * Math.sin(-ang) }, { x: J.x - 3.6 * Math.cos(-ang), y: J.y - 3.6 * Math.sin(-ang) }];
+    return '<polygon points="' + p.map(function (q) { return f(q.x) + ',' + f(q.y); }).join(' ') + '" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="1.4" stroke-linejoin="round"/>';
+  }
+  var onDoorPt = null;
   var springsOn = true, o = S(O), q = S(Q), ha = S(HA), hb = S(HB);
   function draw(s) {
     var M = S(s.M), N = S(s.N), P = S(s.P), B = S(s.B), T = S(s.T), FM = S(s.FM), FN = S(s.FN), LA = S(s.LA), LB = S(s.LB);
     $('armSpringG').innerHTML = springsOn ?
       KD.spring(ha, LA, 9, 3.2) + KD.spring(hb, LB, 7, 3) + KD.pin(ha) + KD.pin(hb) + KD.pin(LA) + KD.pin(LB) : '';
+    onDoorPt = function (sv, tv) { return onDoor(s.B, s.ang, sv, tv); };
     $('armMoving').innerHTML =
-      KD.link(o, LA, 2) + KD.link(o, M, 2.4) + KD.link(q, N, 2.4) +
-      KD.link(M, FM, 3) + KD.link(N, FN, 3) +
+      bentLink(o, M, LA, 9, 2.4) + KD.link(q, N, 2.4) +
       KD.body(B, T, 3.2, 'var(--card)') +
-      KD.joint(o) + KD.joint(q) + KD.joint(M, 3.8) + KD.joint(N, 3.8) + KD.com(P, 5);
+      lug(sM * D, s.ang, M) + lug(sN * D, s.ang, N) +
+      KD.joint(o) + KD.joint(q) + KD.joint(M, 3.8) + KD.joint(N, 3.8) +
+      '<g transform="rotate(' + f(-s.ang * 180 / Math.PI) + ' ' + f(P.x) + ' ' + f(P.y) + ')">' + KD.com(P, 5) + '</g>';   // fixed to the door, turns with it
   }
   // energy chart over the opening
   var W = 260, Hc = 70, n = 121, curve = [];

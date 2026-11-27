@@ -152,6 +152,85 @@
 })();
 
 
+// Home: a gravity-balanced monitor arm (parallelogram four-bar with the screen on the bracket).
+// The simplest case of Kuo, Mech. Mach. Theory 214 (2025) 106140: in a parallelogram the bracket only
+// translates, so the screen's centre P = M + const and its weight acts as a mass on the lower arm at radius r2.
+// One zero-free-length spring from H = (0, h) on the post to L = l (cos th, sin th) on the lower arm gives
+//   U_s = k (h^2 + l^2)/2 - k h l sin th,   U_g = m g r2 sin th + const,
+// so the total is constant for every th when k h l = m g r2. Arms are taken as light.
+(function () {
+  var svg = document.getElementById('arm');
+  if (!svg || !window.KD) return;
+  var r1 = 60, r2 = 170, h = 40, l = 70, m = 1, g = 1, k = m * g * r2 / (h * l);
+  var off = { x: 34, y: 30 }, scrH = 120;          // screen centre relative to M; screen height
+  var amp = 32 * Math.PI / 180;                     // arm swings between -32 and +32 degrees
+  var OX = 92, OY = 150, SC = 0.75;
+  function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
+  function f(v) { return v.toFixed(1); }
+  var $ = function (id) { return svg.querySelector('#' + id); };
+  var O = { x: 0, y: 0 }, Q = { x: 0, y: r1 }, H = { x: 0, y: h };
+  function solve(th) {
+    var M = { x: r2 * Math.cos(th), y: r2 * Math.sin(th) };
+    var N = { x: M.x, y: M.y + r1 };
+    var P = { x: M.x + off.x, y: M.y + off.y };
+    var L = { x: l * Math.cos(th), y: l * Math.sin(th) };
+    var Ug = m * g * P.y, Us = 0.5 * k * ((H.x - L.x) * (H.x - L.x) + (H.y - L.y) * (H.y - L.y));
+    return { M: M, N: N, P: P, L: L, Ug: Ug, Us: Us };
+  }
+  // static: wall, post, pivots, spring anchor
+  var o = S(O), q = S(Q), hh = S(H);
+  $('armStatic').innerHTML =
+    KD.wall(S({ x: -14, y: 100 }), S({ x: -14, y: -40 }), 1) +
+    KD.body(S({ x: -14, y: 84 }), S({ x: 0, y: 84 }), 2.5, 'var(--ground)') +
+    KD.body(S({ x: -14, y: -24 }), S({ x: 0, y: -24 }), 2.5, 'var(--ground)') +
+    KD.body(S({ x: 0, y: -24 }), S({ x: 0, y: 84 }), 3.5, 'var(--ground)');
+  var springOn = true;
+  function draw(s) {
+    var M = S(s.M), N = S(s.N), P = S(s.P), L = S(s.L);
+    var mid = S({ x: s.M.x, y: s.M.y + off.y }), back = S({ x: s.P.x - 7, y: s.P.y });
+    var hs = SC * scrH / 2;
+    $('armSpringG').innerHTML = springOn ? KD.spring(hh, L, 9, 3.5) + KD.pin(hh) + KD.pin(L) : '';
+    $('armMoving').innerHTML =
+      KD.link(o, M, 2.6) + KD.link(q, N, 2.6) + KD.link(M, N, 2.6) +
+      KD.link(mid, back, 2.2) +
+      '<rect x="' + f(back.x - 2) + '" y="' + f(P.y - 22) + '" width="7" height="44" rx="2" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="1.4"/>' +
+      '<rect x="' + f(back.x + 5) + '" y="' + f(P.y - hs) + '" width="6" height="' + f(2 * hs) + '" rx="1.5" fill="var(--fg)" stroke="var(--fg)" stroke-width="1"/>' +
+      KD.joint(o) + KD.joint(q) + KD.joint(M) + KD.joint(N);
+  }
+  // energy chart over the swing
+  var W = 260, Hc = 70, n = 121, curve = [];
+  for (var i = 0; i < n; i++) curve.push(solve(-amp + 2 * amp * i / (n - 1)));
+  var lo = Infinity, hi = -Infinity;
+  curve.forEach(function (c) { lo = Math.min(lo, c.Ug, c.Us); hi = Math.max(hi, c.Ug, c.Us, c.Ug + c.Us); });
+  var pad = (hi - lo) * 0.06; lo -= pad; hi += pad;
+  function Y(u) { return Hc - (u - lo) / (hi - lo) * Hc; }
+  function path(fn) { return curve.map(function (c, i) { return (i ? 'L' : 'M') + f(W * i / (n - 1)) + ',' + f(Y(fn(c))); }).join(''); }
+  var Ug = path(function (c) { return c.Ug; }), Us = path(function (c) { return c.Us; }), Ut = path(function (c) { return c.Ug + c.Us; });
+  $('aUg').setAttribute('d', Ug);
+  function chart() {
+    $('aUs').setAttribute('d', springOn ? Us : '');
+    $('aUt').setAttribute('d', springOn ? Ut : Ug);
+  }
+  chart();
+  var box = document.getElementById('armSpringOn'), msg = document.getElementById('armMsg');
+  if (box) box.addEventListener('change', function () {
+    springOn = box.checked; chart();
+    if (msg) msg.textContent = springOn ? 'Balanced: the screen stays at any height.' : 'Not balanced: the weight pulls it down.';
+  });
+  var t0 = null, period = 9000;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function tick(t) {
+    var ph = t0 === null ? 0.25 : ((t - t0) % period) / period;
+    var th = amp * Math.sin(2 * Math.PI * ph);
+    draw(solve(th));
+    var x = W * (th + amp) / (2 * amp);
+    $('aCursor').setAttribute('x1', f(x)); $('aCursor').setAttribute('x2', f(x));
+  }
+  tick();
+  if (!reduce) requestAnimationFrame(function loop(t) { if (t0 === null) t0 = t - 0.25 * period; tick(t); requestAnimationFrame(loop); });
+})();
+
+
 // Home: gravity compensation of a pendulum by a reconfigurable Halbach cylinder.
 // After Biggs, Kuo and Ren, ASME J. Mech. Des. 148 (2026) 033305.
 // Model: arm of length L with payload M, fixed to a centre (rotor) magnet of dipole moment mu, inside the

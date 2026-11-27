@@ -43,54 +43,31 @@
         <p class="lede">I am a roboticist and mechanical designer working on <span class="term">mechanical intelligence</span>: the capacity of mechanisms and robots to adapt and to perform through their inherent mechanics, with minimal added sensing, computation, control and actuation. Robot arms whose weight is carried by springs or magnets rather than by motors, surgical and rehabilitation devices that hold a load without fighting the hand that guides them, parallel robots whose motions are separated by their geometry, and mechanisms that turn irregular motion into useful energy are all examples. Physical AI puts intelligence in the software; mechanical intelligence puts it in the body.</p>
         <p><a href="research/index.html">Research →</a> &nbsp;·&nbsp; <a href="about.html">About</a></p>
       </div>
-      <figure class="fig" id="balfig">
-        <svg id="bal" viewBox="0 0 340 352" role="img" aria-label="A four-bar linkage carrying a mass on its coupler, gravity balanced by two zero-free-length springs anchored to the ground. A graph below shows gravitational, spring and total potential energy against crank angle; the total is a flat line.">
-          <defs>
-            <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" opacity=".6"/></pattern>
-          </defs>
-          <!-- ground -->
-          <g id="ground"></g>
-          <!-- gravity arrow -->
+      <figure class="fig" id="armfig">
+        <svg id="arm" viewBox="0 0 340 352" role="img" aria-label="A monitor arm: two parallel arms pinned to a post and to a bracket that carries the screen, with one spring from the post to the lower arm. The screen moves up and down and stays upright. A graph below shows gravitational, spring and total potential energy as the arm moves; the total is a flat line.">
+          <g id="armStatic"></g>
           <g stroke="var(--fg)" stroke-width="1.2" fill="var(--fg)">
-            <line x1="292" y1="14" x2="292" y2="42"/><polygon points="288,40 296,40 292,48"/>
-            <text x="298" y="40" class="v" font-size="12" stroke="none">g</text>
+            <line x1="306" y1="14" x2="306" y2="42"/><polygon points="302,40 310,40 306,48"/>
+            <text x="312" y="40" class="v" font-size="12" stroke="none">g</text>
           </g>
-          <!-- springs (toggle) -->
-          <g id="springs">
-            <g id="anchors"></g>
-            <polyline id="sprA" fill="none" stroke="var(--spring)" stroke-width="1.8" stroke-linejoin="miter" stroke-miterlimit="6"/>
-            <polyline id="sprB" fill="none" stroke="var(--spring)" stroke-width="1.8" stroke-linejoin="miter" stroke-miterlimit="6"/>
-            <g id="armA"></g>
-            <g id="armB"></g>
-          </g>
-          <!-- linkage -->
-          <polygon id="coupler" points="" fill="var(--link-fill)" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round"/>
-          <g stroke="var(--fg)" stroke-width="2.2" stroke-linecap="round">
-            <line id="crank"/><line id="rocker"/>
-          </g>
-          <g fill="var(--card)" stroke="var(--fg)" stroke-width="1.6">
-            <circle id="jO" r="5.5"/><circle id="jQ" r="5.5"/>
-            <circle id="jM" r="4.5"/><circle id="jN" r="4.5"/>
-          </g>
-          <!-- coupler mass -->
-          <g id="mass"><circle r="9" fill="var(--mass)" stroke="var(--fg)" stroke-width="1.4"/><text class="v" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="11">m</text></g>
-          <!-- energy chart -->
-          <g id="chart" transform="translate(40,262)">
+          <g id="armSpringG"></g>
+          <g id="armMoving"></g>
+          <g id="armChart" transform="translate(40,262)">
             <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
-            <path id="cUg" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
-            <path id="cUs" fill="none" stroke="var(--spring)" stroke-width="1.4"/>
-            <path id="cUt" fill="none" stroke="var(--red)" stroke-width="2"/>
-            <line id="cursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <path id="aUg" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="aUs" fill="none" stroke="var(--spring)" stroke-width="1.4"/>
+            <path id="aUt" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="aCursor" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
             <text x="4" y="-5" font-size="10" fill="var(--fg-2)">Stored energy as it moves (flat = balanced)</text>
             <g font-size="9">
-              <text x="262" y="12" fill="var(--red)" font-weight="700" id="lblT">total</text>
+              <text x="262" y="12" fill="var(--red)" font-weight="700">total</text>
               <text x="262" y="42" fill="var(--spring)">spring</text>
               <text x="262" y="66" fill="var(--fg-2)">gravity</text>
             </g>
           </g>
         </svg>
-        <div class="ctl"><label><input type="checkbox" id="springsOn" checked> Springs on</label><span class="muted small" id="balMsg">Balanced: it rests in any position.</span></div>
-        <figcaption>A linkage with a weight on it. Two springs, placed the right way, carry the weight at every position, so no motor or hand is needed to hold it. Switch the springs off and the weight takes over. From <a href="https://doi.org/10.1016/j.mechmachtheory.2025.106140">my 2025 paper</a> in <em>Mechanism and Machine Theory</em>. <a href="papers/mmt2025b.html#prototype">See it on a real prototype</a>.</figcaption>
+        <div class="ctl"><label><input type="checkbox" id="armSpringOn" checked> Spring on</label><span class="muted small" id="armMsg">Balanced: the screen stays at any height.</span></div>
+        <figcaption>A monitor arm. The two arms and the bracket form a parallelogram, so the screen stays upright as it moves, and one spring between the post and the lower arm carries its weight at every height: push the screen anywhere and it stays there. Switch the spring off and the weight takes over. It is the simplest case of the four-bar balancing in <a href="https://doi.org/10.1016/j.mechmachtheory.2025.106140">my 2025 paper</a> in <em>Mechanism and Machine Theory</em>: because the bracket only translates, the screen acts as if it hung on the lower arm, and one spring is enough. <a href="papers/mmt2025b.html">See the general linkage and its prototype</a>. A statically balanced display lifting device I designed was patented and transferred to industry.</figcaption>
       </figure>
     </section>
 
@@ -161,7 +138,7 @@
       <p class="muted">Pages, figures and animations drafted with Claude Code. The research is in the papers linked on each page; figures reproduced from them are credited where shown. Visits are counted anonymously with GoatCounter, without cookies.</p>
     </div>
   </footer>
-  <script src="assets/site.js?v=1837abed" defer></script>
+  <script src="assets/site.js?v=036f0fb3" defer></script>
   <script src="assets/stats.js?v=cbdef3fb" defer></script>
   <script data-goatcounter="https://chkuo717.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

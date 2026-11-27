@@ -10,25 +10,15 @@ description: Chin-Hsing Kuo, roboticist and mechanical designer at the Universit
         <p><a href="research/index.html">Research →</a> &nbsp;·&nbsp; <a href="about.html">About</a></p>
       </div>
       <figure class="fig" id="armfig">
-        <svg id="arm" viewBox="0 0 340 545" role="img" aria-label="Side view of a garage with an up-and-over door and the front half of a car inside. The door hangs on a four-bar linkage whose two pivots are at the top of the door opening; two springs carry the door’s weight. The door swings up from closed to level above the opening. A graph below shows gravitational, spring and total potential energy as the door opens; the total is a flat line.">
-          <defs><clipPath id="armClip" clipPathUnits="userSpaceOnUse"><rect x="101" y="52" width="84" height="80"/></clipPath></defs>
-          <g id="armScene">
+        <svg id="arm" viewBox="0 0 340 410" role="img" aria-label="Side view of a garage with an up-and-over door and the front half of a car inside. The door hangs on a four-bar linkage whose two pivots are at the top of the door opening; two springs carry the door’s weight. The door swings up from closed to level above the opening. A graph below shows gravitational, spring and total potential energy as the door opens; the total is a flat line.">
           <g id="armStatic"></g>
           <g id="armSpringG"></g>
           <g id="armMoving"></g>
-          </g>
-          <!-- detail: the hinge area of the same scene, magnified 2.5 times and kept live through <use> -->
-          <rect x="101" y="52" width="84" height="80" fill="none" stroke="var(--fg-2)" stroke-width=".8" stroke-dasharray="3 2"/>
-          <line x1="101" y1="132" x2="65" y2="240" stroke="var(--fg-2)" stroke-width=".6" stroke-dasharray="3 2"/>
-          <line x1="185" y1="132" x2="275" y2="240" stroke="var(--fg-2)" stroke-width=".6" stroke-dasharray="3 2"/>
-          <rect x="65" y="240" width="210" height="200" fill="var(--card)" stroke="var(--fg-2)" stroke-width="1"/>
-          <g transform="translate(65,240) scale(2.5) translate(-101,-52)" clip-path="url(#armClip)"><use href="#armScene"/></g>
-          <text x="70" y="434" font-size="9" fill="var(--fg-2)">Hinge detail (×2.5)</text>
           <g stroke="var(--fg)" stroke-width="1.2" fill="var(--fg)">
             <line x1="306" y1="14" x2="306" y2="42"/><polygon points="302,40 310,40 306,48"/>
             <text x="312" y="40" class="v" font-size="12" stroke="none">g</text>
           </g>
-          <g id="armChart" transform="translate(40,468)">
+          <g id="armChart" transform="translate(40,328)">
             <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
             <path id="aUg" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
             <path id="aUs" fill="none" stroke="var(--spring)" stroke-width="1.4"/>

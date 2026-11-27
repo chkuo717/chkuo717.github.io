@@ -200,7 +200,7 @@
     var Us = 0.5 * kA * ((HA.x - LA.x) * (HA.x - LA.x) + (HA.y - LA.y) * (HA.y - LA.y)) + 0.5 * kB * ((HB.x - LB.x) * (HB.x - LB.x) + (HB.y - LB.y) * (HB.y - LB.y));
     return { M: M, N: N, P: P, B: B, T: T, FM: FM, FN: FN, ang: ang, LA: LA, LB: LB, Ug: Ug, Us: Us };
   }
-  var OX = 160, OY = 160, SC = 0.95;
+  var OX = 138, OY = 212, SC = 1.3;   // framed on the hinges and the door; the car is cut by the figure edge
   function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
   function f(v) { return v.toFixed(1); }
   var $ = function (id) { return svg.querySelector('#' + id); };

@@ -152,7 +152,7 @@
 })();
 
 
-// Home: a gravity-balanced lift-up cabinet door on a general (non-parallelogram) four-bar linkage.
+// Home: a gravity-balanced lift-up (up-and-over) garage door on a general (non-parallelogram) four-bar linkage.
 // Kuo, Mech. Mach. Theory 214 (2025) 106140, coupler-mass case. The door is the coupler; its weight m acts at
 // its centre P. In a frame at the crank pivot O,  P = cA r2 e^{i th2} + cB r4 e^{i th4} + const,  with
 // c = (r5/r3) e^{i alpha}, cA = 1 - c, cB = c  (r5, alpha: P relative to M, measured from M->N).
@@ -191,35 +191,40 @@
     var M = { x: O.x + r2 * Math.cos(th2), y: O.y + r2 * Math.sin(th2) }, N = circ(M, sg);
     var th4 = Math.atan2(N.y - Q.y, N.x - Q.x), ang = Math.atan2(N.y - M.y, N.x - M.x);
     var P = { x: M.x + Pu * Math.cos(ang) - Pv * Math.sin(ang), y: M.y + Pu * Math.sin(ang) + Pv * Math.cos(ang) };
-    var B = onDoor(M, ang, -sM * D, -tt), T = onDoor(B, ang, D, 0), K = onDoor(B, ang, 14, -6);
+    var B = onDoor(M, ang, -sM * D, -tt), T = onDoor(B, ang, D, 0), FM = onDoor(B, ang, sM * D, 0), FN = onDoor(B, ang, sN * D, 0);
     var LA = { x: O.x + lA * Math.cos(th2 + dA + phiA), y: O.y + lA * Math.sin(th2 + dA + phiA) };
     var LB = { x: Q.x + lB * Math.cos(th4 + dB + phiB), y: Q.y + lB * Math.sin(th4 + dB + phiB) };
     var Ug = m * g * P.y;
     var Us = 0.5 * kA * ((HA.x - LA.x) * (HA.x - LA.x) + (HA.y - LA.y) * (HA.y - LA.y)) + 0.5 * kB * ((HB.x - LB.x) * (HB.x - LB.x) + (HB.y - LB.y) * (HB.y - LB.y));
-    return { M: M, N: N, P: P, B: B, T: T, K: K, LA: LA, LB: LB, Ug: Ug, Us: Us };
+    return { M: M, N: N, P: P, B: B, T: T, FM: FM, FN: FN, LA: LA, LB: LB, Ug: Ug, Us: Us };
   }
-  var OX = 110, OY = 170, SC = 1.05;
+  var OX = 160, OY = 160, SC = 0.95;
   function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
   function f(v) { return v.toFixed(1); }
   var $ = function (id) { return svg.querySelector('#' + id); };
-  // static: wall, cabinet (side panel, top, bottom, shelf), pivots and spring anchors
-  var c0 = S({ x: -80, y: 100 }), c1 = S({ x: 0, y: -60 });
+  // static: garage (roof slab, floor and driveway) and the front half of a car
+  var X0 = -150;
+  function poly(pts, fill, extra) { return '<polygon points="' + pts.map(function (p) { var q = S(p); return f(q.x) + ',' + f(q.y); }).join(' ') + '" fill="' + fill + '" stroke="var(--fg)" stroke-width="1.4" stroke-linejoin="round"' + (extra || '') + '/>'; }
+  var w0 = S({ x: -55, y: -37 });
   $('armStatic').innerHTML =
-    '<rect x="' + f(c0.x) + '" y="' + f(c0.y) + '" width="' + f(c1.x - c0.x) + '" height="' + f(c1.y - c0.y) + '" fill="var(--link-fill)" opacity=".45" stroke="none"/>' +
-    KD.wall(S({ x: -84, y: 112 }), S({ x: -84, y: -72 }), 1) +
-    KD.body(S({ x: -80, y: 100 }), S({ x: 0, y: 100 }), 2.2, 'var(--ground)') +
-    KD.body(S({ x: -80, y: -60 }), S({ x: 0, y: -60 }), 2.2, 'var(--ground)') +
-    KD.body(S({ x: -80, y: 100 }), S({ x: -80, y: -60 }), 2.2, 'var(--ground)') +
-    KD.body(S({ x: -80, y: 30 }), S({ x: -2, y: 30 }), 1.2, 'var(--ground)');
+    KD.wall(S({ x: X0, y: -60 }), S({ x: 150, y: -60 }), -1) +
+    KD.body(S({ x: X0, y: 100 }), S({ x: 0, y: 100 }), 2.4, 'var(--ground)') +
+    poly([{ x: -62, y: 98 }, { x: -2, y: 98 }, { x: -2, y: 56 }, { x: -62, y: 56 }], 'var(--ground)', ' fill-opacity=".35" stroke-width="1"') +
+    KD.hatch(S({ x: X0, y: 104 }), S({ x: -4, y: 104 }), 18, 5, -1) +
+    poly([{ x: X0, y: -46 }, { x: -86, y: -46 }, { x: -84, y: -30 }, { x: -72, y: -14 }, { x: -55, y: -9 }, { x: -38, y: -14 }, { x: -26, y: -30 }, { x: -24, y: -46 },
+          { x: -12, y: -44 }, { x: -9, y: -22 }, { x: -14, y: -6 }, { x: -62, y: 4 }, { x: -98, y: 44 }, { x: X0, y: 47 }], 'var(--link-fill)') +
+    poly([{ x: -96, y: 38 }, { x: -70, y: 9 }, { x: X0 + 4, y: 9 }, { x: X0 + 4, y: 41 }], 'var(--card)') +
+    '<circle cx="' + f(w0.x) + '" cy="' + f(w0.y) + '" r="' + f(23 * SC) + '" fill="var(--fg)"/>' +
+    '<circle cx="' + f(w0.x) + '" cy="' + f(w0.y) + '" r="' + f(11 * SC) + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
   var springsOn = true, o = S(O), q = S(Q), ha = S(HA), hb = S(HB);
   function draw(s) {
-    var M = S(s.M), N = S(s.N), P = S(s.P), B = S(s.B), T = S(s.T), K = S(s.K), LA = S(s.LA), LB = S(s.LB);
+    var M = S(s.M), N = S(s.N), P = S(s.P), B = S(s.B), T = S(s.T), FM = S(s.FM), FN = S(s.FN), LA = S(s.LA), LB = S(s.LB);
     $('armSpringG').innerHTML = springsOn ?
       KD.spring(ha, LA, 9, 3.2) + KD.spring(hb, LB, 7, 3) + KD.pin(ha) + KD.pin(hb) + KD.pin(LA) + KD.pin(LB) : '';
     $('armMoving').innerHTML =
       KD.link(o, LA, 2) + KD.link(o, M, 2.4) + KD.link(q, N, 2.4) +
+      KD.link(M, FM, 3) + KD.link(N, FN, 3) +
       KD.body(B, T, 3.2, 'var(--card)') +
-      '<circle cx="' + f(K.x) + '" cy="' + f(K.y) + '" r="2.6" fill="var(--fg)"/>' +
       KD.joint(o) + KD.joint(q) + KD.joint(M, 3.8) + KD.joint(N, 3.8) + KD.com(P, 5);
   }
   // energy chart over the opening

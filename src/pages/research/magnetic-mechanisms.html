@@ -8,6 +8,38 @@ description: Permanent-magnet arrays and Halbach cylinders as contact-free sprin
 
     <p>The work here starts from a computational method for the force between two magnets of general shape and magnetisation, and builds on it to optimise arrays for long-stroke linear compensation, a long-range passive levitator from only two magnets, and reconfigurable Halbach cylinders whose compensating torque can be tuned to the payload. Each design has been validated on a built prototype.</p>
 
+    <section class="hero hero-2">
+      <figure class="fig" id="magfig">
+        <svg id="mag" viewBox="0 0 340 352" role="img" aria-label="A pendulum arm with a payload, mounted on a magnet at the centre of a ring of eight outer magnets arranged as a Halbach cylinder; the top magnet is magnetised straight up, the side magnets straight down. The outer magnets apply a torque on the centre magnet that nearly cancels the gravity torque at every angle. A graph below shows gravity torque, magnetic torque and their sum against arm angle; the sum stays close to zero but not exactly on it.">
+                    <g stroke="var(--fg)" stroke-width="1.2" fill="var(--fg)">
+            <line x1="306" y1="30" x2="306" y2="58"/><polygon points="302,56 310,56 306,64"/>
+            <text class="v" x="312" y="56" font-size="12" stroke="none">g</text>
+          </g>
+          <g id="outer"></g>
+          <circle cx="170" cy="130" r="26" fill="var(--card)" stroke="var(--fg)" stroke-width="2"/>
+          <g id="rotor"></g>
+          <g id="field" opacity=".6"></g>
+          <g id="chart2" transform="translate(40,262)">
+            <rect x="0" y="0" width="260" height="70" fill="none" stroke="var(--line)"/>
+            <line x1="0" y1="35" x2="260" y2="35" stroke="var(--line)"/>
+            <path id="tG" fill="none" stroke="var(--fg-2)" stroke-width="1.4"/>
+            <path id="tM" fill="none" stroke="var(--spring)" stroke-width="1.4"/>
+            <path id="tN" fill="none" stroke="var(--red)" stroke-width="2"/>
+            <line id="cursor2" y1="0" y2="70" stroke="var(--fg-2)" stroke-dasharray="2 3"/>
+            <text x="4" y="-5" font-size="10" fill="var(--fg-2)">Push on the arm as it swings (near zero = nearly balanced)</text>
+            <g font-size="9"><text x="262" y="38" fill="var(--red)" font-weight="700">net</text><text x="262" y="12" fill="var(--fg-2)">gravity</text><text x="262" y="66" fill="var(--spring)">magnet</text></g>
+          </g>
+        </svg>
+        <div class="ctl"><label><input type="checkbox" id="magnetsOn" checked> Outer magnets on</label><span class="muted small" id="magMsg">Nearly balanced: only a small push is left.</span></div>
+        <figcaption>A ring of magnets around the pivot pushes the arm up almost exactly as hard as gravity pulls it down, at every angle, with nothing touching. Magnets cannot match the weight perfectly, so a small push is left over (the red line is close to zero, not on it); the design work is in making that leftover as small as possible. Turning the eight outer magnets, alternate ones opposite ways, weakens the field evenly and re-sets it for a lighter load. From <a href="https://doi.org/10.1115/1.4069596">our 2026 paper</a> in the <em>ASME Journal of Mechanical Design</em>.</figcaption>
+      </figure>
+      <div>
+        <p class="eyebrow">Magnetic balancing</p>
+        <h2 class="h2-tight">Nearly the same, <span class="hl">without contact</span></h2>
+        <p>Springs wear, rub and need adjusting. Magnets can do nearly the same job without touching anything, though never perfectly: a magnet's pull does not follow the simple curve a weight does, so the balance is always approximate. At Wollongong my group designs arrangements of permanent magnets that come as close as possible: arrays that hold up a load along a long stroke, two magnets that float a load in mid-air, and rings like the one here that balance an arm and can be re-set for a different load.</p>
+      </div>
+    </section>
+
     <div class="figrow">
       <figure class="pfig"><img src="../assets/img/jmd2026-halbach.png" alt="A reconfigurable Halbach cylinder: a ring of gear-coupled magnets around a central magnet. Turning the outer magnets together with the lever changes the compensating torque to suit a new payload." loading="lazy"><figcaption>A reconfigurable Halbach cylinder: a ring of gear-coupled magnets around a central magnet. Turning the outer magnets together with the lever changes the compensating torque to suit a new payload.<span class="src"><a href="https://doi.org/10.1115/1.4069596">Biggs, Kuo and Ren, <em>ASME J. Mech. Des.</em> 148 (2026) 033305</a>, Fig. 3. © ASME.</span></figcaption></figure>
       <figure class="pfig"><img src="../assets/img/jmd2026-torque.png" alt="The compensating torque as the outer magnets are rotated, for several payload angles: one device covers a family of payloads." loading="lazy"><figcaption>The compensating torque as the outer magnets are rotated, for several payload angles: one device covers a family of payloads.<span class="src"><a href="https://doi.org/10.1115/1.4069596">Biggs, Kuo and Ren, <em>ASME J. Mech. Des.</em> 148 (2026) 033305</a>, Fig. 12. © ASME.</span></figcaption></figure>

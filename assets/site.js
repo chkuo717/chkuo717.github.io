@@ -175,8 +175,10 @@
   var cr = r5 / r3 * Math.cos(alpha), ci = r5 / r3 * Math.sin(alpha);
   var rA = r2 * Math.hypot(1 - cr, -ci), dA = Math.atan2(-ci, 1 - cr), rB = r4 * Math.hypot(cr, ci), dB = alpha;
   var m = 1, g = 1;
-  var phiA = 235 * Math.PI / 180, hA = 12, lA = 26;      // crank spring: anchor below-right of O, on a lever pointing down-left
-  var phiB = -dB, hB = 20, lB = 14;                       // rocker spring: anchor below-left of Q, on the rocker itself
+  var phiA = 235 * Math.PI / 180, hA = 12, lA = 26;      // crank spring: anchor below-right of O, on a lever of the crank
+  var phiB = -dB, lB = 14;                                // rocker spring: anchor below-left of Q, on the rocker itself
+  var xPost = O.x + hA * Math.cos(Math.PI / 2 + phiA);  // both spring anchors hang on one post from the ceiling at x = xPost
+  var hB = (xPost - Q.x) / Math.cos(Math.PI / 2 + phiB);
   var kA = m * g * rA / (hA * lA), kB = m * g * rB / (hB * lB);
   var HA = { x: O.x + hA * Math.cos(Math.PI / 2 + phiA), y: O.y + hA * Math.sin(Math.PI / 2 + phiA) };
   var HB = { x: Q.x + hB * Math.cos(Math.PI / 2 + phiB), y: Q.y + hB * Math.sin(Math.PI / 2 + phiB) };
@@ -202,20 +204,23 @@
   function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
   function f(v) { return v.toFixed(1); }
   var $ = function (id) { return svg.querySelector('#' + id); };
-  // static: garage (roof slab, floor and driveway) and the front half of a car
+  // static: garage (roof slab, floor and driveway), posts from the ceiling to the two ground pivots and to the spring anchors, and the front half of a car
   var X0 = -150;
   function poly(pts, fill, extra) { return '<polygon points="' + pts.map(function (p) { var q = S(p); return f(q.x) + ',' + f(q.y); }).join(' ') + '" fill="' + fill + '" stroke="var(--fg)" stroke-width="1.4" stroke-linejoin="round"' + (extra || '') + '/>'; }
   var w0 = S({ x: -55, y: -37 });
   $('armStatic').innerHTML =
-    KD.wall(S({ x: X0, y: -60 }), S({ x: 150, y: -60 }), -1) +
+    KD.wall(S({ x: X0, y: -66 }), S({ x: 150, y: -66 }), -1) +   // floor 6 below the closed door's edge, so the door never cuts it
     KD.body(S({ x: X0, y: 100 }), S({ x: 0, y: 100 }), 2.4, 'var(--ground)') +
-    poly([{ x: -62, y: 98 }, { x: -2, y: 98 }, { x: -2, y: 56 }, { x: -62, y: 56 }], 'var(--ground)', ' fill-opacity=".35" stroke-width="1"') +
+    KD.body(S({ x: O.x, y: 100 }), S(O), 2, 'var(--ground)') + KD.body(S({ x: Q.x, y: 100 }), S(Q), 2, 'var(--ground)') +
+    KD.body(S({ x: xPost, y: 100 }), S({ x: xPost, y: Math.min(HA.y, HB.y) }), 2, 'var(--ground)') +
     KD.hatch(S({ x: X0, y: 104 }), S({ x: -4, y: 104 }), 18, 5, -1) +
+    '<g transform="translate(0,' + f(6 * SC) + ')">' +
     poly([{ x: X0, y: -46 }, { x: -86, y: -46 }, { x: -84, y: -30 }, { x: -72, y: -14 }, { x: -55, y: -9 }, { x: -38, y: -14 }, { x: -26, y: -30 }, { x: -24, y: -46 },
           { x: -12, y: -44 }, { x: -9, y: -22 }, { x: -14, y: -6 }, { x: -62, y: 4 }, { x: -98, y: 44 }, { x: X0, y: 47 }], 'var(--link-fill)') +
     poly([{ x: -96, y: 38 }, { x: -70, y: 9 }, { x: X0 + 4, y: 9 }, { x: X0 + 4, y: 41 }], 'var(--card)') +
     '<circle cx="' + f(w0.x) + '" cy="' + f(w0.y) + '" r="' + f(23 * SC) + '" fill="var(--fg)"/>' +
-    '<circle cx="' + f(w0.x) + '" cy="' + f(w0.y) + '" r="' + f(11 * SC) + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>';
+    '<circle cx="' + f(w0.x) + '" cy="' + f(w0.y) + '" r="' + f(11 * SC) + '" fill="var(--card)" stroke="var(--fg)" stroke-width="1.2"/>' +
+    '</g>';
   // one rigid link with two arms from pivot c: each arm stops short of the joint and the two are joined by an
   // arc around it on the side between the arms (his sketch, 2026-11-27), so they read as one piece
   function bentLink(c, p1, p2, rj, w) {

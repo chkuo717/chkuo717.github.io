@@ -204,15 +204,25 @@
   function S(p) { return { x: OX + SC * p.x, y: OY - SC * p.y }; }
   function f(v) { return v.toFixed(1); }
   var $ = function (id) { return svg.querySelector('#' + id); };
+  // the ground (ceiling slab and the posts hanging from it) is one body: all outlines first, then all fills,
+  // so the pieces merge with no outline drawn across a junction (his rule, 2026-11-27)
+  function groundBody(segs) {
+    var out = '', fill = '';
+    segs.forEach(function (sg) {
+      out += KD.line(sg[0], sg[1], 'stroke="var(--fg)" stroke-width="' + f(2 * sg[2] + 3.2) + '" stroke-linecap="round"');
+      fill += KD.line(sg[0], sg[1], 'stroke="var(--ground)" stroke-width="' + f(2 * sg[2]) + '" stroke-linecap="round"');
+    });
+    return out + fill;
+  }
   // static: garage (roof slab, floor and driveway), posts from the ceiling to the two ground pivots and to the spring anchors, and the front half of a car
   var X0 = -150;
   function poly(pts, fill, extra) { return '<polygon points="' + pts.map(function (p) { var q = S(p); return f(q.x) + ',' + f(q.y); }).join(' ') + '" fill="' + fill + '" stroke="var(--fg)" stroke-width="1.4" stroke-linejoin="round"' + (extra || '') + '/>'; }
   var w0 = S({ x: -55, y: -37 });
   $('armStatic').innerHTML =
     KD.wall(S({ x: X0, y: -66 }), S({ x: 150, y: -66 }), -1) +   // floor 6 below the closed door's edge, so the door never cuts it
-    KD.body(S({ x: X0, y: 100 }), S({ x: 0, y: 100 }), 2.4, 'var(--ground)') +
-    KD.body(S({ x: O.x, y: 100 }), S(O), 2, 'var(--ground)') + KD.body(S({ x: Q.x, y: 100 }), S(Q), 2, 'var(--ground)') +
-    KD.body(S({ x: xPost, y: 100 }), S({ x: xPost, y: Math.min(HA.y, HB.y) }), 2, 'var(--ground)') +
+    groundBody([[S({ x: X0, y: 100 }), S({ x: 0, y: 100 }), 2.4], [S({ x: O.x, y: 100 }), S(O), 2], [S({ x: Q.x, y: 100 }), S(Q), 2],
+                [S({ x: xPost, y: 100 }), S({ x: xPost, y: Math.min(HA.y, HB.y) }), 2],
+                [S({ x: O.x, y: O.y }), S({ x: O.x + 0.01, y: O.y }), 6.5], [S({ x: Q.x, y: Q.y }), S({ x: Q.x + 0.01, y: Q.y }), 6.5], [S({ x: HA.x, y: HA.y }), S({ x: HA.x + 0.01, y: HA.y }), 3.6], [S({ x: HB.x, y: HB.y }), S({ x: HB.x + 0.01, y: HB.y }), 3.6]]) +   // bosses round the ground joints and spring anchors
     KD.hatch(S({ x: X0, y: 104 }), S({ x: -4, y: 104 }), 18, 5, -1) +
     '<g transform="translate(0,' + f(6 * SC) + ')">' +
     poly([{ x: X0, y: -46 }, { x: -86, y: -46 }, { x: -84, y: -30 }, { x: -72, y: -14 }, { x: -55, y: -9 }, { x: -38, y: -14 }, { x: -26, y: -30 }, { x: -24, y: -46 },
